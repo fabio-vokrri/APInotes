@@ -1,0 +1,449 @@
+\chapter{Automi Deterministici}
+  In questo capitolo verrà introdotto il concetto di automa e se ne analizzeranno le varie classi esistenti, differenziandole in base alla loro espressività nella rappresentazione di linguaggi via via sempre più complessi. Si inizierà con lo studio degli automi determinstici per passare gradualmente a quelli non deterministici, analzzandone le differenze e le caratteristiche più importanti. Di seguito sono date le definizioni di automa, accettatore e trasduttore:
+
+  \begin{definition}
+    Gli automi sono sistemi dinamici discreti e tempo invarianti. Lo stato di un automa viene modificato a fronte di un simbolo di ingresso. Ogni automa presenta uno stato iniziale, da cui ha inizio la sua esecuzione, e uno o più stati finali in cui la sua esecuzione ha termine. 
+  \end{definition}
+
+  \begin{definition}
+    Gli accettatori sono automi che indicano se una determinata sequenza di simboli appartiene ad un linguaggio.    
+  \end{definition}
+
+  \begin{definition}
+    I trasduttori sono automi che mappano una determinata sequenza di simboli appartenenti ad un linguaggio in una sequenza di simboli appartenenti ad un linguaggio differente. Un trasduttore lavora quindi su due nastri infiniti:
+    il primo nastro in ingresso di sola lettura, il secondo nastro in uscita di sola scrittura. 
+  \end{definition}
+
+  Un automa è rappresentato graficamente come un inisieme di circonferenze denominate (che rappresentano gli stati dell'automa), ognuna delle quali è connessa ad altri stati tramite frecce. Su tali frecce è segnata la condizione da soddisfare per intraprendere quel passaggio di stato e come viene modificato lo stato durante il passaggio. Lo stato iniziale si riconosce per via di una freccia entrante nel nodo, mentre gli stati finali sono rappresentati da circonferenze con bordo doppio. 
+
+  \begin{figure}[h!]
+    \begin{center}
+      \begin{tikzpicture} [node distance = 3cm]
+        \node[state, initial, initial text={}] (q1) {\(q_0\)};
+        \node[state, accepting, right of=q1] (q2) {\(q_1\)};
+        \node[state, right of=q2] (q3) {\(q_2\)};
+        \path [->] 
+          (q1) edge[loop above] node{0} (q1)
+          (q1) edge[above] node{1} (q2)
+          (q2) edge[loop above] node{1} (q2)
+          (q2) edge[bend left, above] node{0} (q3)
+          (q3) edge[bend left, below] node{0, 1} (q2);
+      \end{tikzpicture}
+    \end{center}
+    \caption{Esempio di rappresentazione di un automa a stati finiti}
+  \end{figure}
+
+  \begin{figure}[h!]
+    \begin{center}
+      \begin{tikzpicture} [node distance = 3.7cm]
+        \node[state, initial, initial text={}] (q0) {\(q_0\)};
+        \node[state, right of=q0] (q1) {\(q_1\)};
+        \node[state, right of=q1] (q2) {\(q_2\)};
+        \node[state, accepting, right of=q2] (q3) {\(q_3\)};
+        \path [->] 
+          (q0) edge[above] node{\(a, \_\,\;|\;\,Z_0 <S,R>\)} (q1)
+          (q1) edge[loop above] node{\(a, \_\,\;|\;\,A <R,R>\)} (q1)
+          (q1) edge[right, above] node{\(b,\_\,\;|\;\,\_ <S, L>\)} (q2)
+          (q2) edge[loop above] node{\(b, A\,\;|\;\,A <R,L>\)} (q3)
+          (q2) edge[left, above] node{\(\_,Z_0\,\;|\;\,Z_0<S,S>\)} (q3);
+      \end{tikzpicture}
+    \end{center}
+    \caption{Esempio di rappresentazione di una macchina di Turing}
+  \end{figure} 
+
+  \section{Automi a Stati Finiti}
+    Gli FSA (Finite State Automaton) sono automi che presentano un numero finito di stati . Formalmente:
+    \begin{definition}
+      Un FSA è una tupla di 5 elementi \(<Q, A, \delta, q_0, F>\), dove:
+      \begin{itemize}
+        \item \(Q\) è un insieme finito di stati;
+        \item \(A:=\{a_0, a_1, a_2,..., a_n\}\) è l'alfabeto di ingresso;
+        \item \(\delta:Q\times A \to Q\): è la funzione di transizione (eventualmente parziale);
+        \item \(q_0 \in Q\) è lo stato iniziale;
+        \item \(F\subseteq Q\) è un insieme di stati finali
+      \end{itemize}
+    \end{definition}
+    
+    Quando l'automa riceve in ingresso un simbolo del proprio alfabeto, cambia lo stato in cui si trova. Il passaggio da uno stato a quello successivo avviene attraverso la funzione di transizione \(\delta\); tale funzione indica, a partire da un determinato stato, in quale stato si troverà l'automa dopo la ricezione di un simbolo in ingresso.
+    
+    \textbf{Attenzione!} La funzione di transizione \(\delta\) non sempre è totale: ciò significa che in alcuni automi non tutte le transizioni da uno stato a quello successivo sono definite. Gli automi che presentano una funzione di transizione completa sono detti completi.
+
+    Data la funzione di transizione \(\delta\) è possibile definire una sequenza di mosse \(\delta^*\), che opera su una stringa anzichè su un unico simbolo in ingresso. Formalmente:
+
+    \begin{definition}
+      La chiusura riflessiva e transitiva della funzione di trasferimento, indicata con \(\delta^*:Q\times A^* \to Q\), è definita in maniera induttiva come segue:
+      \begin{itemize}
+        \item \(\delta^*(q,\varepsilon)\)=q;
+        \item \(\delta^*(q,yi) = \delta(\delta^*(q,y), i)\)
+      \end{itemize}
+      \(\forall x : x \in L \Leftrightarrow \delta^*(q_0, x) \in F\).
+    \end{definition}   
+
+    In altri termini, se l'automa ricesse in ingresso la stringa vuota \(\varepsilon\), allora rimarrebbe nello stato \(q\) in cui si trova, mentre nel caso in cui ricevesse una sequenza di caratteri \(yi\) lo stato che l'automa raggiungerebbe sarebbe quello che raggiungerebbe con ingresso \(i\), a partire dallo stato che raggiungerebbe da \(q\) con la stringa \(y\).
+    
+    Tramite questa definizione, si può affermare che una generica stringa \(x\) appartiene al linguaggio \(L\) se e solo se l'automa si trova in uno stato finale a fronte della lettura della stringa in ingresso: in tal caso si dice che l'automa accetta o riconosce la stringa di ingresso. Per questo motivo, gli FSA sono detti essere accettatori, in quanto verificano se una determinata stringa appartiene o meno ad un dato linguaggio.
+
+    \subsection{Trasduttore a Stati Finiti}
+    Gli FST (Finate State Trasducer) sono trasduttori che presentano un numero finito di stati . Formalmente:
+
+    \begin{definition}
+      Un FST è una tupla di 7 elementi \(<Q, I, \delta, q_0, F, O, \eta>\), dove:
+      \begin{itemize}
+        \item \(Q\) è un insieme finito di stati;
+        \item \(I\) è l'alfabeto di ingresso;
+        \item \(\delta:Q\times I\to Q\) è la funzione di transizione (eventualmente parziale);
+        \item \(q_0\in Q\) è lo stato iniziale;
+        \item \(F\subseteq Q\) è un insieme di stati finali
+        \item \(O\) è l'alfabeto di uscita;
+        \item \(\eta:Q\times I \to O^*\) è la funzione di uscita (eventualmente parziale).
+      \end{itemize}
+    \end{definition}
+    Quando l'automa riceve in ingresso un simbolo, modifica il proprio stato  e mostra in uscita una sequenza di uno o più simboli. Il passaggio da uno stato a quello successivo avviene attraverso la funzione di transizione \(\delta\), mentre l'operazione di uscita avviene tramite la funzione di uscita \(\eta\). 
+
+    \textbf{Attenzione!} La funzione di uscita \(\eta\) non sempre è totale: ciò significa che in alcuni automi è possibile che non ci sia nessuna associazione fra un simbolo del linguaggio in ingresso e un simbolo del linguaggio di uscita.
+
+    Data la funzione di uscita \(\eta\), è possibile definire una sequenza di uscita \(\eta^*\), che opera su una stringa anzichè su un unico simbolo in ingresso. Formalmente:
+
+    \begin{definition}
+      La chiusura riflessiva e transitiva della funzione di uscita, indicata con \(\eta^*:Q\times I^* \to O^*\), è definita in maniera induttiva come segue:
+      \begin{itemize}
+        \item \(\eta^*(q, \varepsilon) = \varepsilon\);
+        \item \(\eta^*(q, yi) = \eta^*(q, y).\eta(\delta^*(q,y),i)\)
+      \end{itemize}
+      \(\forall x : \tau(x)=\eta^*(q_0,x)\; \Leftrightarrow \; \delta^*(q_0,x) \in F\) in cui \(tau\) rappresenta la funzione di traduzione.
+    \end{definition}
+
+    In altri termini, se l'automa ricevesse in ingresso la stringa vuota \(\varepsilon\), allora rimarrebbe nello stato \(q\) in cui si trova e non scriverebbe nessun simbolo sul nastro di uscita, mentre, nel caso in cui ricevesse in ingresso una sequenza di caratteri \(yi\), allora l’automa produrebbe in uscita quello che produrrebbe da \(q\) leggendo \(y\) seguito da ciò che produrrebbe dallo stato che raggiungerebbe da \(q\) leggendo \(y\), avendo \(i\) come ingresso. Quindi la funzione \(\eta^*\) ha il compito di concatenare il simbolo (o la stringa) che si ottiene a fronte della prima transizione con i simboli (o le stringhe) che si ottengono nei successivi passaggi di stato.
+    
+    Tramite questa definizione, si può affermare che la traduzione di una stringa in ingresso \(x\) è accettata solo se e solo se l'automa si trova in uno stato finale a fronte della lettura di \(x\).
+
+  \subsection{Operazioni sugli Automi a Stati Finiti}
+  Gli Automi a Stati Finiti sono chiusi rispetto alle sequenti operazioni:
+
+  \begin{itemize}
+    \item Intersezione. Formalmente, dati: 
+    \begin{itemize}
+      \item \(A^1 =<Q^1, I, \delta^1, q_0^1, F^1>\)
+      \item \(A^2 = <Q^2, I, \delta^2, q_0^2, F^2>\)
+    \end{itemize}
+    allora \(<A^1, A^2> \,=\, < Q^1 \times Q^2, I, \delta,<q_0^1,q_0^2>, F^1 \times F^2>\) e si può dimostrare che il linguaggio \(L(<A^1, A^2>) = L(A^1) \cap L(A^2)\)
+    \item Unione. Formalmente, dati:
+    \begin{itemize}
+      \item \(A^1 =<Q^1, I, \delta^1, q_0^1, F^1>\)
+      \item \(A^2 = <Q^2, I, \delta^2, q_0^2, F^2>\)
+    \end{itemize}
+    Allora \(<A^1, A^2> \,=\, < Q^1 \times Q^2, I, \delta,<q_0^1,q_0^2>, F^1 \times Q^2 \cup Q^1 \times F^2\) con \(\delta(<q^1, q^2>, i) = <\delta^1(q^1,i), \delta^2(q^2,i)>\)
+    \item Complementazione. L'idea alla base del ragionamento è che \(F^C = Q - F\), quindi per poter complementare un automa a stati finiti è necessario rendere finali gli stati che non lo sono e viceversa. Bisogna però prestare attenzione al caso in cui la funzione di transizione dell'automa sia parziale: in tal caso, è necessario innanzitutto completare l'automa, definendo tutte le transizioni precedentemente non definite, e solo in seguito procedere con lo stesso algoritmo.
+  \end{itemize}
+
+  \subsection{Pumping Lemma}
+  Gli automi appena analizzati sono molto semplici e hanno delle evidenti limitazioni, che li rendono inefficaci nella risoluzione di alcuni problemi. 
+  Dallo studio di questi automi si possono ricavare alcuni teoremi dimostrabili, utili per mettere in luce tali limitazioni:
+
+  \begin{theorem} \label{th linguaggio non vuoto}
+    Dato un automa a stati finiti \(A=<Q, I, \delta, q_0, F>\), dove Q ha cardinalità n, il linguaggio riconosciuto da A non è vuoto se e solo se A accetta una stringa x con \;|\;x\;|\;<n.
+  \end{theorem}
+
+  \begin{theorem} \label{th linguaggio infinito}
+    Dato un automa a stati finiti \(A=<Q, I, \delta, q_0, F>\), dove Q ha cardinalità n, il linguaggio riconosciuto da A è infinito se e solo se A accetta una stringa x con \(n\le \;|\;x\;|\; < 2n\).
+  \end{theorem}
+
+  I teoremi \ref{th linguaggio non vuoto} e \ref{th linguaggio infinito} sono basati sul fatto che un determinato Automa a Stati Finiti può presentare cicli nella sua rappresentazione grafica. Nel caso in cui l'automa non presenta alcun ciclo nella sua rappresentazione grafica, il linguaggio è sicuramente finito, in quanto la stringta in ingresso può far passare l'automa una sola volta in ciascuno dei suoi stati: di conseguenza, la stringa può essere lunga al più come il numero di stati dell'automa meno uno. 
+
+  Si enuncia quindi il seguente teorema noto con il nome di Pumping Lemma:
+
+  \begin{theorem}[Pumping Lemma] \label{Pumping Lemma}
+    Sia A un automa a stati finiti. Se \(x \in L\)  e \(\;|\;x\;|\;\leq\;|\;Q\;|\;\), allora esistono uno stato \(q \in Q\) e una stringa \(w \in I^+\) tali che:
+    \begin{itemize}
+      \item \(x = ywz\);
+      \item \(\delta^*(q,w)=q\)
+    \end{itemize}
+    Perciò vale che \(\forall n\geq 0 \;\; yw^nz\in L\)
+  \end{theorem}
+
+  Il Pumping Lemma fornisce una condizione necessaria, ma non sufficiente sulla struttura dei linguaggi che vengono riconosciuti da un FSA. In altri termini, il teorema \ref{Pumping Lemma} afferma che se una stringa \(x\) è lunga almeno quanto il numero degli stati interni di un determinato automa che accetta tale stringa, allora \(x\) passa necessariamente per una sequenza di mosse contenti un ciclo. Inoltre, tutte le stringhe che si ottengono da \(x\) ripetendo la sua sottostringa che attraversa il ciclo, sono sequenze riconosciute e accettate dall’automa. Allo stesso modo, sono accettate anche tutte le stringhe che si ottengono da \(x\) cancellando qualsiasi sua sottostringa che attraversi tale ciclo.
+
+  Ora supponiamo di progettare un automa \(A\) che riconosce tutte e sole le stringhe del linguaggio \(L=\{a^nb^n : n<0\}\). Inizialmente si assume che \(A\) sia in grado di riconoscere un tale linguaggio. Si considera innanzitutto il caso in cui \(x=a^mb^m : m>\;|\;Q\;|\;\). Sappiamo, grazie al Pumping Lemma, che ci sarà un ciclo interno all’automa e può esistere nei tre casi sottolineati:
+
+  \begin{itemize}
+    \item ...aa\underline{aaa}abbbbbb... : se così fosse si potrebbe rimovere dalla stringa la sottostringa che passa all'interno del ciclo e l’automa riconoscerebbe comunque come accettabile tale stringa, ma ciò non è vero in quanto il numero di \(a\) presenti dopo la rimozione di tale sottostringa sarebbe minore del numero delle \(b\) e dunque la stringa non sarebbe riconosciuta dall’automa;
+    \item ...aaaaaab\underline{bbb}bb... : si applica lo stesso ragionamento del punto precedente;
+    \item ..aaa\underline{aaabbb}bbb... : se così fosse si potrebbe ripercorrere quel determinato ciclo anche due volte, ma così facendo si otterrebbe la stringa ...aaaaaaaabbaabbbbbbbb... che, secondo il lemma dovrebbe essere riconoscibile dall’automa, ma così non è.
+  \end{itemize}
+
+  Si nota quindi che non esiste nessun automa a stati finiti che riesca a interpretare un tale linguaggio, in quanto ha una struttura che richiede di contare e ricordare il numero di simboli letti. Per poter contare un numero \(n\) arbitrariamente grande si renderebbe necessaria una memoria infinita, che abbia, quindi, un numero infinito di stati.
+
+  \section{Automi a Pila}
+  I PDA (Push Down Automaton) sono automi che presentano un numero finito di stati  e una memoria organizzata su una struttura a pila. Tale memoria ha lo stesso comportamento dell'omonima struttura dati: i nuovi simboli vengono inseriti in cima allo stack ed estratti dalla cima dello stack, secondo la politica LIFO (Last In First Out). Per indicare che non ci sono più simboli in memoria, si utilizza il simbolo speciale \(Z_0\), detto di fondo pila.
+
+  Questi particolari tipi di automi hanno la possibilità di utilizzare il simbolo in cima alla pila per decidere quale transizione effettuare e la possibilità di manipolare la pila, rimuovendone il simbolo alla cima, oppure aggiungendo un nuovo simbolo.
+
+  \vspace{1in}
+
+  \noindent
+  Formalmente:
+  \begin{definition}
+    Un PDA è una tupla di 7 elementi \(<Q, I, \delta, \Gamma, q_0, Z_0, F>\), dove:
+    \begin{itemize}
+      \item Q è un inisieme finito di stati;
+      \item I è l'alfabeto di ingresso;
+      \item \(\Gamma\) è l'alfabeto della pila, tale per cui \(\Gamma \cap I = \emptyset\);
+      \item \(\delta:Q\times (I\cup \{\varepsilon\})\times \Gamma \to Q \times \Gamma^*\) è la funzione di transizione (eventualmente parziale);
+      \item \(q_0\) è lo stato iniziale
+      \item \(Z_0\) è il simbolo di fondo pila, ovvero l'unico simbolo che appare inizialmente nella pila;
+      \item \(F\subseteq Q\) è un insieme di stati finali.
+    \end{itemize}
+  \end{definition}
+
+  Dalla definizione, si può osservare che l'automa è in grado di decidere il passo successivo anche senza la lettura di alcun simbolo dal nastro di ingresso, ma solo a fronte della lettura di un simbolo sulla cima dello stack. Tali mosse prendono il nome di \(\varepsilon\)-mosse o mosse spontanee. Ovviamente, per uno stesso stato, non è possibile definire sia una transizione spontanea che una non spontanea, in quanto l'automa in questione sarebbe non deterministico e non sarebbe possibile definirne il comportamento a priori. 
+
+  Una mossa spontanea non altera la posizione della testina di lettura sul nastro di ingresso, proprio per il fatto che, in tal caso, l'automa ignora deliberatamente il nastro in questione.
+
+  Per gli automi a pila, si può introdurre il concetto di configurazione, ossia una generalizzazione della nozione di stato, definita come segue:
+
+  \begin{definition}
+    Una configurazione c è una tupla di 3 elementi \(<q, x, \gamma>\), dove:
+    \begin{itemize}
+      \item \(q\in Q\) è lo stato corrente del dispositivo di controllo;
+      \item \(x \in I^*\) è la porzione non ancora letta della stringa d'ingresso;
+      \item \(\gamma \in \Gamma^*\) è la stringa composta da tutti i simboli contenuti all'interno della pila. 
+    \end{itemize}
+  \end{definition}
+  Una configurazione può essere quindi vista come una fotografia dello stato dell'automa in un determinbato istante di tempo. 
+
+  Le transizioni tra configurazioni, indicate con il simbolo \(\vdash\), dipendono naturalmente dalla funzione di transizione \(\delta\) e si distinguono in due categorie:
+  \begin{enumerate}
+    \item Se \(\delta(q,i,A) =<q', \alpha>\) è una mossa definita, si ha che \(c=<q,x,\gamma>\; \vdash \; c'=<q',x',\gamma'>\), dove:
+    \begin{itemize}
+      \item \(\gamma = A\beta\), la pila contiene il simbolo \(A\), utilizzato per eseguire la mossa, seguito dalla stringa \(\beta\) composta da tutti i restanti simboli della pila;
+      \item \(x=iy\), la stringa in ingresso è composta da un simbolo \(i\), utilizzato per eseguire la mossa, seguito dalla stringa \(y\) composta da tutti i restanti simboli non ancora letti;
+      \item \(\gamma'=\alpha\beta\), dopo la transizione, la pila contiene la stringa \(\alpha\) appena inserita, seguita dalla stringa \(\beta\) composta da tutti i restanti simboli della pila;
+      \item \(x'=y\), dopo la transizione, la stringa in ingresso è composta da tutti i simboli non ancora letti; in altre parole, la testina di lettura si sposta a destra di una posizione. 
+    \end{itemize}
+    \item Se \(\delta(q,\varepsilon, A) =<q', \alpha>\) è una mossa definita, si ha che \(c=<q,x,\gamma>\;\vdash\; c'=<q',x',\gamma'>\). dove:
+    \begin{itemize}
+      \item \(\gamma=A\beta\), la pila contiene il simbolo \(A\), utilizzato per eseguire la mossa, seguito dalla stringa \(\beta\) composta da tutti i restanti simboli della pila;
+      \item \(\gamma'=\alpha\beta\), dopo la transizione, la pila contiene la stringa \(\alpha\) appena inserita, seguita dalla stringa \(\beta\) composta da tutti i restanti simboli della pila;
+      \item \(x'=x\), dopo la transizione, la stringa in ingresso è la medesima; in altre parole, la testina di lettura non si sposta.
+    \end{itemize}
+  \end{enumerate}
+
+  Se \(\delta(q,\varepsilon, A) \neq \bot\), ovvero se la funzione di transizione è definita, allora \(\forall i \in I, \delta(q,i,A)= \bot\) : se questa proprietà non fosse soddisfatta, entrambe le transizioni sarebbero consentinte e, come detto precedentemente, l'automa non avrebbe un comportamento deterministico.
+
+  Data la funzione di transizione tra configurazioni \(\vdash\), si può definire la chiusura transitiva e riflessiva \(\vdash^*\) che opera su un insieme di configurazioni anzichè su un'unica configurazione. Un automa a pila accetta una determinata stringa \(x\) se c’è un cammino coerente che va dallo stato iniziale ad uno stato finale al termine della lettura della stringa d’ingresso. Formalmente:
+
+  \begin{math}
+    \forall x \in I^*, x \in L \iff c_0=<q_0,x, Z_0>\;\vdash^*\,c_F=<q\in F, \varepsilon, \gamma>
+  \end{math}
+
+  \vspace{10pt}
+
+  Sappiamo quindi che il linguaggio \(a^nb^n\) non può essere riconosciuto da alcun FSA per il Pumping Lemma. Inoltre, ogni linguaggio riconosciuto da un FSA è riconoscibile anche da un PDA. Si può affermare, quindi, che gli automi a pila sono più espressivi e di maggiore potenza rispetto agli automi a stati finiti, i quali possono essere visti come un sottoinsieme dei PDA. 
+
+  A differenza degli FSA, i PDA potrebbero anche non terminare la propria esecuzione dopo un numero finito di mosse, in quanto possono presentare cicli di \(\varepsilon\)-mosse. Tali cicli non aggiungono potere espressivo ai PDA: questo significa che gli automi a pila ciclici riconoscono lo stesso insieme di linguaggi degli automi aciclici. Per questo motivo, si preferisce eliminare tale categoria di automi, utilizzando tranisizioni tra configurazioni del tipo \(<q,x,\alpha>\vdash^*_d<q',x,\beta>\), in cui il simbolo \(\vdash_d^*\) indica che per \(<q,x,\alpha>\vdash^*<q',x,\beta>\) con \(\beta = Z\beta'\), \(\delta(q', \varepsilon, Z) = \bot\), ovvero transizioni che hanno necessariamente bisogno di un simbolo in ingresso per proseguire la propria esecuzione. Formalmente:
+
+  \begin{definition}
+    Un PDA si definisce aciclico se e solo se:
+
+    \begin{math}
+      \forall x \in I^*\; \exists q,\gamma : <q_0, x, Z_0> \vdash_d^* <q, \varepsilon, \gamma>.
+    \end{math}
+  \end{definition}
+
+  Un tale automa legge sempre per intero la stringa in ingresso prima di terminare la propria esecuzione ed accettare tale stringa, non potendo finire in un ciclo di \(\varepsilon\)-mosse. Un automa a pila cicliclo può sempre essere trasformato in un automa a pila aciclico equivalente.
+
+  \subsection{Trasduttori a Pila}
+  I PDT (Push Down Trasducer) sono trasduttori che presentano un numero finiti di stati  e una memoria organizzata su una struttura a pila. Formalmente:
+
+  \begin{definition}
+    Un PDT è una tupla di 9 elementi \(<Q, I, \delta, \Gamma, q_0, Z_0, F, O, \eta>\), dove:
+    \begin{itemize}
+      \item Q è un inisieme finito di stati;
+      \item I è l'alfabeto di ingresso;
+      \item \(\Gamma\) è l'alfabeto della pila, tale per cui \(\Gamma \cap I = \emptyset\);
+      \item \(\delta:Q\times (I\cup \{\varepsilon\})\times \Gamma \to Q \times \Gamma^*\) è la funzione di transizione (eventualmente parziale);
+      \item \(q_0\) è lo stato iniziale
+      \item \(Z_0\) è il simbolo di fondo pila, ovvero l'unico simbolo che appare inizialmente nella pila;
+      \item \(F\subseteq Q\) è un insieme di stati finali;
+      \item O è l'alfabeto di uscita;
+      \item \(\eta: Q\times (I \cup \{\varepsilon\})\times \Gamma \to O^*\) è la funzione di uscita (eventualmente paziale).
+    \end{itemize}    
+  \end{definition}
+
+  \begin{definition}
+    Una configurazione c di un PDT è una tupla di 4 elementi \(<q,x,\gamma, z>\), dove:
+    \begin{itemize}
+      \item \(q \in Q\) è lo stato corrente del dispositivo di controllo;
+      \item \(x \in I^*\) è la porzione non ancora letta della stringa dàingresso;
+      \item \(\gamma \in \Gamma^*\) è la stringa composta da tutti i simboli contenuti all'interno della pila;
+      \item \(z \in O^*\) è la stringa presente sul nastro di uscita.
+    \end{itemize}
+  \end{definition}
+
+  \vspace{1in}
+
+  Le relazioni di transizione \(c =<q,x,\gamma, z> \vdash c' = <q',x',\gamma',z'>\) possono essere di due categorie:
+  \begin{enumerate}
+    \item se \(\delta(q,i,A)=<q',\alpha>\) è una mossa definita, si ha che \(\eta(q,i,A) = w\), dove:
+    \begin{itemize}
+      \item \(\gamma =A\beta\), la pila contiene il simbolo A, utilizzato per eseguire la mossa, seguito dalla stringa \(\beta\) composta da tutti irestanti simboli della pila;
+      \item \(x=iy\), la stringa in ingresso è composta da un simbolo i, utilizzato per eseguire la mossa, seguito dalla stringa y composta da tutti i restanti simboli non ancora letti;
+      \item \(\gamma'=\alpha\beta\), dopo la transizione, la pila contiene la stringa \(\alpha\) appena inserita, seguita dalla stringa \(\beta\) composta da tutti i restanti simboli delle pila;
+      \item \(x'=y\), dopo la tranisizone, la stringa in ingresso è composta da tutti i simboli non ancora letti; in altre parole, la testina di lettura si sposta a destra di una posizione;
+      \item \(z'=zw\), dopo la tranisizone, alla stringa sul nastro di uscita viene concatenato il simbolo w prodotto dalla funzione di traduzione.  
+    \end{itemize}
+    \item Se \(\delta(q,\varepsilon,A)=<q',\alpha>\) è una mossa definita, si ha che \(\eta(q,\varepsilon,A) = w\), dove:
+    \begin{itemize}
+      \item \(\gamma=A\beta\), la pila contiene il simbolo \(A\), utilizzato per eseguire la mossa, seguito dalla stringa \(\beta\) composta da tutti i restanti simboli della pila;
+      \item \(\gamma'=\alpha\beta\), dopo la transizione, la pila contiene la stringa \(\alpha\) appena inserita, seguita dalla stringa \(\beta\) composta da tutti i restanti simboli della pila;
+      \item \(x'=x\), dopo la transizione, la stringa in ingresso è la medesima; in altre parole, la testina di lettura non si sposta;
+      \item \(z'=zw\), dopo la tranisizone, alla stringa sul nastro di uscita viene concatenato il simbolo w prodotto dalla funzione di traduzione.
+    \end{itemize}
+  \end{enumerate}
+
+  La condizione di accettazione della traduzione è quindi la seguente:
+
+  \begin{math}
+    \forall x \in I^* : x \in L \wedge z = \eta(x) \iff c_0 = <q_0, x, Z_0, \varepsilon> \vdash ^* c_F=<q\in F, \varepsilon, \gamma, z>.
+  \end{math}
+
+  \subsection{Operazioni sugli Automi a Pila}
+  Gli Automi a Pila sono chiusi solamente rispetto all'operazione di complementazione. Ogni PDA può essere complementato seguendo le operazioni qui elencate:
+  \begin{enumerate}
+    \item Eliminazione dei cicli;
+    \item Aggiunta di stati di errore;
+    \item Eliminazione delle mosse spontanee che collegano stati non finali a stati finali;
+    \item Scambio di stati finali e non finali.
+  \end{enumerate}
+
+  \noindent
+  I PDA non sono aperti rispetto ad alcun'altra operazione, quindi un automa a pila non riesce a riconoscere i linguaggi generati dall'intersezione o l'unione di più linguaggi. Inoltre, gli automi a pila presentano ulteriori limitazioni dovute al fatto che lo stack di memoria sia di tipo distruttivo: per poter leggere le informazioni contenute in memoria è prima necessario eliminare tutte le altre informazioni che si trova al di sopra di essa. Quindi, linguaggi del tipo \(L=\{a^nb^nc^n\;|\;n\geq 1\}\) non possono essere riconosciuti da normali PDA perchè una volta terminata la lettura delle \(b\) e, quindi, una volta eliminati tutti i simboli sulla pila per controllare che il numero di \(b\) sia uguale al numero di \(a\), non rimane più alcuna informazione per poter verificare che il numero di \(c\) sia uguale al numero delle altre lettere.
+
+  \section{Macchine di Turing}  
+  Le TM (Turing Machine) sono automi che presentano un numero finito di stati  e che operano su un insieme di nastri infiniti a destra: un nastro di ingresso, un nastro di uscita e uno o più nastri di memoria. Ogni nastro è composto da celle inizializzate dal simbolo di blank (tramite cui si indica che la cella è vuota) che può essere sovrascritto con un qualsiasi simbolo dell'alfabeto in ingresso. Il dispositivo di controllo può muovere le testine di lettura dei nastri in maniera indipendente l'una dall'altra, spostandole a destra (R) o a sinistra (L) di una cella, oppure lasciandole ferme (S) nella posizione in cui si trovano. L'unica eccezione è costituita dal nastro di uscita che può essere spostato solamente a destra. In alternativa, l'automa può anche non effettuare alcuna operazione, fermandosi definitivamente. 
+  
+  Formalmente:
+  \begin{definition}[Turing machine] \label{TM}
+    Una TM a k nastri è una tupla di 9 elementi\\  \(<Q, I, \Gamma, O, \delta, \eta, q_0, Z_0, F>\), dove:
+    \begin{itemize}
+      \item Q è un insieme finito di stati;
+      \item I è l'alfabeto di ingresso;
+      \item \(\Gamma\) è l'alfabeto di memoria;
+      \item O è l'alfabeto di uscita;
+      \item \(F \subseteq Q\) è l'insieme di stati finali;
+      \item \(q_0 \in Q\) è lo stato iniziale;
+      \item \(Z_0\in \Gamma\) è il simbolo iniziale dell'alfabeto di memoria;
+      \item \(\delta:(Q-F)\times I\times\Gamma^k\to Q\times\Gamma^k\times\{R,L,S\}^{k+1} \) è la funzione di transizione (eventualmente parziale);
+      \item \(\eta:(Q-F)\times I\times \Gamma^k \to O\times\{R,S\}\) è la funzione di uscita (eventualmente parziale), definita dove è definita la funzione di transizione \(\delta\);
+    \end{itemize}
+  \end{definition}
+
+  Si noti che la funzione di transizione \(\delta\) è definita in modo tale che non ci siano transizioni uscnti da uno stato finale.
+
+  \begin{definition} \label{configurazione TM}
+    Una configurazione c di una TM a k nastri è una tupla di k+3 elementi \\    \(<q,\; x \!\uparrow\! iy,\; \alpha_1\!\uparrow\! A_1\beta_1,..., \alpha_k\!\uparrow\! A_k\beta_k,\; u\!\uparrow\! o>\), dove:
+    \begin{itemize}
+      \item \(q\in Q\) è lo stato attuale in cui si trova l'automa;
+      \item \(x\!\uparrow\! iy\) è la posizione in cui si trova la testina di lettura del nastro di ingresso, con \(x,y \in I^*\) e \(i\in I\);
+      \item \(\alpha_1\!\uparrow\! A_1\beta_1\) è la posizione in cui si trova la testina di lettura del primo nastro di memoria, con \(\alpha_1, \beta_1 \in \Gamma^*\) e \(A_1\in \Gamma\).
+      \item \(\alpha_k\!\uparrow\! A_k\beta_k\) è la posizione in cui si trova la testina di lettura del k-esimo nastro di memoria, con \(\alpha_k, \beta_k \in \Gamma^*\) e \(A_k\in \Gamma\).
+      \item \(u\!\uparrow\! o\) è la posizione in cui si trova la testina di lettura del nastro di uscita, con \(u\in O^*\) e \(o\in O\);
+      \item \(\!\uparrow\! \; \notin I\cup \Gamma \cup O\), rappresenta la posizione della testina di lettura di un determinato nastro; la testina di lettura punta la cella in cui è contenuto il carattere immediatamente alla destra del simbolo \(\!\uparrow\!\).
+    \end{itemize}
+    La configurazione iniziale \(c_0\) di una TM a k nastri è una tupla di k+3 elementi \\ \(<q_0,\; \!\uparrow\! iy,\; \!\uparrow\! Z_0,...,\; \!\uparrow\! Z_0, \;\!\uparrow\! \_>\). Quindi, \(x=\varepsilon, A_1, ..., A_k=Z_0, \alpha_1,...,\alpha_k=\varepsilon, \beta_1, ...\beta_k=\varepsilon, u=\varepsilon\) e \(o=\_\).
+  \end{definition}
+
+  Ora, data la definizione di configurazione, è necessario anche formalizzare il significato di transizione \(\vdash\) tra due date configurazioni \(c\) e \(c'\) (detta anche mossa o passo computazionale):
+
+  \begin{definition}
+    Siano:\\
+    \(c=<q, x\!\uparrow\! iy, \alpha_1\!\uparrow\! A_1\beta_1,...,\alpha_k \!\uparrow\! A_k \beta_k, u \!\uparrow\! o>\), con \(x=\underline{xi}, y=\underline{jy}, \alpha_1=\underline{\alpha_1A_1},...,\alpha_k=\underline{\alpha_kA_k}\) e \(\beta_1=\underline{\beta_1B_1},..., \beta_k=\underline{\beta_kB_k}\),\;
+    \(c'=<q', x' \!\uparrow\! i'y', \alpha_1' \!\uparrow\! A_1' \beta_1',..., \alpha_k' \!\uparrow\! A_k' \beta_k', u' \!\uparrow\! o'>\), \\ 
+    \(\delta(q,i,A_1, ..., A_k) = <p, C_1, ..., C_k, N,N_1,...N_k>\), con \(p \in Q, N, N_1, ..., N_k \in \{R,L,S\}\) e \(C_1,...,C_k\in\Gamma\), e \(\eta(q,i,A_1,...,A_k) = <v,M>\), con \(v\in O\) e \(M\in\{R,S\}\).
+    \\ Allora \(c\vdash c'\) se e solo se:
+    \begin{enumerate}
+      \item Vale che \(p=q'\);
+      \item Vale anche una delle seguenti condizioni:
+      \begin{enumerate}
+        \item x=x', i=i', y=y' ed N=S;
+        \item x'=xi, i'=\underline{j}, y'=\underline{y} ed N=R;
+        \item x'=\underline{x}, i'=i, y'=iy ed N=L;
+      \end{enumerate}
+      \item Vale anche una delle seguenti condizioni, per \(1\leq r\leq k\):
+      \begin{enumerate}
+        \item \(\alpha_r'=\alpha_r, A_r'=C_r, \beta_r'=\beta_r,\) ed \(N_r=S\);
+        \item \(\alpha_r'=\alpha_rC_r, A_r'=B_r,\beta_r'=\underline{\beta_r},\) ed \(N_r=R\); se \(\beta_r=\varepsilon\), allora \(A_r'=\_\) e \(\beta_r'=\varepsilon\);
+        \item \(\alpha_r'=\underline{\alpha_r}, A_r'=\underline{A_r}, \beta_r'=C_r\beta_r\) ed \(N_r=L\);
+      \end{enumerate}
+      \item Vale anche una delle seguenti condizioni:
+      \begin{enumerate}
+        \item u'=u, o'=v ed M=S;
+        \item u'=uv, o=\(\_\) ed M=R
+      \end{enumerate}      
+    \end{enumerate}
+
+    Se nei casi 2c e 3c, \(x=\varepsilon\) oppure \(\alpha=\varepsilon\), allora non esiste una configurazione c' tale che \(c\vdash c'\) e la macchina di Turing termina la propria esecuzione. Lo stesso comportamento si ottiene nel caso in cui le funzioni \(\delta\) ed \(\eta\) non sono definite in \(<1,i,A_1,...,A_k>\). In tali casi, c viene anche definita configurazione di arresto.
+  \end{definition}
+
+  In altre parole, se \(\delta(q,i,A_1,...,A_k)=<p,C_1,...,C_k,N,N_1,...,N_k>\), la condizione 1 vincola lo stato di \(x'\) ad essere quello di arrivo della transizione. Le condizioni di tipo 2 definiscono l'evoluzione del nastro di ingresso al passaggio da \(c\) a \(c'\): se la testina rimane ferma (condizione 2a), le tre parti in cui la testina divide il nastro saranno identiche in \(c\) e \(c'\); se la testina si muove a destra (condizione 2b), la parte a sinistra della testina conterrà anche il simbolo corrente di \(c\), il simbolo corrente di \(c'\) sarà il primo simbolo della parte destra in \(c\) e la rimanente parte destra di \(c\) sarà la parte destra di \(c'\); infine, se la testina si muove a sinistra (condizione 2c), la parte a sinistra della testina in \(c'\) conterrà tutti i simboli della parte sinistra in \(c\), tranne l'ultimo che diventerà il simbolo corrente di \(c'\) e la parte destra di \(c'\) sarà composto dal simbolo corrente in \(c\) seguito dalla sua parte destra. Analogamente le condizioni di tipo 3 specificano l'evoluzione dei nestri di memoria e le condizioni 4 quella del nastro di uscita.
+
+  Si introduce di seguito il teorema tramite cui si afferma la supremazia delle macchine di Turing nella computazione e nella traduzione.
+
+  \begin{theorem}
+    La classe di linguaggi riconosciuti dalle Macchine di turing include strettamente la classe dei linguaggi riconosciuti dagli Automi a Pila.
+    Inoltre, le macchine di Turing sono trasduttori più potenti rispetto ai trasduttori a pila, per cui tutte le traduzioni effettuate da un PDT possono essere effettuate anche da una TM trasduttrice, ma non viceversa.
+  \end{theorem}
+  
+  \noindent
+  Le macchine di Turing sono il formalismo più potente di cui siamo a disposizione.
+
+  \subsection{Macchine di Turing come Accettatori}
+  Quando le macchine di Turing vengono impiegate per il riconoscimento di un determinato linguaggio o per definire nuovi linguaggi, il nastro di uscita viene completamente ignorato. Dunque, una TM utilizzata come accettatore è una tupla di 7 elementi, ottenuta eliminando dalla definizione \ref{TM} gli elementi \(O\) (l'alfabeto di uscita) ed \(\eta\) (la funzione di uscita). Di conseguenza, anche la definizione \ref{configurazione TM} di configurazione viene modificata omettendo la rappresentazione del nastro di uscita.
+
+  \begin{definition}
+    Sia M una TM a k nastri. Una stringa \(x\in I^*\) è accettata da M se e solo se:
+
+    \(c_0=<q_0, \!\uparrow\! x, \!\uparrow\! Z_0,...,\!\uparrow\! Z_0>\vdash^*c_F<q\in F,x'\!\uparrow\! iy,\; \alpha_1\!\uparrow\! A_1\beta_1,...,\alpha_k\!\uparrow\! A_k\beta_k>\).
+  \end{definition}
+
+  In altre parole, il linguaggio riconosciuto da una TM M è composto da tutte e sole le stringhe che permettono di andare dallo stato iniziale ad uno stato finale. Inoltre, non è richiesto che al termine della computazione la testina si trovi al termine della stringa in ingresso: la TM M può raggiungere uno stato finale anche senza aver completamente letto la stringa in ingresso.
+
+  Se \(x\notin L\), M può anche non raggiungere mai una configurazione di arresto e continuare la sua esecuzione per un tempo indefinito.
+
+  \subsection{Macchine di Turing come Trasduttori}
+  Quando le macchine di Turing vengono impiegate per la traduzione di linguaggi, ovvero per mappare stringhe di \(I^*\) in stringhe di \(O^*\), il nastro di uscita non viene più ignorato come nel caso degli accettatori. Dunque, una TM utilizzata come trasduttore è una tupla di 9 elementi, esattamente come presentata nella definizione \ref{TM}.
+
+  \begin{definition}
+    Sia M una MT a k nastri. M definisce una traduzione \(\tau(x)=y\), con \(\tau_M:I^*\to O^*\), se e solo se:
+
+    \(c_0=<q_0, \!\uparrow\! x, \!\uparrow\! Z_0,...,\!\uparrow\! Z_0, \!\uparrow\! \_>\vdash^* c_F=<q \in F, x'\!\uparrow\! iy,\; \alpha_1\!\uparrow\! A_1\beta_1,..., \alpha_k\!\uparrow\! A_k\beta_k,\; y\!\uparrow\! \_>\)
+  \end{definition}
+
+  In altre parole, una stringa \(x\) viene tradotta in una stringa \(y\) da una TM M se esiste un cammino che parte da una configurazione iniziale con \(x\) sul nastro di ingresso e termina in una configurazione finale con \(y\) sul nastro di uscita.
+
+  \subsection{Altri Modelli di Macchine di Turing}
+  Il modello originario di automa, pensato da Alan Turing (padre fondatore dell'odierna informatica), era una macchina, simile a quelle analizzate nelle sezioni precedenti, con l'unica differenza che presentava un solo nastro infinito (sia a destra che a sinistra), utilizzato come ingresso, uscita e memoria. Formalmente:
+
+  \begin{definition}
+    Una TM a nastro singolo è una tupla di 5 elementi \(<Q,A,\delta, q_0, F>\), dove:
+    \begin{itemize}
+      \item Q è un insieme finito di stati;
+      \item A è un alfabeto finito caratteristico del nastro;
+      \item \(q_0 \in Q\) è lo stato iniziale;
+      \item \(F\subseteq Q\) è l'insieme di stati finali;
+      \item \(\delta:(Q-F)\times A \to Q\times A\times \{R,L,S\}\) è la funzione di transizione (eventualmente parziale).
+    \end{itemize}
+  \end{definition}
+
+  Si noti che, le macchine di Turing ad 1 nastro sono un modello di automa differente rispetto ad una macchina di Turing a singolo nastro: nel primo caso, la TM presenta ben tre nastri (uno di ingresso, uno di uscita e uno di memoria), emntre nel secondo caso, la TM presenta un unico nastro. 
+
+  \begin{theorem}
+    Le TM multinastro e le TM a nastro singolo sono formalismi equivalenti, ossia accettano la stessa classe di linguaggi e realizzano la stessa classe di traduzioni.
+  \end{theorem}
+
+
+  Ognuno dei modelli di macchine di Turing precedentemente analizzati possono essere dotati di nastri multidimensionali: il modello che se ne ricava è la TM con nastro multimensionale. Un nastro \(k\)-dimensionale è realizzato in modo che ogni cella sia identificata univocamente da una tupla di \(k\) interi positivi. Anche questo modello di macchina di Turing è equivalente agli altri analizzati, in quanto si può stabilire una corrispondenza biiettiva fra \(\mathbb N - \{0\}\) e \((\mathbb N - \{0\})^k\), che indicano rispettivamente l'insieme delle posizioni della testina per i nastri lineari e l'insieme delle posizioni della testina per i nastri multidimensionali. Un esempio importante è l'enumerazione delle celle del nastro bidimensionale, che si ottiene tramite la formula:
+  \begin{equation*}
+    \displaystyle d(x,y) = x+\frac{(x+y)(x+y-1)}{2}
+  \end{equation*}
+  ottenuta con il metodo della diagonalizzazione. 

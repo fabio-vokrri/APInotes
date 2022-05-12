@@ -1,0 +1,60 @@
+\chapter{Automi non Deterministici}
+  Tutti modelli analizzati fino ad ora sono deterministici, nel senso che una volta fissato lo stato iniziale e l'ingresso, il comportamento di tale automa è univocamente determinato. In altri termini, per ogni stato e per ogni ingresso è sempre possibile determinare a priori lo stato in cui l'automa termina la propria esecuzione.
+  
+  Ci sono però casi in cui questo non è possibile, in quanto non si ha una conoscenza sufficientemente accurata del comportamento dell'automa per poter prevedere l'esatta evoluzione del modello. In tal caso si dice che l'automa è non deterministico. 
+
+  \section{Automi a Stati Finiti non deterministici}
+  Gli NFSA (Nondeterministic Finite State Automaton) sono automi a stati finiti che presentano un numero finito di stati. Tali automi sono definiti come i corrispettivi automi deterministici, con l'unica differenza che presentano una funzione di transizione definita nel seguente modo:
+  
+  \(\delta:Q\times I\to \wp(Q)\) \footnote{\(\wp (Q)\) rappresenta l'insieme delle parti di Q, i cui elementi sono insiemi di stati.}
+
+  Di conseguenza, la chiusura riflessiva e transitiva di tale funzione, si definisce induttivamente nel seguente modo:
+  \begin{equation*}
+    \delta^*(q,\varepsilon)=\{q\},\; \forall q \qquad\qquad\qquad \delta^*(q,xi)=\bigcup_{q'\in \delta^*(q,x)}\delta(q',i)
+  \end{equation*}
+
+  Nel caso di accettatori, \(x\in I^*\) è accettata da un NFSA \(<Q,I,\delta, q_0, F>\) se e solo se \(\delta^*(q_0,x)\cap F = \emptyset\).
+
+  In altre parole, un NFSA può presentare diverse sequenze di transizioni per ogni dato stato e per ogni data sequenza di ingresso, quindi la chiusura riflessive e transitiva della funzione \(\delta\) non rappresenta più un singolo cammino coerente con la stringa di ingresso, ma un insieme di cammini possibili. Questo porta anche alla necessità di dover modificare la condizione di accettazione di una determinata stringa in ingresso: intuitivamente, infatti, tale nastro è accettato dall'automa se e solo se almeno una delle possibili sequenze di transizioni conduce a uno stato finale. 
+
+  Gli automi non deterministici a stati finiti hanno la stessa potenza di calcolo dei corrispettivi automi deterministici, ma sono spesso più convenienti da utilizzare. Da qui il seguente teorema:
+
+  \begin{theorem}
+    Per ogni NFSA A, può essere costruito un FSA \(A_D\) deterministico che accetti lo stesso linguaggio. 
+  \end{theorem}
+
+  Infatti, dato un NFSA, si può costruire un FSA equivalente che ha come stati gli insiemi formati da stati dell'NFSA. La funzione di transizione è costruita in modo che se un insieme di stati è raggiungibile a partire da uno stato dell'NFSA, allora tale relazione deve essere presente anche nell'FSA sfruttando la costruzione degli stati come insiemi di stati dell'NFSA. 
+
+  \vspace{1in}
+  \section{Automi a Pila non deterministici}
+  Un NPDA (Nondeterministic Push Down Automaton) è un automa che presenta un numero finito di stati  e una memoria organizzata su una struttura a pila. Tali automi sono definiti come i corrispettivi automi deterministici, con l'unica differenza che presentano una funzione di tranisizione definita nel seguente modo:
+
+  \(\delta:Q\times (I\cup \{\varepsilon\})\times \Gamma \to \wp_F(Q\times\Gamma^*)\)
+
+  La relazione di transizione fra configurazioni su \(Q\times I^*\times \Gamma^*\) è definita da \(<q,x,\gamma> \vdash <q',x',\gamma'>\) se e solo se vale una delle seguenti condizioni:
+  \begin{enumerate}
+    \item \(x=ay, x'=y, \gamma=A\beta, \gamma'=\alpha\beta, <q',\alpha>\in\delta(q, a, A)\);
+    \item \(x=x', \gamma=A\beta, \gamma'=\alpha\beta, <q',\alpha>\in \delta(q,\varepsilon,A)\).
+  \end{enumerate}  
+
+  \noindent
+  Inoltre, la stringa \(x\in I^*\) è accettata dall'automa se e solo se:\\
+  \(<q_0, x,Z_0>\vdash^*<q\in F, \varepsilon, \gamma\in \Gamma^*>\).
+
+  Si noti che i PDA sono automi intrinsecamente non deterministici: infatti, nella prima definizione di automa a pila si era dovuto aggiungere il vincolo che, se per una determinata condizione era definita una \(\varepsilon\)-mossa, allora non era definita nessun'altra transizione che partisse da quello stato. Nella definizione appena data, invece, questo vincolo viene rimosso.
+
+  \section{Macchine di Turing non deterministiche}
+  Una NTM (Nondeterministic Turing Machine) è un automa che presenta un numero finito di stati e che opera su un insieme di nastri infiniti a destra. Tali automi sono defiuniti come i corrispettivi automi deterministici, con l'unica differenza che presentano una funzione di transizione e di accettazione definita nel seguente modo:
+
+  \(<\delta, \eta>:(Q-F)\times I\times \Gamma^k\to\wp(Q\times\Gamma^k\times\{R,L,S\}^{k+1}\times\{R,S\})\)
+  
+  \noindent
+  mentre per una NTM a nastro singolo, la funzione di transizione è definita nel seguente modo:
+
+  \(\delta:(Q-F)\times A\to\wp(Q\times A\times\{R,L,S\})\)
+
+  \begin{theorem}
+    Le macchine di Turing non deterministiche non sono più potenti delle corrispettive macchine di Turing deterministiche se utilizzate come riconoscitori di linguaggi.
+  \end{theorem} 
+
+  Data una qualsiasi NTM M, è sempre possibile costruire una TM deterministica M' che riconosce lo stesso linguaggio di M. Se si considera una computazione di M su una stringa in ingresso, questa è ben definita da un albero di configurazioni, in cui è inserita ogni configurazione raggiungibile dallo stato iniziale. Una stringa viene accettata solo se esiste almeno un cammino all'interno della struttura ad albero che si conclude in una configurazione finale. M' potrà simulare il comportamento della TM M, ricostruendo in maniera sequenziale tutte le possibili computazioni di M. Si noti però che quando una stringa non viene accettata, la macchina di Turing M potrebbe entrare in un ciclo infinito, senza mai terminare la propria esecuzione: per questo motivo, l'albero delle computazioni potrebbe presentare rami infiniti. La TM M', che simula M, deve quindi evitare di visitare l'albero delle computazioni 'in profondità' (ovvero tramite un algoritmo di depth first search), ossia seguendo un percorso fino al suo termine, prima di passare ad un ramo successivo, in quanto alcuni rami sono, appunto, infiniti. Conviene quindi visitare l'albero delle computazioni 'in ampiezza' (ovvero tramite un algoritmo di breadth first search), ossia seguendo tutti i nodi dei rami sullo stesso livello. In questo modo, se esiste un cammino dell'albero di M che porti all'accettazione della stringa, M' riuscirà a trovarlo in un tempo finito, terminando la propria esecuzione. Altrimenti, se tutti i cammini di M terminano in stati non finali, M' terminerà la propria esecuzione senza aver trovato nessun nodo di accettazione e rifiuterà la stringa in ingresso. 

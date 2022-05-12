@@ -1,0 +1,62 @@
+\documentclass{book}
+
+\usepackage[italian]{babel}
+\usepackage[
+  a4paper,
+  bindingoffset=0in,
+  left=1in,
+  right=1in,
+  top=1in,
+  bottom=1in,
+  footskip=.25in
+]{geometry}
+
+% references
+\usepackage{hyperref}
+\hypersetup{
+  pdftitle={Appunti di Algoritmi e Prencipi dell'Informatica},
+  pdfauthor={Fabio Vokrri},
+  pdfsubject={Corso di Algoritmi e Prencipi dell'Informatica del professor Davide Martinenghi, Politecnico di Milano 2021-2022},
+  pdfkeywords={Informatica Teorica, Strutture Dati, Algoritmi},  colorlinks=false,
+  linkcolor=black,
+  pdfpagemode=FullScreen,
+}
+
+% graphics and images
+\usepackage{tikz}
+\usetikzlibrary{automata, arrows.meta, positioning}
+
+\usepackage{graphicx}
+\graphicspath{ {../images/} }
+
+% math
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{definition}{Definizione}[section]
+\newtheorem{thesis}{Tesi}[section]
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+
+  \input{title.tex}
+
+  \tableofcontents
+  \clearpage
+
+  \part{Informatica Teorica}
+
+  \include{part1/chapter1.tex}
+  \include{part1/chapter2.tex}
+  \include{part1/chapter3.tex}
+  \include{part1/chapter4.tex}
+  \include{part1/chapter5.tex}
+  \include{part1/chapter6.tex}
+
+  \part{Algoritmi e Strutture Dati}
+  \include{part2/chapter1.tex}
+  \include{part2/chapter2.tex}
+  
+\end{document}

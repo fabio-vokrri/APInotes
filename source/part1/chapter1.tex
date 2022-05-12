@@ -1,0 +1,90 @@
+\chapter{Linguaggi Formali}
+
+  \section{Alfabeti e Stringhe}
+  Diamo alcune definizioni elementari:
+  \begin{definition}[Alfabeto]
+    Un alfabeto (o vocabolario) V è un insieme finito di oggetti elementari detti simboli (o caratteri)
+  \end{definition} 
+
+  \begin{definition} [Stringa]
+    Una stringa x appartenente ad un alfabeto V è una sequenza finita e ordinata di caratteri appartenenti a tale alfabeto.
+  \end{definition}
+
+  Data una stringa \(x\), la notazione \(\;|\;x\;|\;\) indica la lunghezza della stringa \(x\), ovvero il numero di caratteri di cui è composta la stringa (la cardinalità del suo dominio \(V\)). Per convenzione la stringa vuota, ovvero non composta da nessun carattere, è indicata con la lettera \(\varepsilon\): la stringa vuota \(\varepsilon\) ha, quindi, lunghezza zero. 
+
+  Per poter confrontare due stringhe è necessario verificare che:
+  \begin{itemize}
+    \item \(\;|\;x\;|\; = \;|\;y\;|\;\)
+    \item \(x_i = y_i\, \forall i=0,1,2,...,\;|\;x\;|\;\)
+  \end{itemize}
+
+  La concatenazione (o prodotto) \(x.y\) di due stringhe \(x\) e \(y\) è una stringa composta da tutti i caratteri di \(x\) seguiti da tutti i caratteri di \(y\). Inoltre, la concatenazione \(x.\varepsilon\) produce come risultato la stringa \(x\).
+
+  Data una stringa \(s\), una stringa \(x\) è sottostringa (o fattore) di \(s\) se esistono due stringhe \(y\) e \(z\), tali che \(s=yxz\). Inoltre:
+  \begin{itemize}
+    \item se \(y=\varepsilon\), \(x\) è detta prefisso.
+    \item se \(z=\varepsilon\), \(x\) è detta suffisso.
+    \item se \(z=y=\varepsilon\), \(x=s\)
+  \end{itemize}
+
+  Data una stringa \(x\), l'espressione \(x^i\) indica la concatenazione della stringa \(x\) con sè stessa per \(i-1\) volte, ovvero \(x^0 = \varepsilon\) e \(x^{i+1} = x\cdot x^{i}\).
+
+  \section{Operatori di Kleene}
+  Per poter proseguire con il trattato, è prima necessario introdurre alcuni concetti matematici fondamentali. Si danno quindi le seguenti definizioni:
+  \begin{definition}[Semigruppo] \label{Semigruppo}
+    Un semigruppo è una coppia \(<S, \circ >\), dove:
+    \begin{itemize}
+      \item \(S\) è un insieme chiuso rispetto a \(\circ\); per cui, se si prendono due qualsiasi elementi \(A\) e \(B\) di tale insieme, l'operazione \(A\circ B\) produce come risultato un elemento appartenente ad \(S\);
+      \item \(\circ\) è un'operazione associativa su \(S\).
+    \end{itemize}
+  \end{definition}
+
+  Nel contesto dei linguaggi, l'operatore \(\circ\) rappresenta la concatenazione di stringhe.
+  
+  \begin{definition}[Monoide] \label{Monoide}
+    Un monoide è un semigruppo in cui è definito un elemento unitario \(u\in S\), tale che \(\forall x, \exists u(x\circ u = x)\).
+  \end{definition}
+
+  Nel contesto dei linguaggi, l'elemento unitario \(u\) rappresenta la stringa vuota \(\varepsilon\): infatti, la concatenazione di una generica stringa \(x\) con la stringa vuota \(\varepsilon\) produce come risultato nuovamente la stringa originaria \(x\). 
+
+  \begin{definition}[Gruppo] \label{Gruppo}
+    Un gruppo è un monoide in cui è definito un elemento inverso \(x^{-1}\) unico per ogni elemento \(x\) dell'insieme \(S\), tale che \(\forall x(x\circ x^{-1} = u)\).
+  \end{definition}
+
+  Date le definizioni \ref{Semigruppo}, \ref{Monoide} e \ref{Gruppo}, si possono definire gli operatori di Kleene:
+
+  \begin{definition} [Più di Kleene]
+    Sia \(<S, \circ>\) un semigruppo. Per ogni \(X\subseteq S\), \(S^+\) indica il sottoinsieme di S generato da X, ovvero l'insieme di tutti gli elementi \(s\in S\) tale per cui \(s=x_1\circ x_2\circ...\circ x_n\) per qualche \(n\geq 1\), con \(x_i\in X\) (stringhe non vuote).
+  \end{definition}
+
+  Nel contesto dei linguaggi, l'operatore + di Kleene rappresenta l'insieme infinito di stringhe non vuote, che si possono generare a partire dall'insieme \(S\) di simboli, a cui si applica tale operatore.
+
+  \begin{definition} [Stella di Kleene]
+    Se \(<S, \circ, u>\) è un monoide, allora \(X^*=X^+\cup\{u\}\) è un monoide (più precisamente un sottomonoide) di S ed è detto monoide libero generato da X.
+  \end{definition} 
+
+  Nel contesto dei linguaggi, la stella di Kleene rappresenta l'insieme infinito di stringhe, inclusa la stringa vuota \(\varepsilon\), che si possono generare a partire dall'insieme \(S\) di simboli, a cui si applica tale operatore. Quindi, \(X^*=X^+\cup \{\varepsilon\}\).
+
+  Ad esempio, dato l'insieme di simboli \(S=\{a,b,c\}\), \(S^+=\{a,b,c,aa,ab,ac,ba,bb,bc,ca,cb,cc,aaa...\}\) e \(S^*=\{\varepsilon,a,b,c,aa,ab,ac,ba,bb,bc,ca,cb,cc,aaa...\}\). 
+
+  \section{Linguaggi} 
+  Data la definizione della stella di Kleene, si può ora dare la definizione di linguaggio:
+  \begin{definition} [Linguaggio]
+    Un linguaggio L su un alfabeto V è un sottoinsieme di \(V^*\).
+  \end{definition}
+  Dato un insieme di simboli, si possono generare infiniti linguaggi.
+  
+  \vspace{10pt}
+
+  \noindent 
+  Poichè i linguaggi sono un inisieme di stringhe, valgono tutte le operazioni insiemistiche come:
+  \begin{itemize}
+    \item Unione (\(L_1\cup L_2\)): l'inisieme di tutte le stringhe che appartengono o ad \(L_1\) o ad \(L_2\) o ad entrambi i linguaggi;
+    \item Intersezione (\(L_1 \cap L_2\)): l'insieme di tutte le stringhe che appartengono sia ad \(L_1\) che ad \(L_2\);
+    \item Differenza (\(L_1\backslash L_2\)): l'insieme di tutte le stringhe che appartengono ad \(L_1\) ma non ad \(L_2\);
+    \item Complementare (\(L^C = A^* \backslash L\)): l'insieme di tutte le stringhe che non appartengono al linguaggio \(L\);
+    \item Concatenazione (\(L_1.L_2\)): l'insieme di tutte le stringhe che si ottengono concatenando ad ogni stringa di \(L_1\) ogni stringa di \(L_2\); formalmente \(L_1.L_2=\{xy:x\in L_1, \, y\in L_2\}\);
+    \item Potenza \(n\)-esima (\(L^n\)): l'insieme di tutte le stringhe che si ottengono concatenando \(L\) con sè stesso \(n\) volte, utilizzando le regole della concatenazione precedentemente definite;
+    \item Chiusura di Kleene \(\biggl(\displaystyle L^*=\bigcup_{n=0}^\infty L^n\) e \(\displaystyle L^+=\bigcup_{n=1}^\infty L^n\biggr)\)
+  \end{itemize}
+  Le operazioni su di un determinato linguaggio crea nuove classi di linguaggi con caratteristiche proprie, talvolta interessanti. Un linguaggio diventa di interesse nel momento in cui le stringhe di cui è composto possono essere utilizzate per veicolare informazioni, problemi, soluzioni o per rappresentare programmi, documenti, elementi multimediali o, nel caso più rilevante, per rappresentare computazioni.
