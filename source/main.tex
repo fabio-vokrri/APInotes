@@ -1,5 +1,6 @@
 \documentclass{book}
 
+% document style
 \usepackage[italian]{babel}
 \usepackage[
   a4paper,
@@ -37,8 +38,38 @@
 \newtheorem{definition}{Definizione}[section]
 \newtheorem{thesis}{Tesi}[section]
 
+% coding style
 \newcommand{\code}[1]{\texttt{#1}}
+\usepackage{listings}
 
+\lstdefinestyle{mystyle}{
+  basicstyle=\ttfamily,
+  numberstyle=\tiny,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=7.5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  xleftmargin=20pt,
+  frame=l,
+  aboveskip=10pt,
+  belowskip=10pt,
+  keywordstyle=\bf\itshape,
+  classoffset=0,
+  morekeywords={for, down, to, by, while, and, or, repeat, until, if, else, return},
+}
+
+\lstset{style=mystyle}
+
+\renewcommand\lstlistingname{codice}
+\renewcommand\lstlistlistingname{codice}
+
+% MAIN
 \begin{document}
 
   \input{title.tex}

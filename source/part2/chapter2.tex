@@ -1,5 +1,5 @@
 \chapter{Algoritmi}
-In questo capitolo si analizzano a fondo i principali algoritmi di ordinamento e i relativi tempi di esecuzione. Prima di tutto, però, è necessario dare una definizione generale di algoritmo:
+In questo capitolo si analizzano a fondo i principali algoritmi di ordinamento e i relativi tempi di esecuzione. Nello specifico, si utilizzerà come modello di riferimento la macchina RAM con un criterio di costo costante, come analizzato nei capitoli precedenti. Prima di proseguire nella trattazione è necessario dare una definizione generale di algoritmo:
 
 \begin{definition}
   Un algoritmo è una procedura di calcolo ben definita che prende un certo valore, o un insieme di valori, in input e genera un valore, o un insieme di valori, in output. Dunque, un algoritmo è una serie di passi computazionali che trasformano l'input in output.
@@ -20,4 +20,25 @@ La pseudocodifica può avvenire in molti modi, ma nel seguito si utilizzerano le
   \item Gli operatori booleani \code{and} e \code{or} sono cortocircuitati. Ciò significa che nella valutazione dell'espressione \code{x and y}, si valuta prima se il valore di \code{x} sia falso, in quanto, se lo fosse, l'intera espressione sarebbe falsa e non avrebbe quindi alcun senso valutare il valore della variabile \code{y}. Al contrario, nella valutazione dell'espressione \code{x or y}, si verifica innanzitutto se il valore di \code{x} sia vero, in quanto, se lo fosse, l'intera espressione sarebbe vera e non avrebbe quindi alcun senso valutare il valore della variabile \code{y}.
 \end{itemize}
 
-Tramite queste regole è possibile definire un qualsiasi algoritmo.
+Tramite queste regole è possibile definire un generico algoritmo.
+
+\section{Insertion Sort}
+Una classe di algoritmi molto studiati è quella riguardante l'ordinamento di un vettore, che consiste nella disposizione dei suoi elementi in ordine crescente.
+
+\vspace{10pt}
+
+Il primo algoritmo analizzato è l'\textbf{insertion sort}, che prende in input una sequenza di \(n\) numeri\\ \(<a_1, a_2, ...,a_n>\) e restituisce in output una permutazione \(<a_1', a_2',...,a_n'>\) tale che \(a_1'\le a_2' \le ... \le a_n'\).
+
+Questo algoritmo ordina sul posto \footnote{L'algoritmo risistema gli elementi della sequenza all'interno dell'array avendo, in ogni istante, al più un numero finito di elementi memorizzati all'esterno dell'array: ciò permette di risparmiare memoria nel calcolatore.} gli elementi assumendo che la sequenza da ordinare sia inizialmente partizionata in una sottosequenza già ordinata, all'inizio composta da un unico elemento (il primo dell'array), e una sottosequenza ancora da ordinare. Ad ogni iterazione viene rimosso un elemento dalla sottosequenza non ordinata e inserita nella posizione corretta all'interno della sottosequenza già ordinata. 
+
+In pseudocodice:
+
+\lstinputlisting{../docs/insertion_sort.txt}
+
+All'inizio di ogni iterazione del ciclo \code{for}, il cui indice è \(j\), la sottosequenza di elementi \code{A[1..j-1]} è la parte ordinata dell'array, mentre la sottosequenza \code{A[j+1..n]} è costituita da elementi ancora da ordinare.
+
+\vspace{10pt}
+
+Si analizza ora il tempo di esecuzione della procedura \code{insertion sort}: per ogni \(j=2,3,...,n\) in cui \(n\) = \code{A.length}, si indica con \(t_j\) il numero di volte che il test del ciclo \code{while} nella riga 5 viene eseguito per quel determinato valore di \(j\).
+
+
