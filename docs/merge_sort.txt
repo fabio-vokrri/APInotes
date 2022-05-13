@@ -1,0 +1,5 @@
+mergeSort(A, p, r):
+  q = $\lfloor$ (p + q) / 2 $\rfloor$
+  mergeSort(A, p, q)
+  mergeSort(A, q+1, r)
+  merge(A, p, q, r)

@@ -14,7 +14,7 @@ La pseudocodifica può avvenire in molti modi, ma nel seguito si utilizzerano le
   \item I costrutti iterativi \code{while}, \code{for}, \code{repeat-until} e il costrutto condizionale \code{if-else} hanno interpretazioni simili a quelle dei comuni linguaggi di programmazione. Il contatore del ciclo mantiene il suo valore dopo la fine del ciclo, quindi il valore che ha provocato la terminazione del ciclo stesso. Inoltre, si utilizza la parola chiave \code{to} quando il ciclo \code{for} incrementa il valore del suo contatore ad ogni iterazione, mentre si utilizza la parola chiave \code{down to} nel caso la variabile venga decrementata;
   \item Le assegnazioni di un valore ad una certa variabile avviene con il simbolo \code{:=}, differente dall'operatore \code{=}, che invece indica l'eguaglianza di due valori all'interno di un costrutto \code{if};
   \item Per identificare un elemento appartenente ad un array, si utilizza la notazione con le parentesi quadre, al cui interno si indica l'indice dell'elemento a cui si vuole accedere: \code{array[i]}; Per indicare un intervallo di valori all'interno dell'array si utilizza la seguente sintassi: \code{array[i..j]}, con cui si indica la sottomatrice composta dagli elementi compresi fra \(i\) e \(j\); 
-  \item I dati utilizzati sono tipicamente organizzati in oggetti, formati da attributi, a cui si accede tramite la notazione punto: \code{oggetto.proprietà}. Le variabili che rappresentano un determinato oggetto sono trattate come puntatori a tale oggetto. Un puntatore che non fa riferimento ad alcun oggetto è inizializzato con il valore \code{NIL};
+  \item I dati utilizzati sono tipicamente organizzati in oggetti, formati da attributi, a cui si accede tramite la notazione punto: \code{oggetto.prop}. Le variabili che rappresentano un determinato oggetto sono trattate come puntatori a tale oggetto. Un puntatore che non fa riferimento ad alcun oggetto è inizializzato con il valore \code{NIL};
   \item I parametri vengono passati ad una procedura per valore: la procedura chiamata riceve una sua copia dei parametri e, quindi, se a una di queste variabili è assegnato un nuovo valore, la modifica non è visibile dalla procedura chiamante. Nel caso venga passato come argomento un oggetto, viene copiato il puntatore a tale oggetto e quindi le modifiche sono visibili anche dalla procedura chiamante;
   \item L'istruzione \code{return} restituisce immediatamente il controllo al punto in cui la procedura chiamante ha effettuato la chiamata. Le istruzioni \code{return} possono anche ritornare un valore al chiamante;
   \item Gli operatori booleani \code{and} e \code{or} sono cortocircuitati. Ciò significa che nella valutazione dell'espressione \code{x and y}, si valuta prima se il valore di \code{x} sia falso, in quanto, se lo fosse, l'intera espressione sarebbe falsa e non avrebbe quindi alcun senso valutare il valore della variabile \code{y}. Al contrario, nella valutazione dell'espressione \code{x or y}, si verifica innanzitutto se il valore di \code{x} sia vero, in quanto, se lo fosse, l'intera espressione sarebbe vera e non avrebbe quindi alcun senso valutare il valore della variabile \code{y}.
@@ -27,9 +27,7 @@ Una classe di algoritmi molto studiati è quella riguardante l'ordinamento di un
 
 \vspace{10pt}
 
-Il primo algoritmo analizzato è l'\textbf{insertion sort}, che prende in input una sequenza di \(n\) numeri\\ \(<a_1, a_2, ...,a_n>\) e restituisce in output una permutazione \(<a_1', a_2',...,a_n'>\) tale che \(a_1'\le a_2' \le ... \le a_n'\).
-
-Questo algoritmo ordina sul posto \footnote{L'algoritmo risistema gli elementi della sequenza all'interno dell'array avendo, in ogni istante, al più un numero finito di elementi memorizzati all'esterno dell'array: ciò permette di risparmiare memoria nel calcolatore.} gli elementi assumendo che la sequenza da ordinare sia inizialmente partizionata in una sottosequenza già ordinata, all'inizio composta da un unico elemento (il primo dell'array), e una sottosequenza ancora da ordinare. Ad ogni iterazione viene rimosso un elemento dalla sottosequenza non ordinata e inserita nella posizione corretta all'interno della sottosequenza già ordinata. 
+Il primo algoritmo analizzato è l'\textbf{insertion sort}, che prende in input una sequenza di \(n\) numeri \([a_1, a_2, ...,a_n]\) e restituisce in output una permutazione \([a_1', a_2',...,a_n']\) tale che \(a_1'\le a_2' \le ... \le a_n'\). Questo algoritmo ordina sul posto \footnote{L'algoritmo risistema gli elementi della sequenza all'interno dell'array avendo, in ogni istante, al più un numero finito di elementi memorizzati all'esterno dell'array: ciò permette di risparmiare memoria nel calcolatore.} gli elementi assumendo che la sequenza da ordinare sia inizialmente partizionata in una sottosequenza già ordinata, all'inizio composta da un unico elemento (il primo dell'array), e una sottosequenza ancora da ordinare. Ad ogni iterazione viene rimosso un elemento dalla sottosequenza non ordinata e inserita nella posizione corretta all'interno della sottosequenza già ordinata. 
 
 In pseudocodice:
 
@@ -41,4 +39,104 @@ All'inizio di ogni iterazione del ciclo \code{for}, il cui indice è \(j\), la s
 
 Si analizza ora il tempo di esecuzione della procedura \code{insertion sort}: per ogni \(j=2,3,...,n\) in cui \(n\) = \code{A.length}, si indica con \(t_j\) il numero di volte che il test del ciclo \code{while} nella riga 5 viene eseguito per quel determinato valore di \(j\).
 
+\begin{table}[!h]
+  \centering
+  \begin{tabular}{l l l}
+    Codice & Costo & Numero di volte \\
+    \hline
+    \code{for j:= 2 to A.length} & \(c_1\) & \(n\) \\
+    \code{key := A[j]} & \(c_2\) & \(n-1\) \\
+    \code{i := j - 1} & \(c_3\) & \(n-1\) \\
+    \code{while i > 0 and A[i] > key} & \(c_4\) & \(\sum_{j=2}^n{t_j}\) \\
+    \code{A[i + 1] := A[i]} & \(c_5\) & \(\sum_{j=2}^n{(t_j-1)}\) \\
+    \code{i := i - 1} & \(c_6\) & \(\sum_{j=2}^n{(t_j-1)}\) \\
+    \code{A[i + 1] := key} & \(c_7\) & \(n-1\) \\
+  \end{tabular}
+  
+\end{table}
 
+
+Ad ogni riga di codice viene associato un costo \(c_i\) che va moltiplicato per il numero di volte che tale riga viene eseguita. Il tempo totale di esecuzione si calcola, dunque, sommando i vari contributi di tempo di ogni riga, ottenendo così l'espressione di \(T(n)\):
+
+\begin{equation*}
+  \displaystyle T(n) = c_1n+c_2(n-1)+c_3(n-1)+c_4\sum_{j=2}^n{t_j}+c_5\sum_{j=2}^n(t_j-1)+c_6\sum_{j=2}^n(t_j-1)+c_7(n-1)
+\end{equation*}
+
+Ovviamente, il caso migliore si verifica quando l'array in input è già ordinato. In questo caso, \(t_j = 1 \;\; \forall j=2,3...,n\) e l'espressione di \(T(n)\) assume la forma:
+
+\begin{equation*}
+  T(n) = (c_1+c_2+c_3+c_4+c_7)n - (c_2+c_3+c_4+c_7)
+\end{equation*}
+
+che è funzione lineare di \(n\). Dunque, \(T(n)=\Theta(n)\).
+
+Al contrario, il caso pessimo si verifica quando l'array in input è ordinato, ma in ordine decrescente. In questo caso \(t_j = j \;\; \forall j=2,3...,n\) e l'espressione di \(T(n)\) assume la forma:
+
+\begin{equation*}
+  T(n) = \frac{1}{2}(c_4+c_5+c_6)n^2+(c_1+c_2+c_3)n+\frac{1}{2}(c_4-c_5-c_6+c_8)n-(c_2+c_3+c_4+c_7)
+\end{equation*}
+
+che è funzione quadratica di \(n\). Dunque, \(T(n)=\Theta(n^2)\).
+
+\section{Merge Sort}
+L'algoritmo appena analizzato utilizza un approccio di tipo incrementale: dopo aver ordinato il sottoarray \code{A[1..j-1]} inserisce l'elemento \code{A[j]} nella posizione corretta, ottenendo il sottoarray ordinato \code{A[1..j]}. Nel seguito, invece, si analizza un secondo approccio, più efficiente del primo, soprattutto per array di molti elementi: Divide et Impera. Questo criterio si basa sulla suddivisione ricorsiva del problema in sottoproblemi più piccoli, simili a quello originario, ma di dimensione ridotta, per poi risolvere i sottoproblemi di dimensione minima e fondere i risultati ottenuti, per costruire una soluzione generale del problema originario. 
+
+Il paradigma Divide et Impera, si basa in realtà su tre passaggi:
+\begin{enumerate}
+  \item Divide: il problema viene suddiviso in un certo numero di sottoproblemi, che sono istanze più piccole del problema originario, fino ad ottenere sottoproblemi minimi, non più divisibili;
+  \item Impera: i sottoproblemi di dimensione minima vengono risolti in maniera ricorsiva; se i problemi hanno dimensione sufficientemente piccola vengono risolti direttamente;
+  \item Combina: le soluzioni dei sottoproblemi vengono combinate per generare la soluzione del problema generale.
+\end{enumerate}
+
+Un tipico algoritmo che segue questo metodo di risoluzione è il \textbf{merge sort}, che suddivide l'array originario a metà e ordina ricorsivamente i due sottoarray ottenuti, chiamando sè stesso fino ad ottenere sequenze di dimensione uno, di per sè già ordinate. A questo punto, le sottosequenze vengono fuse in modo da ottenere un array ordinato. 
+
+Quest'ultimo passaggio viene effettuato tramite una procedura ausiliaria \code{merge(A,p,q,r)}, dove \(A\) è un array, e \(p,q,r\) sono tre indici dell'array tali che \(p\le q < r\).
+La porcedura assume che le sottosequenze \code{A[p..q]} e \code{A[q+1..r]} siano ordinate e, quindi, le fonde per formare un unico sottoarray ordinato che sostituisce il sottoarray corrente \code{A[p..r]}. La procedura \code{merge(A,p,q,r)} impiega un tempo \(\Theta(n)\) con \(n=r-p+1\) il numero di elementi da fondere. Ad ogni iterazione, la procedura \code{merge} confronta gli elementi più piccoli dei due sottoarray, inserendoli nel sottoarray "successivo" fino a quando uno dei due sottoarray è vuoto: a quel punto, i restanti elementi del sottoarray rimanente vengono copiati per completare l'array "successivo". Da un punto di vista computazionale, ogni iterazione della procedura impiega un tempo costante, in quanto deve semplicemente confrontare i due elementi dei due sottoarray. Poichè tale procedura viene effettuata per un massimo di \(n\) volte, la funsione impiega un tempo \(\Theta(n)\).
+
+\vspace{1in}
+
+In pseudocodice:
+
+\lstinputlisting[mathescape=true]{../docs/merge.txt}
+
+\noindent
+In altri termini, le righe 2 e 3 inizializzano i valori di \(n_1\) ed \(n_2\), che rappresentano la lunghezza dei due sottoarray \code{A[p..q]} e \code{A[q+1..r]}. Nelle due righe successive vengono creati i due sottoarray ausiliari \code{L} (per Left) ed \code{R} (per Right), che contano \(n+1\) elementi (per motivi che verranno chiariti a breve). Le righe dalla 6 alla 9, inizializzano gli array appena creati con i valori contenuti rispettivamente nella prima e nella seconda metà dell'array \code{A}. Le righe 10 e 11 inizializzano l'ultimo (\(n+1\) -esimo) elemento dei due sottoarray \code{L} ed \code{R}, con un valore sentinella. Impostando tale valore ad \(\infty\), si è certi che non possa essere il valore più piccolo fra i due confrontati: in questo modo, una volta arrivati alla fine di uno dei due sottoarray, gli elementi dell'altro vengono ricopiati nell'array "successivo" in quanto necessariamente più piccoli di \(\infty\). Le ultime righe (dalla 12 alla 20) implementano la logica del confronto e dell'insermento dell'elemento correntemente più piccolo nell'array \code{A}.
+
+\vspace{10pt}
+
+Una volta analizzata la procedura \code{merge}, si può introdurre l'algoritmo di ordinamento \code{mergeSort}. In pseudocodice:
+
+\lstinputlisting[mathescape=true]{../docs/merge_sort.txt}
+
+L'algoritmo calcola, in riga 2, un indice \code{q}, che serve a suddividere l'array \code{A} in due sottoarray che contengono rispettivamente \(\lceil n/2 \rceil\) elementi ed \(\lfloor n/2 \rfloor\) elementi, su cui richiama ricorsivamente sè stessa. Una volta suddiviso l'array \code{A} in sottoarray di dimensione minima, viene chiamata la procedura \code{merge}, precedentemente analizzata. 
+
+Come si può facilmente osservare, la procedura \code{mergeSort} è definita in maniera ricorsiva, quindi l'analisi delle prestazioni temporali diventa leggermente più complessa: infatti, si deve necessariamente far uso di un'equazione di ricorrenza, che esprime il tempo di esecuzione totale di un problema di dimensione \(n\), in funzione del tempo di esecuzione per input più piccoli. Se la dimensione del problema diventa sufficientemente piccola, per esempio \(n\le c\) per qualche costante \(c\), la soluzione del problema è diretta e richiede un tempo di esecuzione costante, indicata con \(\Theta(1)\). Si suppone, inoltre, che il problema originario venga suddiviso in \(a\) sottoproblemi, tutti di dimensione \(1/b\) volte la dimensione del problema originario. Dunque, è necessario un tempo \(T(n/b)\) per risolvere un sottoproblema di dimensione \(n/b\) e un tempo \(aT(n/b)\) per risolverli tutti. Infine, se si impiega un tempo \(D(n)\) per suddividere il problema in \(a\) sottoproblemi e un tempo \(C(n)\) per fonderne le soluzioni, si ottiene la ricorrenza:
+
+\begin{equation*}
+  T(n) = \begin{cases}
+    \Theta(1) & if\;n\le c\\
+    aT(n/b)+D(n)+C(n) & else
+  \end{cases}
+\end{equation*}
+
+Per trovare ora il tempo di esecuzione \(T(n)\) nel caso peggiore si può ragionare come segue. Nel caso in cui i sottoarray abbiano cardinalità uno, la soluzione è diretta, quindi viene impiegato un tempo costante per risolvere il problema, mentre se i sottoarray hanno \(n > 1\) elementi, si suddivide il tempo di esecuzione impostando \(D(n) = \Theta(1)\), in quanto si impiega un tempo costante per calcolare il centro di un array, \(C(n)=\Theta(n)\), in quanto si è già precedentemente dimostrato che la procedura \code{merge} impieghi un tempo lineare per la fusione delle soluzioni, e infine si pone \(a=b=2\), in quanto si suddivide ricorsivamente il problema in due sottoproblemi di uguale dimensione \footnote{In realtà, sarebbe più accurato scrivere \(T(\lfloor n/2 \rfloor) + T(\lceil n/2 \rceil)\) in quanto non sempre la dimensione dell'array \code{A} è potenza di 2 e, dunque, divisibile ricorsivamente in due metà. In questo caso è più agevole, anche nei calcoli, ipotizzare che i sottoarray da suddividere abbiano un numero pari di elementi. Tale approssimazione, comunque, non influisce sulla complessità finale del calcolo.}. Con questo ragionamento, la ricorrenza assume l'espressione:
+
+\begin{equation*}
+  T(n)=\begin{cases}
+    \Theta(1) & if\; n=1\\
+    2T(n/2)+\Theta(n)+\Theta(1) & if\; n>1
+  \end{cases}
+\end{equation*}
+
+Si può facilmente dimostrare (analiticamente oppure tramite il teorema dell'espreto, di cui si discuterà successivamente) che tale equazione ha soluzione \(T(n)=\Theta(n\,log_2\,n)\), che rappresenta il tempo di esecuzione dell'algoritmo \code{mergeSort} nel caso pessimo. Si può osservare come tale algoritmo sia decisamente migliore rispetto all'\code{insertionSort}, il cui tempo di esecuzione nel caso passimo è \(\Theta(n^2)\).
+
+Un modo per comprendere meglio come mai la complessità temporale del \code{mergeSort} sia proprio \(\Theta(n\,log_2\,n)\), si riscrive la ricorrenza nel seguente modo:
+
+\begin{equation*}
+  T(n)=\begin{cases}
+    c & if\; n=1\\
+    2T(n/2)+cn+c & if\; n>1
+  \end{cases}
+\end{equation*}
+
+in cui la costante \(c\) rappresenta sia il tempo richiesto per risolvere i problemi di dimensione 1, sia il tempo per elemento dell'array dei passi divide e combina. Si può costruire un albero di ricorsione, in cui ogni ramo rappresenti una metà dell'array precedente e ogni foglia sia un array di dimensione unitaria. Il primo livello (in alto) ha un costo totale di \(cn\), il secondo livello ha un costo totale di \(cn/2 + cn/2 = cn\) e così via fino all'ultimo livello, con costo totale di \(n + n +...+ n\) (\(c\) volte), quindi di \(cn\). In generale, il livello \(i\) ha \(2^i\) nodi, ciascuno dei quali ha un costo di \(c(n/2^i)\), quindi, il numero totale di livelli dell'albero di ricorsione è \(log_2\,n+1\), con \(n\) la dimensione dell'input. Dunque, per calcolare il costo totale, basta sommare i costi di tutti i livelli, ottenendo \(cn(log_2\,n+1) = cn(log_2\,n)+cn\), ovvero \(\Theta(n\,log_2\,n)\).
