@@ -140,3 +140,65 @@ Un modo per comprendere meglio come mai la complessità temporale del \code{merg
 \end{equation*}
 
 in cui la costante \(c\) rappresenta sia il tempo richiesto per risolvere i problemi di dimensione 1, sia il tempo per elemento dell'array dei passi divide e combina. Si può costruire un albero di ricorsione, in cui ogni ramo rappresenti una metà dell'array precedente e ogni foglia sia un array di dimensione unitaria. Il primo livello (in alto) ha un costo totale di \(cn\), il secondo livello ha un costo totale di \(cn/2 + cn/2 = cn\) e così via fino all'ultimo livello, con costo totale di \(n + n +...+ n\) (\(c\) volte), quindi di \(cn\). In generale, il livello \(i\) ha \(2^i\) nodi, ciascuno dei quali ha un costo di \(c(n/2^i)\), quindi, il numero totale di livelli dell'albero di ricorsione è \(log_2\,n+1\), con \(n\) la dimensione dell'input. Dunque, per calcolare il costo totale, basta sommare i costi di tutti i livelli, ottenendo \(cn(log_2\,n+1) = cn(log_2\,n)+cn\), ovvero \(\Theta(n\,log_2\,n)\).
+
+\section{Risoluzione Ricorrenze}
+Come già detto in precedenza, quando i problemi sono abbastanza grandi da essere risolti ricorsivamente, si ha il cosiddetto caso ricorsivo, tramite cui si divide il problema in problemi più piccoli di uguale natura. Una volta che i sottoproblemi diventano sufficientemente piccoli da non richiedere più il passo ricorsivo, si è raggiunto il cosiddetto caso base, da cui inizia la soluzione del problema. 
+
+Questo modello di risoluzione del problema viene anche detto Divide et Impera e richiede l'utilizzo di equazioni di ricorrenza, tramite cui si caratterizzano i tempi di esecuzione degli algoritmi in termini dei loro valori con input più piccoli. Per risolvere tali equazioni, ovvero per trovare i limiti asintotici \(\Theta\) oppure \(O\), esistono tre metodi:
+\begin{enumerate}
+  \item Metodo di Sostituzione: si fa un'ipotesi di soluzione e si utilizza l'induzione matematica per dimostrare che l'ipotesi sia corretta;
+  \item Metodo dell'Albero di ricorsione: si converte la ricorrenza in una struttura ad albero, i cui nodi rappresentano i costi ai vari livelli della ricorsione;
+  \item Metodo dell'Esperto (Master theorem): fornisce i limiti per ricorrenze nella forma \\ \(T(n)=aT(n/b)+f(n)\) con \(a\ge 1, b>1\) e \(f(n)\) data. Una ricorrenza in questa forma caratterizza un algoritmo divide et impera che crea \(a\) sottoproblemi di dimensione \(1/b\), i cui passi divide e combina richiedono un tempo \(f(n)\).
+\end{enumerate}
+
+A volte, le ricorrenze non saranno delle uguaglianze, ma delle disuguaglianze nella forma \(T(n) \le ...\), che stabilisce un limite superiore su \(T(n)\) (quindi si utilizza la notazione \(O\) anzichè \(\Theta\)), oppure nella forma \(T(n) \ge ...\), che stabilisce invece un limite inferiore su \(T(n)\) (quindi si utilizza la notazione \(\Omega\) anzichè \(\Theta\)). Inoltre, ci sono casi in cui si trascurano dei dettagli tecnici di poca importanza, come le condizioni al contorno: infatti, poichè il tempo di esecuzione di un algoritmo con un input di dimensione costante è costante, le ricorrenze che ne derivano hanno \(T(n)=\Theta(1)\), per valori sufficientemente piccoli di \(n\). Questa decisione risiede nel fatto che, sebbene le condizioni al contorno cambiano la soluzione esatta della ricorrenza, tuttavia la soluzione non cambia per più di un fattore costante e quindi asintoticamente rimane immutata.
+
+\subsection{Metodo di Sostituzione}
+Uno dei metodi per la risoluzione delle occorrenze e, quindi, per il calcolo del tempo di esecuzione degli algoritmi, è il metodo della sostituzione, che richiede due passaggi:
+\begin{enumerate}
+  \item Ipotizzare la forma della soluzione;
+  \item Utilizzare l'induzione matematica per dimostrare che la soluzione ipotizzata sia corretta.
+\end{enumerate}
+Questo metodo può essere applicato solamente se si ha un'idea della forma generale della soluzione e si vuole calcolare il limite superiore o inferiore della ricorrenza che si analizza.
+
+\textit{ESEMPIO:} Si determini il limite superiore della ricorrenza \(T(n)=2T(\lfloor n/2 \rfloor)+n\).
+
+Si suppone che la soluzione sia \(O(n\,log_2\,n)\). Il metodo di sostituzione consiste nel dimostrare che \(T(n)\le c\,n\,log_2\,n\) per un generico \(c>0\). Si verifica, innanzitutto, che questo limite sia valido anche per \(\lfloor n/2 \rfloor\), ovvero che \(T(\lfloor n/2 \rfloor)\le c\,\lfloor n/2 \rfloor\,log_2(\lfloor n/2 \rfloor)\). Facendo le opportune sostituzioni si ha:  
+\begin{flalign*}
+  T(n)\;\;\; &\le \;\;\; 2(c\lfloor n/2 \rfloor log_2(\lfloor n/2 \rfloor)) + n &&\\
+  &\le \;\;\; c\,n\,log_2(n/2)+n &&\\
+  &= \;\;\; c\,n\,log_2\,n-c\,n\,log_2\,2+n &&\\
+  &= \;\;\; c\,n\,log_2\,n-c\,n+n &&\\
+  &\le \;\;\; c\,n\,log_2\,n &&
+\end{flalign*}
+L'ultimo passaggio è vero solo per \(c \ge 1\).
+A questo punto, l'induzione matematica richiede di dimostrare che la soluzione vale per le condizioni al contorno. Si suppone, per esempio, che l'unica condizione al contorno sia \(T(1)=1\): si deve dimostrare che è possibile scegliere una costante \(c\) sufficientemente grande in modo che il limite \(T(n)\le c\,n\,log_2\,n\) sia valido anche per le condizioni al contorno. Quindi per \(n=1\) (condizione al contorno), il limite \(T(n)\le c\,n\,log_2\,n\) diventa \(T(1)\le c\, log_2\;1 = 0\), che però è in contrasto con \(T(1)=1\): il caso base della dimostrazione induttiva non è valido!
+
+Questo ostacolo nella dimostrazione può essere facilmente superato sfruttando la notazione asintotica, che richiede di provare che \(T(n)\le c\,n\,log_2\,n\) sia valida solamente dopo un certo \(n_0\) in poi, scelto arbitrariamente: l'idea è quella di escludere la condizione al contorno dalla dimostrazione induttiva. Si osservi che, per \(n\ge 3\), la ricorrenza non dipende direttamente da \(T(1)\), quindi si può sostituire con \(T(2)\) e \(T(3)\), impiegati come casi base della dimostrazione induttiva. Inoltre, ponendo \(n_0=2\), se \(T(1)=1\) allora \(T(2)=4\) e \(T(3)=5\). Basta quindi determinare una costante \(c\) tale per cui \(T(2)= 4 \le 2c\,log_2(2)\) e \(T(3)= 5 \le 3c\,log_2(3)\): le precedenti condizioni sono soddisfatte solo per \(c\ge 2\).
+
+\vspace*{10pt}
+
+Non esiste un metodo unico e generale per indovinare la soluzione corretta di una ricorrenza, ma è possibile formulare delle buone ipotesi tramite il metodo dell'albero di ricorsione. Inoltre, se una ricorrenza è simile già risolta in precedenza, allora è possibile che anche la soluzione sia analoga. Un altro metodo per formulare un'ipotesi di soluzione consiste nel dimostrare dei limiti superiori e inferiori molto generali e larghi, per poi ridurre gradualmente il grado di incertezza, aumentando il limite inferiore e diminuendo il limite superiore.
+
+Ci sono poi casi in cui la soluzione ipotizzata sembra essere corretta, ma i calcoli matematici non soddisfano il passo induttivo: solitamente, il problema risiede nel fatto che l'ipotesi induttiva non è abbastanza forte per dimostrare il limite esatto. In un caso del genere, spesso è necessario semplicemente correggere l'ipotesi sottraendo un termine di ordine inferiore per fare in modo che i calcoli soddisfino i requisiti. 
+
+\textit{ESEMPIO:} Si calcoli la ricorrenza \(T(n)=T(\lfloor n/2 \rfloor)+T(\lceil n/2 \rceil)+1\) supponendo che la soluzione sia \(T(n)=O(n)\). Si deve quindi dimostrare che \(T(n)\le cn\) per qualche \(c\) arbitraria. Sostituendo l'ipotesi all'interno della ricorrenza si ottiene:
+\begin{flalign*}
+  T(n) \;\;\; &\le \;\;\; c\lfloor n/2\rfloor + c\,\lceil n/2 \rceil + 1 &&\\
+  &=\;\;\; c\,n+1 &&
+\end{flalign*}
+che non implica che \(T(n)\le c\,n\) per qualunque valore di \(c\). Sembrerebbe quindi che l'ipotesi fatta sia sbagliata, ma al contrario si può dimostrare che è corretta, formulando un'ipotesi induttiva più forte. Per affrontare tale problema, si sottrae un termine di ordine inferiore dalla precedente ipotesi, ad esempio, un termine costante \(d\ge 0\), ottenendo come nuova ipotesi \(T(n)\le c\,n-d\), che sostituita alla ricorrenza:
+\begin{flalign*}
+  T(n)\;\;\; &\le \;\;\; (c\lfloor n/2 \rfloor -d)+ (c\lceil n/2 \rceil-d)+1 &&\\
+  &= \;\;\; cn -2d +1 &&\\
+  &\le\;\;\; cn-d
+\end{flalign*}
+che diventa valida per ogni \(d\ge 1\). Come prima, la costante \(c\) deve essere scelta arbitrariamente grande affinchè siano soddisfatte le condizioni al contorno.
+
+\vspace*{10pt}
+
+Infine, ci sono casi in cui tramite una piccola manipolazione algebrica è possibile rendere una ricorrenza ignota simile ad una più familiare.
+
+\textit{ESEMPIO:} Si calcoli la ricorrenza \(T(n)=2T(\lfloor \sqrt{n} \rfloor)+ log_2(n)\). Tale ricorrenza sembra molto complessa da risolvere, ma è possibile semplificarla ponendo \(m=log_2n\), ottenendo così \\ \(T(2^m)=2T(2^{m/2})+m \). Chiamando \(S(m)\) la ricorrenza appena ottenuta, è possibile scrivere \(S(m)=2S(m/2)+m\), simile alla precedente ricorrenza analizzata \(T(n)=2T(\lfloor n/2 \rfloor)+n\); in effetti, la soluzione della ricorrenza \(S(m)\) è la stessa ottenuta in precedenza. Dunque, la soluzione è \(S(m)=m\,log_2\,m\) e, ripristinando i termini con la sostituzione \(m=log_2n\), si ottiene che \(T(n)=O(log_2n \cdot log_2(log_2n))\).
+
+\subsection{Metodo dell'Albero di Ricorsione}
