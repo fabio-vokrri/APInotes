@@ -93,8 +93,6 @@ Un tipico algoritmo che segue questo metodo di risoluzione è il \textbf{merge s
 Quest'ultimo passaggio viene effettuato tramite una procedura ausiliaria \code{merge(A,p,q,r)}, dove \(A\) è un array, e \(p,q,r\) sono tre indici dell'array tali che \(p\le q < r\).
 La porcedura assume che le sottosequenze \code{A[p..q]} e \code{A[q+1..r]} siano ordinate e, quindi, le fonde per formare un unico sottoarray ordinato che sostituisce il sottoarray corrente \code{A[p..r]}. La procedura \code{merge(A,p,q,r)} impiega un tempo \(\Theta(n)\) con \(n=r-p+1\) il numero di elementi da fondere. Ad ogni iterazione, la procedura \code{merge} confronta gli elementi più piccoli dei due sottoarray, inserendoli nel sottoarray "successivo" fino a quando uno dei due sottoarray è vuoto: a quel punto, i restanti elementi del sottoarray rimanente vengono copiati per completare l'array "successivo". Da un punto di vista computazionale, ogni iterazione della procedura impiega un tempo costante, in quanto deve semplicemente confrontare i due elementi dei due sottoarray. Poichè tale procedura viene effettuata per un massimo di \(n\) volte, la funsione impiega un tempo \(\Theta(n)\).
 
-\vspace{1in}
-
 In pseudocodice:
 
 \lstinputlisting[mathescape=true]{../docs/merge.txt}
@@ -202,3 +200,53 @@ Infine, ci sono casi in cui tramite una piccola manipolazione algebrica è possi
 \textit{ESEMPIO:} Si calcoli la ricorrenza \(T(n)=2T(\lfloor \sqrt{n} \rfloor)+ log_2(n)\). Tale ricorrenza sembra molto complessa da risolvere, ma è possibile semplificarla ponendo \(m=log_2n\), ottenendo così \\ \(T(2^m)=2T(2^{m/2})+m \). Chiamando \(S(m)\) la ricorrenza appena ottenuta, è possibile scrivere \(S(m)=2S(m/2)+m\), simile alla precedente ricorrenza analizzata \(T(n)=2T(\lfloor n/2 \rfloor)+n\); in effetti, la soluzione della ricorrenza \(S(m)\) è la stessa ottenuta in precedenza. Dunque, la soluzione è \(S(m)=m\,log_2\,m\) e, ripristinando i termini con la sostituzione \(m=log_2n\), si ottiene che \(T(n)=O(log_2n \cdot log_2(log_2n))\).
 
 \subsection{Metodo dell'Albero di Ricorsione}
+Dato che spesso è complesso fomulare un'ipotesi di soluzione per una data ricorrenza, è possibile utilizzare il metodo dell'albero di ricorsione, in cui ogni nodo rappresenta il costo di un singolo sottoproblema. Sommando i costi dei nodi di ogni livello, si ottengono i costi relativi a quel livello e, sommando tali costi, si ottiene il costo generale della ricorrenza, che rappresenta l'ipotesi da verificare con il metodo della sostituzione. Utilizzando questo metodo, si tollera un certo livello di approssimazione, in quanto è interessante analizzare solamente il comportamento asintotico della ricorrenza: si possono quindi eliminare gli operatori 'ceil' e 'floor' e fare delle ipotesi blande per semplificare i calcoli.
+
+\textit{ESEMPIO:} Si calcoli la ricorrenza \(T(n)=3T(\lfloor n/4 \rfloor)+\Theta(n^2)\). Come detto, si può approssimare la ricorrenza eliminando l'operatore floor, ottenendo \(T(n)=3T(n/4)+cn^2\), per una data costante \(c>0\). Per comodità, si suppone anche che \(n\) sia una potenza di 4, in modo tale che ogni livello dell'albero abbia dimensione intera. Si ottiene così il seguente albero delle ricorrenze:
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=10cm]{albero ricorrenze.jpg}
+  \caption{Albero della ricorrenza \(T(n)=3T(n/4)+cn^2\)}
+\end{figure}
+
+La parte \((a)\) della figura mostra \(T(n)\), che viene espanso nella parte \((b)\) in un albero equivalente che rappresenta la ricorrenza. Il termine \(cn^2\) nella radice di quest'albero rappresenta il costo al livello più alto della ricorsione, mentre i tre sottoalberi rappresentano i costi richiesti dai tre sottoproblemi di dimensione \(n/4\). La parte \((c)\) mostra l'espansione dei nodi di costo \(T(n/4)\) dalla parte \((b)\), in cui ogni nodo figlio ha costo \(c(n/4)^2\). Tale processo viene ripetuto più e più volte fino ad ottenere i casi base, rappresentati nella parte \((d)\) con \(T(1)\). 
+
+La dimensione dei sottoproblemi per i nodi alla profondità \(i\) è di \(n/4^i\), quindi la dimensione del sottoproblema diventa 1 (dimensione delle foglie) quando \((n/4)^i=1\), ovvero quando \(i=log_4(n)\): dunque, l'albero della ricorrenza ha esattamente \(log_4n+1\) livelli. Ora, per determinare il costo di ogni livello, basti pensare che ogni nodo dell'albero genera tre sottonodi e che, dunque, il numero di nodi alla profondità \(i\) è \(3^i\). Moltiplicando il risultato appena ottenuto con il costo di un singolo nodo, si ottiene che ogni livello ha un costo di \(3^ic(n/4^i)^2 = (3/16)^icn^2\). L'ultimo livello dell'albero conta \(n^{log_43}\) nodi, ognuno di costo \(T(1)\), per un costo totale di \(n^{log_43}T(1)\), ovvero \(\Theta(n^{log_43})\).
+
+A questo punto, si sommano i contributi di ogni livello, ottenendo:
+\begin{flalign*}
+  T(n)\;\;\; &= \;\;\; cn^2 + \frac{3}{16}cn^2 + \bigg(\frac{3}{16} \bigg)^2cn^2+...+\bigg(\frac{3}{16} \bigg)^{log_4n-1}cn^2+\Theta(n^{log_43}) &&\\
+  &=\;\;\; \sum_{i=0}^{log_4n-1}\bigg(\frac{3}{16}\bigg)^icn^2+\Theta(n^{log_43}) &&\\
+  &\overset{*}{<} \;\;\; \sum_{i=0}^{\infty}\bigg(\frac{3}{16}\bigg)^icn^2+\Theta(n^{log_43}) &&\\
+  &= \;\;\; \frac{1}{1-(3/16)}cn^2 + \Theta(n^{log_43}) &&\\
+  &= \;\;\; \frac{16}{13}cn^2 + \Theta(n^{log_43}) &&\\
+  &= \;\;\; O(n^2).
+\end{flalign*}
+
+Il passaggio segnato con * rappresenta una piccola approssimazione: la \(\sum_{i=0}^{log_4n-1}\big(\frac{3}{16}\big)^icn^2\) ammette come limite superiore \(\sum_{i=0}^{\infty}\big(\frac{3}{16}\big)^icn^2\), che rappresenta una serie geometrica decrescente infinita. In questo modo è possibile proseguire con agilità i calcoli, ottenendo come ipotesi \(T(n)=O(n^2)\), che dovrà essere verificata con il metodo della sostituzione. 
+
+\subsection{Metodo dell'Esperto}
+Il metodo dell'esperto è impiegato per la risoluzione di ricorrenze del tipo \(T(n)=aT(n/b)+f(n)\), con \(a\ge 1, b>1\) costanti ed \(f(n)\) una funzione asintoticamante positiva. Una ricorrenza di questo tipo rappresenta il tempo di esecuzione di un algoritmo che divide il problema di dimensione \(n\) in \(a\) sottoproblemi di dimensione \(n/b\), mentre la funzione \(f(n)\) rappresenta il costo di divisione del problema e di combinazione delle soluzioni.
+Il metodo dell'esperto dipende dal seguente teorema:
+
+\begin{theorem}[Master Theorem]
+  Date le costanti \(a\ge 1\), \(b>1\) e la funzione \(f(n)\), se la ricorsione \(T(n)\) si presenta nella forma \(T(n)=aT(n/b)+f(n)\), allora può essere limitata asintoticamente nei seguenti modi:
+  \begin{enumerate}
+    \item Se \(f(n)=O(n^{log_b a-\varepsilon})\) per qualche \(\varepsilon>0\), allora \(T(n)=\Theta(n^{log_b a})\);
+    \item Se \(f(n)=\Theta(n^{log_b a})\), allora \(T(n)=\Theta(n^{log_b a}log_2(n))\);
+    \item Se \(f(n)=\Omega(n^{log_b a +\varepsilon})\) per qualche \(\varepsilon>0\) e se \(af(n/b)\le cf(n)\) per qualche \(c<1\) e per ogni \(n\) sufficientemente grande, allora \(T(n)=\Theta(f(n))\).
+  \end{enumerate}
+\end{theorem}
+
+Si osservi che in ciascuno dei tre casi, si confronta la funzione \(f(n)\) con la funzione \(n^{log_b a}\): intuitivamente, la soluzione della ricorrenza è determinata dalla funzione polinomialmente \footnote{Una funzione è polinomialmente più grande rispetto ad un'altra funzione se la prima è asintoticamente più grande della seconda di un fattore \(n^\varepsilon\) per qualche \(\varepsilon >0\).} più grande. Se la funzione \(n^{log_b a}\) è più grande polinomialmente, come nel caso uno, allora sarà soluzione della ricorrenza, altrimenti la soluzione sarà \(f(n)\), come enunciato nel caso tre, in cui si deve anche verificare la condizione di regolarità della funzione. Nel caso due, in cui le due funzioni sono asintoticamente uguali, si moltiplicano entrambi i membri per un fattore logaritmico e la soluzione sarà \(T(n)=\Theta(n^{log_b a}log_2(n)) = \Theta(f(n)log_2(n))\).
+
+I tre casi, sfortunatamente, non coprono tutte le funzioni \(f(n)\) possibili, in quanto ci sarà un intervallo fra i casi 1 e 2, in cui la funzione \(f(n)\) è minore di \(n^{log_b a}\), ma non polinomialmente, mentre ci sarà anche un intervallo fra i casi 2 e 3, in cui la funzione \(f(n)\) è maggiore di \(n^{log_b a}\), ma non polinomialmente. In questi casi, il teorema dell'esperto non può essere applicato. 
+
+Per utilizzare il teorema enunciato, bisogna semplicemente determinare in quali dei tre casi rientra la funzione \(f(n)\) e confrontarla con la funzione \(n^{log_b a}\).
+
+\textit{ESEMPIO:} Si determini la soluzione della ricorrenza \(T(n)=9T(n/3)+n\). In questo caso, si ha che \(a=9, b=3\) ed \(f(n)=n\) e quindi \(n^{log_b a} = n^{log_3(9)}=\Theta(n^2)\). Dato che \(f(n)=O(n^{log_3(9)-\varepsilon})\), con \(\varepsilon = 1\) (in quanto \(f(n)=n\)), si può applicare il caso 1 del teorema dell'esperto e concludere immediatamente che la soluzione della ricorrenza è \(T(n)=\Theta(n^2)\), in quanto \(n^2\) è polinomialmente più grande di \(n\). 
+
+\vspace*{10pt}
+
+\textit{ESEMPIO:} Si determini la soluzione della ricorrenza \(T(n)=2T(n/2)+n\,log_2\,n\). In questo caso, si ha che \(a=2,b=2\) ed \(f(n)=n\,log_2\,n\) e quindi \(n^{log_b a}=n^{log_2(2)} = n\). Si potrebbe erroneamente pensare di essere nel terzo caso del teorema dell'esperto, ma le due funzioni non sono polinomialmente comparabili quindi non si può applicare il teorema. La ricorrenza, dunque, deve necessariamente essere risolta con l'utilizzo dei metodi precedentemente analizzati.
