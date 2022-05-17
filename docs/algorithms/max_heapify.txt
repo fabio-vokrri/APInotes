@@ -1,0 +1,12 @@
+maxHeapify(A, i):
+  l := left(i)
+  r := right(i)
+  if l <= A.heapSize and A[l] > A[i]:
+    max := l
+  else: max := i
+  if r <= A.heapSize and A[r] > A[max]:
+    max := r
+  if max != i:
+    swap A[i] with A[max]
+    maxHeapify(A, max)
+

@@ -1,0 +1,6 @@
+heapSort(A):
+  buildMaxheap(A)
+  for i := A.length down to 2:
+    swap A[1] with A[i]
+    A.heapSize := A.heapSize - 1
+    maxHeapify(A, 1)

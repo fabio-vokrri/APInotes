@@ -1,0 +1,4 @@
+buildMaxheap(A):
+  A.heapSize := A.length
+  for i := $\lfloor$A.length / 2 $\rfloor$ down to 1:
+    maxHeapify(A, i)

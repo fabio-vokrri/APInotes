@@ -3,18 +3,18 @@ merge(A, p, q, r):
   $n_2$ := r - q
   L := [1 .. $n_1$ + 1]
   R := [1 .. $n_2$ + 1]
-  for i = 1 to $n_1$:
+  for i := 1 to $n_1$:
     L[i] := A[p + i - 1]
-  for j = 1 to $n_2$:
+  for j := 1 to $n_2$:
     R[j] := A[q + j]
   L[$n_1$ + 1] := $\infty$
   L[$n_2$ + 1] := $\infty$
-  i = 1
-  j = 1
-  for k = p to r:
-    if L[i] $\le$ R[j]:
+  i := 1
+  j := 1
+  for k := p to r:
+    if L[i] <= R[j]:
       A[k] := L[i]
-      i = i + 1
+      i := i + 1
     else:
       A[k] := R[j]:
       j := j + 1

@@ -31,7 +31,7 @@ Il primo algoritmo analizzato è l'\textbf{insertion sort}, che prende in input 
 
 In pseudocodice:
 
-\lstinputlisting{../docs/insertion_sort.txt}
+\lstinputlisting{../docs/algorithms/insertion_sort.txt}
 
 All'inizio di ogni iterazione del ciclo \code{for}, il cui indice è \(j\), la sottosequenza di elementi \code{A[1..j-1]} è la parte ordinata dell'array, mentre la sottosequenza \code{A[j+1..n]} è costituita da elementi ancora da ordinare.
 
@@ -95,7 +95,7 @@ La porcedura assume che le sottosequenze \code{A[p..q]} e \code{A[q+1..r]} siano
 
 In pseudocodice:
 
-\lstinputlisting[mathescape=true]{../docs/merge.txt}
+\lstinputlisting[mathescape=true]{../docs/algorithms/merge.txt}
 
 \noindent
 In altri termini, le righe 2 e 3 inizializzano i valori di \(n_1\) ed \(n_2\), che rappresentano la lunghezza dei due sottoarray \code{A[p..q]} e \code{A[q+1..r]}. Nelle due righe successive vengono creati i due sottoarray ausiliari \code{L} (per Left) ed \code{R} (per Right), che contano \(n+1\) elementi (per motivi che verranno chiariti a breve). Le righe dalla 6 alla 9, inizializzano gli array appena creati con i valori contenuti rispettivamente nella prima e nella seconda metà dell'array \code{A}. Le righe 10 e 11 inizializzano l'ultimo (\(n+1\) -esimo) elemento dei due sottoarray \code{L} ed \code{R}, con un valore sentinella. Impostando tale valore ad \(\infty\), si è certi che non possa essere il valore più piccolo fra i due confrontati: in questo modo, una volta arrivati alla fine di uno dei due sottoarray, gli elementi dell'altro vengono ricopiati nell'array "successivo" in quanto necessariamente più piccoli di \(\infty\). Le ultime righe (dalla 12 alla 20) implementano la logica del confronto e dell'insermento dell'elemento correntemente più piccolo nell'array \code{A}.
@@ -104,7 +104,7 @@ In altri termini, le righe 2 e 3 inizializzano i valori di \(n_1\) ed \(n_2\), c
 
 Una volta analizzata la procedura \code{merge}, si può introdurre l'algoritmo di ordinamento \code{mergeSort}. In pseudocodice:
 
-\lstinputlisting[mathescape=true]{../docs/merge_sort.txt}
+\lstinputlisting[mathescape=true]{../docs/algorithms/merge_sort.txt}
 
 L'algoritmo calcola, in riga 2, un indice \code{q}, che serve a suddividere l'array \code{A} in due sottoarray che contengono rispettivamente \(\lceil n/2 \rceil\) elementi ed \(\lfloor n/2 \rfloor\) elementi, su cui richiama ricorsivamente sè stessa. Una volta suddiviso l'array \code{A} in sottoarray di dimensione minima, viene chiamata la procedura \code{merge}, precedentemente analizzata. 
 
@@ -250,3 +250,57 @@ Per utilizzare il teorema enunciato, bisogna semplicemente determinare in quali 
 \vspace*{10pt}
 
 \textit{ESEMPIO:} Si determini la soluzione della ricorrenza \(T(n)=2T(n/2)+n\,log_2\,n\). In questo caso, si ha che \(a=2,b=2\) ed \(f(n)=n\,log_2\,n\) e quindi \(n^{log_b a}=n^{log_2(2)} = n\). Si potrebbe erroneamente pensare di essere nel terzo caso del teorema dell'esperto, ma le due funzioni non sono polinomialmente comparabili quindi non si può applicare il teorema. La ricorrenza, dunque, deve necessariamente essere risolta con l'utilizzo dei metodi precedentemente analizzati.
+
+\section{Heap Sort}
+Analizzando l'algoritmo Merge Sort si è constatato che è efficiente dal punto di vista temporale, ma non dal punto di vista spaziale, in quanto occupa una grande quantità di memoria. A questo proposito, si analizza ora l'algoritmo \textbf{Heap Sort}, che effettua un ordinamento sul posto degli elementi utilizzando una struttura dati detta Heap ('mucchio'), per la gestione delle informazioni.
+
+Un Heap (binario) è una struttura dati ad albero binario quasi completo \footnote{Un albero binario quasi completo è una struttura dati ad albero in cui ogni livello è completo, eccetto per al più l'ultimo livello, che potrebbe essere completo solo fino ad un certo punto da sinistra}, in cui ogni nodo rappresenta un elemento dell'array da ordinare. Nello specifico, \code{A[1]} è la radice dell'albero, e per ogni elemento \code{A[i]}, \code{A[2i]} e \code{A[2i+1]} rappresentano i figli del nodo, mentre \lstinline[mathescape]{A[$\lfloor n/2 \rfloor$]} rappresenta il nodo padre. Si possono quindi definire le seguenti procedure:
+
+\begin{lstlisting}[mathescape=true]
+parent(i):
+  return $\lfloor i/2 \rfloor$
+\end{lstlisting}
+\begin{lstlisting}[mathescape=true]
+left(i):
+  return $2i$
+\end{lstlisting}
+\begin{lstlisting}[mathescape]
+right(i):
+  return $2i+1$
+\end{lstlisting}
+
+Oltre all'attributo \code{A.length}, che ne ritorna la lunghezza, l'array \code{A} possiede in questo caso anche l'attributo \code{A.heapSize}, che indica il numero degli elementi dell'heap che sono registrati nell'array \code{A}. In altre parole, anche se l'array contiene \(n\) elementi, con \(n\)=\code{A.length}, soltanto gli elementi in \code{A[1..A.heapSize]}, con \(0\le\) \code{A.heapSize} \(\le\) \code{A.length}, sono elementi validi dell'heap.
+
+Esistono, inoltre, due tipologie di heap binari: max-heap e min-heap. Il primo, più importante, è costruito in modo tale che ogni nodo rispetti la condizione per cui \lstinline[mathescape]{A[parent(i)] $\ge$ A[i]}; dunque, il valore di un nodo è al massimo il valore del nodo padre e, di conseguenza, l'elemento più grande di un max-heap è memorizzato alla sua radice. Il secondo, meno utilizzato, è costruito in modo tale che ogni nodo rispetti la condizione per cui \lstinline[mathescape]{A[parent(i)] $\le$ A[i]}. 
+
+Per implementare l'algoritmo heapsort si fa utilizzo del max-heap; per poterne mantenere le proprietà si utilizza la procedura di supporto \code{maxHeapify}, un algoritmo che prende in input un array \code{A} e un suo indice \code{i}, e restituisce l'array ordinato in modo tale da rappresentare il max-heap. Quando tale procedura viene invocata, essa assume che gli alberi binari di radici \code{left(i)} e \code{right(i)} siano dei max-heap, ma assume anche che \code{A[i]} possa essere più piccolo dei suoi figli, violando la proprietà fondamentale. La procedura, quindi, ha il compito di far 'scendere' il valore \code{A[i]} in modo tale che il sottoalbero con radice di indice \(i\) diventi un max-heap.
+
+\vspace{1in}
+
+In pseudocodice:
+\lstinputlisting[mathescape]{../docs/algorithms/max_heapify.txt}
+ 
+A ogni passo viene determinato il più grande degli elementi \code{A[i]}, \code{A[left(i)]} e \code{A[right(i)]} e il suo indice viene memorizzato nella variabile \code{max}. Se \code{A[i]} è l'elemento più grande, allora il sottoalbero è già un max-heap e la procedura termina la propria esecuzione, altrimenti uno dei due figli contiene l'elemento più grande e \code{A[i]} viene scambiato con \code{A[max]} (\code{swap with}); in questo modo, il nodo di indice \(i\) e i suoi figli soddisfano la proprietà di max-heap. Il nodo con indice massimo, però, presenta il valore originale di \code{A[i]} e, quindi, il sottoalbero di radice \code{max} potrebbe violare la proprietà fondamentale: quindi, la procedura viene chiamata ricorsivamente sul sottoalbero, fino a raggiungere le foglie.
+
+Questa procedura viene eseguita in un tempo \(O(h)\), con \(h\) l'altezza dell'albero. Essendo l'albero quasi completo, \(h=O(log\,n)\), quindi \(T(n)=O(log\,n)\).
+
+\vspace*{10pt}
+
+Ora, tramite la procedura \code{maxHeapify} è possibile convertire un array \code{A[1..n]} (con \(n\)=\code{A.length}) in un max-heap. Prima di procedere, è importante osservare come tutti gli elementi \lstinline[mathescape]{A[$\lfloor n/2 \rfloor + 1$ .. n]} siano foglie dell'albero e, quindi, ciascuno di essi è un heap di un solo elemento, che si può utilizzare come punto di partenza per la costruzione dell'heap. Si introduce, dunque, la procedura \code{buildMaxHeap}, che attraversa i nodi restanti dell'albero ed esegue la procedura \code{maxHeapify} in ciascuno di essi. 
+
+In pseudocodice:
+\lstinputlisting[mathescape]{../docs/algorithms/build_max_heap.txt}
+
+Si può dimostrare che tale procedura impiega un tempo di esecuzione \(T(n)=O(n)\).
+
+\vspace*{10pt}
+
+A questo punto, è possibile scrivere l'algoritmo \code{heapSort}. In pseudocodice:
+
+\lstinputlisting[mathescape]{../docs/algorithms/heap_sort.txt}
+
+Questo algoritmo si basa sul fatto che, una volta riordinato l'array in maniera che rappresenti un max-heap, l'elemento più grande dell'array si trova in \code{A[1]}: questo elemento può quindi essere inserito nella posizione finale corretta scambiandolo con \code{A[n]}. Se ora si toglie il nodo \(n\) dall'heap, diminuendo \code{A.heapSize}, si nota che i figli della radice restano max-heap, ma la nuova radice potrebbe violare la proprietà del max-heap. Questo problema può essere rimosso chiamando la procedura \code{maxHeapify(A, 1)}, che lascia un max-heap in \code{A[1..n-1]}. Questa operazione viene ripetuta fino ad un heap di dimensione 2, già ordinato per definizione. 
+
+Come detto in precedenza, la procedura \code{buildMaxHeap} impiega un tempo di esecuzione lineare (\(O(n)\)), mentre le \(n-1\) chiamate alla procedura \code{maxHeapify} impiegano ciascuna un tempo \(O(log\,n)\). Pertanto il tempo di esecuzione dell'\code{heapSort} impiega un tempo di esecuzione \(T(n)=O(n\,log\,n)\).
+
+
