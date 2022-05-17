@@ -303,4 +303,49 @@ Questo algoritmo si basa sul fatto che, una volta riordinato l'array in maniera 
 
 Come detto in precedenza, la procedura \code{buildMaxHeap} impiega un tempo di esecuzione lineare (\(O(n)\)), mentre le \(n-1\) chiamate alla procedura \code{maxHeapify} impiegano ciascuna un tempo \(O(log\,n)\). Pertanto il tempo di esecuzione dell'\code{heapSort} impiega un tempo di esecuzione \(T(n)=O(n\,log\,n)\).
 
+\section{Quick Sort}
+\textbf{Quick sort} è un algoritmo di ordinamento divide et impera, il cui tempo di esecuzione nel caso peggiore è \(O(n^2)\). Nonostante un tempo di esecuzione molto lento nel caso peggiore, quick sort è uno degli algoritmi più utilizzati perchè ha un tempo medio atteso \(\Theta(n\,log\,)\) e i fattori costanti nascosti dalla notazione asintotica sono pressochè nulli. Inoltre, è un algoritmo di ordinamento sul posto, che lo rende utilizzabile anche in calcolatori con memoria limitata. 
+
+L'idea generale di questo algoritmo si basa sui tre tipici passi del metodo divide et impera, per un sottoarray \code{A[p..r]}:
+\begin{enumerate}
+  \item Divide: partiziona l'array \code{A[p..r]} in due sottoarray \code{A[p..q-1]} e \code{A[q+1..r]} (eventualmente vuoti) tali che ogni elemento di \code{A[p..q-1]} sia minore o uguale di \code{A[q]} che, a sua volta, è minore o uguale di ogni elemento di \code{A[q+1..r]}.
+  \item Impera: ordina i due sottoarray \code{A[p..q-1]} e \code{A[q+1..r]} chiamando ricorsivamente sè stesso.
+  \item Combina: nessuna operazione di ricombinazione necessaria in quanto l'array \code{A[p..r]} è già ordinato.
+\end{enumerate}
+
+La procedura \code{quickSort} è implementata tramite il seguente pseudocodice:
+
+\lstinputlisting{../docs/algorithms/quick_sort.txt}
+
+Per pter ordinare un intero array \code{A}, la chiamata iniziale a tale algoritmo è \code{quickSort(A, 1, A.length)}. Si noti che all'interno di tale algoritmo viene chiamata la sottoprocedura \code{partition}, definita come segue in pseudocodifica:
+
+\lstinputlisting{../docs/algorithms/partition.txt}
+
+Questo algoritmo riarrangia il sottoarray \code{A[p..r]} sul posto selezionando un elemento \code{x = A[r]} come pivot, intorno a cui partizionare l'array. All'inizio di ogni iterazione del ciclo \code{for} di riga 4, per qualsiasi indice \(k\) si individuano quattro regioni:
+\begin{enumerate}
+  \item Se \(p\le k\le i\), allora \lstinline[mathescape]{A[k] $\le$ x};
+  \item Se \(i+1\le k \le j-1\), allora \lstinline[mathescape]{A[k] $\ge$ x};
+  \item Se \(k=r\), allora \code{A[k]=x};
+  \item Gli indici \(k\) tali che \(j \le k \le r-1\) non hanno una particolare relazione con il pivot \(x\).
+\end{enumerate}
+
+Le ultime due righe della procdeura, inveceinseriscono il pivot al suo posto nel mezzo dell'array, scambiandolo con l'elemento più a sinistra, che è maggiore di \(x\), e restituisce un nuovo indice di pivot. Il tempo di esecuzione dell'algoritmo \code{partition} con input il sottoarray \code{A[p..r]} è \(\Theta(n)\), con \(n=r-p+1\).
+
+Il tempo di esecuzione dell'algoritmo \code{quickSort} dipende solamente da come viene partizionato l'array (in maniera bilanciata o meno) che, a sua volta, dipende da quali elementi vengono utilizzati per il partizionamento. Se il partizionamento è bilanciato, l'algoritmo ha un tempo di esecuzione \(\Theta(n\,log\,n)\), mentre nel caso peggiore, quando il partizionamento è sbilanciato, l'algoritmo converge ad una solzuione in un tempo \(\Theta(n^2)\).
+
+\vspace*{10pt}
+
+Il comportamento nel caso peggiore si verifica quando la subroutine \code{partition} produce un sottoproblema con \(n-1\) elementi e uno vuoto. Per calcolare il tempo di esecuzione, si suppone che questo sbilanciamento si verifichi per ogni chiamata ricorsiva. Il partizionamento costa un tempo di esecuzione \(\Theta(n)\) e, dato che uno dei due array è vuoto e làaltro conta \(n-1\) elementi, si ha un tempo totale:
+\begin{equation*}
+  T(n) = T(n-1) + T(0) + \Theta(n) = T(n-1) + \Theta(1) + \Theta(n)
+\end{equation*}
+Intuitivamente, e si sommano i costi ad ogni livello della ricorsione si ottiene una serie aritmetica, il cui valore è \(\Theta(n^2)\). Questa situazione si verifica quando l'array di partenza è già completamente ordinato. 
+
+\vspace*{10pt}
+
+Il comportamento nel caso ottimo si verifica quando la subroutine \code{partition} produce due sottoproblemi di dimensione non maggiore di \(n/2\): in questo caso il tempo di esecuzione dell'algoritmo è molto più rapido e avviene in un tempo totale \(T(n) \le 2T(n/2) + \Theta(n)\), che per il secondo caso del teorema dell'esperto, ha soluzione \(T(n)=\Theta(n\,log\,n)\). Si noti, inoltre, che nel caso in cui la partizione non fosse perfettamente bilanciata, l'algoritmo riuscirebbe comunque a riordinare l'array in un tempo \(T(n)=\Theta(n\,log\,n)\): questo dimostra che il \code{quickSort} è un algoritmo molto più vicino al caso ottimo che al caso pessimo, caso che si verifica in una sola istanza del problema (quando, appunto, è ordinato). 
+
+\vspace*{10pt}
+
+Il comportamento nel caso medio si verifica quando la subroutine \code{partition} produce una combinazione di partizioni 'buone' e 'cattive'. Si suppone, per semplicità, che le partizioni buone e cattive si alternino all'interno dell'albero di ricorsione e che quelle buone siano tutte nel caso migliore, mentre le quelle cattive siano nel caso pessimo. Si ipotizzi che nella radice dell'albero il costo di ripartizione è \(n\) e i sottoarray prodotti hanno dimensione \(n-1\) e 0 (caso pessimo), mentre nel livello successivo il prtizionamento del sottoarray \(n-1\) produca due array di dimensione \((n-1)/2\) e \((n-1)/2 - 1\) (caso migliore). Il costo di una divisione cattiva, seguito da una divisione buona è comunque \(\Theta(n)\), ovvero lo stesso costo di una divisione buona: intuitivamente, quindi, la coppia divisione buona/cattiva impiega lo stesso tempo totale di esecuzione \(\Theta(n\,log\,n)\).
 
