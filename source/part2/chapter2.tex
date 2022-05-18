@@ -347,5 +347,39 @@ Il comportamento nel caso ottimo si verifica quando la subroutine \code{partitio
 
 \vspace*{10pt}
 
-Il comportamento nel caso medio si verifica quando la subroutine \code{partition} produce una combinazione di partizioni 'buone' e 'cattive'. Si suppone, per semplicità, che le partizioni buone e cattive si alternino all'interno dell'albero di ricorsione e che quelle buone siano tutte nel caso migliore, mentre le quelle cattive siano nel caso pessimo. Si ipotizzi che nella radice dell'albero il costo di ripartizione è \(n\) e i sottoarray prodotti hanno dimensione \(n-1\) e 0 (caso pessimo), mentre nel livello successivo il prtizionamento del sottoarray \(n-1\) produca due array di dimensione \((n-1)/2\) e \((n-1)/2 - 1\) (caso migliore). Il costo di una divisione cattiva, seguito da una divisione buona è comunque \(\Theta(n)\), ovvero lo stesso costo di una divisione buona: intuitivamente, quindi, la coppia divisione buona/cattiva impiega lo stesso tempo totale di esecuzione \(\Theta(n\,log\,n)\).
+Il comportamento nel caso medio si verifica quando la subroutine \code{partition} produce una combinazione di partizioni 'buone' e 'cattive'. Si suppone, per semplicità, che le partizioni buone e cattive si alternino all'interno dell'albero di ricorsione e che quelle buone siano tutte nel caso migliore, mentre le quelle cattive siano nel caso pessimo. Si ipotizzi che nella radice dell'albero il costo di ripartizione è \(n\) e i sottoarray prodotti hanno dimensione \(n-1\) e 0 (caso pessimo), mentre nel livello successivo il prtizionamento del sottoarray \(n-1\) produca due array di dimensione \((n-1)/2\) e \((n-1)/2 - 1\) (caso migliore). Il costo di una divisione cattiva, seguito da una divisione buona è comunque \(\Theta(n)\), ovvero lo stesso costo di una divisione buona: intuitivamente, quindi, la coppia divisione buona/cattiva impiega lo stesso tempo totale di esecuzione \(\Theta(n\,log\,n)\), con l'unica differenza che cambiano le costanti moltiplicative, eclissante nella notazione asintotica.
+
+\section{Counting Sort}
+Gli algoritmi analizzati fino ad ora, seppur differenti fra loro, condividono un'importante proprietà: l'ordinamento che effettuano è basato soltanto su confronti fra gli elementi di input. Questi algoritmi sono detti di ordinamento per confronti, per cui, dati due elementi \(a_i\) e \(a_j\) si esegue uno dei test \(a_i , a_j, a_i\le a_j, a_i=a_j, a_i\ge a_j\) o \(a_i > a_j\) per determinare il loro ordine relativo. 
+
+Gli algoritmi di ordinamento per confronti possono essere visti in termini di alberi di decisione, ovvero alberi binari completi che rappresentano i confronti fra gli elementi effettuati da un determinato algoritmo di ordinamento. Ora, l'esecuzione di un algoritmo di ordinamento corrisponde ad indicare su tale albero un cammino semplice che collega la radice dell'albero con una foglia (nello specifico, una delle foglie che rappresentano le permutazioni ordinate dell'array di ingresso). Ogni nodo interno di tale albero rappresenta un confronto: il sottoalbero sinistro corrisponde a confronti del tipo \(a_i \le a_j\), mentre quello destro corrisponde a confronti del tipo \(a_i > a_j\). Si noti che sulle foglie sono presenti tutte le possibili permutazioni della sequenza di input: dunque un albero di decisione può presentare più di \(n!\) foglie, in quanto alcune permutazioni potrebbero comparire più volte, ma meno di \(2^h\) (con h, l'altezza dell'albero). La lunghezza del cammino semplice più lungo dalla radice di un albero di decisione ad una delle sue foglie rappresenta il numero di confronti che un determinato algoritmo di ordinamento deve svolgere nel caso peggiore: questo numero è equivalente all'altezza dell'albero stesso. Si introduce quindi il seguente teorema, che determina un limite inferiore sul tempo di esecuzione degli algoritmi di ordinamento per confronti:
+
+\begin{theorem}
+  Qualsiasi algoritmo di ordinamento per confronti richiede \(\Omega(n\,log\,n)\) confronti nel caso peggiore.
+\end{theorem}
+
+\noindent
+da cui deriva anche:
+
+\begin{theorem}
+  Ogni albero di decisione di un algoritmo di ordinamento di n elementi ha altezza \(\Omega(n\,log\,n)\).
+\end{theorem}
+
+\vspace*{10pt}
+
+Una volta determinato il limite inferiore del tempo di esecuzione degli algoritmi di ordinamento, si introduce qui l'algoritmo \textbf{counting sort}, che riordina un array di dimensione \(n\) in un tempo lineare \(\Theta(n)\). 
+Tale algoritmo suppone che ciascuno degli elementi di input sia un numero intero compreso nell'intervallo da 0 a \(k\in \mathbb{N}\) e determina per ciascun di essi il numero di elementi minori; utilizza poi questa informazione per inserire l'elemento corrente direttamente nella giusta posizione nell'array di output. Ad esempio, se l'elemento \(x\) è più grande di 5 altri elementi, allora verrà inserito nella posizione 6 dell'array di output.
+
+Nel codice di counting sort, si suppone che l'input sia un array \code{A[1..n]}, con \(n\)=\code{A.length}. Occorrono altri due array: l'array \code{B[1..n]}, che contiene l'output ordinato, e l'array \code{C[0..k]} fornisce la memoria temporanea di lavoro. In pseudocodice:
+
+\lstinputlisting{../docs/algorithms/counting_sort.txt}
+
+Dopo che il ciclo \code{for} in riga 3 inizializza a zero tutti gli elementi dell'array \code{C}, ogni elemento dell'input viene esaminato con il secondo ciclo \code{for} (in riga 5): se il valore di un elemento è \(i\), viene incrementato il valore di \code{C[i]}. Dunque, dopo la riga 6, l'array \code{C} contiene il numero di elementi uguagli ad \(i\), per ogni \(i=0,1,...,k\). Le righe 7 e 8 determinano, per ogni \(i=0,1,...,k\), quanti elementi di input sono minori o uguali a \(i\). Infine, il ciclo \code{for} di riga 9 inserisce l'elemento corrente nella posizione corretta all'interno dell'array di output \code{B}. 
+
+Il primo ciclo \code{for} impiega un tempo di esecuzione \(\Theta(k)\), il secondo un tempo \(\Theta(n)\), il terzo un tempo \(\Theta(k)\) e, infine, il ciclo \code{for} di riga 9 impiega un tempo di esecuzione lineare \(\Theta(n)\). Dunque, il tempo di esecuzione totale dell'algoritmo \code{countingSort} è \(T(n)=\Theta(n+k)\). Di solito, questa procedura viene utilizzata quando \(h=\Theta(n)\), facendo si che il tempo totale di esecuzione sia un \(\Theta(n)\). 
+
+L'algoritmo appena analizzato batte il limite inferiore di tempo \(\Omega(n\,log\,n)\) per gli algoritmi di ordinamento per confronti perchè non confronta nessun elemento dell'input, ma utilizza il valore di ogni elemento come indice di un array \code{C} di appoggio. 
+
+
+
 
