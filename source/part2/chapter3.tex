@@ -1,1 +1,84 @@
 \chapter{Strutture Dati}
+Gli insiemi manipolati dagli algoritmi, a differenza di quelli matematici, possono essere modificati inserendo o rimuovendo elementi. Questi insiemi sono detti dinamici e giocano un ruolo importante in informatica, perchè modellano le strutture utilizzate per memorizzare in modo ordinato i dati.
+
+In una tipica implementazione di un insieme dinamico, ogni elemento è rappresentato da un oggetto, i cui attributi possono essere esaminati e manipolati a piacimento dagli algoritmi. In molte strutture dati, l'oggetto dispone di una chiave identificativa (spesso univoca, ma non necessariamente) e ovviamente di dati satelliti che si vogliono memorizzare ordinatamente in memoria. Oltre a questi due attributi, l'oggetto può anche contenere altri dati specifici per una determinata struttura dati, in modo da rendere più semplice e veloce la loro manipolazione.
+
+Le tipiche operazioni che si possono svolgere sulle strutture dati sono suddivise in due categorie: le query (interrogazioni), che hanno il solo scopo di estrapolare informazioni dall'insieme dinamico, e le operazioni di modifica, che hanno il compito di modificare l'insieme. Di seguito sono elencate le istruzioni più comuni:
+
+\begin{itemize}
+  \item \code{search(S, k)}: è un'operazione di query che, dato un insieme \(S\) e un valore chiave \(k\), restituisce \code{NIL} se tale elemento non appartiene all'insieme.
+  \item \code{insert(S, x)}: è un'operazione di modifica che inserisce all'interno dell'insieme \(S\) l'elemento puntato da \(x\).
+  \item \code{delete(S, x)}: è un'operazione di modifica che, dato un puntatore \(x\) ad un elemento dell'insieme \(S\), rimuove \(x\) da \(S\).
+  \item \code{minimum(S)}: è un'operazione di query che ritorna l'elemento dell'insieme \(S\) con la chiave più piccola.
+  \item \code{maximum(S)}: è un'operazione di query che ritorna l'elemento dell'insieme \(S\) con la chiave più grande.
+  \item \code{successor(S, x)}: è un'operazione di query che, dato un elemento \(x\) la cui chiave appartiene ad un insieme totalmente ordinato \(S\), restituisce un puntatore all'elemento successivo più grande di \(S\) oppure \code{NIL} se \(x\) è il più grande degli elementi.
+  \item \code{predecessor(S, x)}: è un'operazione di query che, dato un elemento \(x\) la cui chiave appartiene ad un insieme totalmente ordinato \(S\), restituisce un puntatore all'elemento precedente più piccolo di \(S\) oppure \code{NIL} se \(x\) è il più piccolo degli elementi.
+\end{itemize}
+
+\section{Stack}
+Gli \textbf{stack} sono insiemi dinamici dove l'elemento da rimuovere tramite l'operazione \code{delete} è predeterminato. In questa struttura dati, l'elemento cancellato è quello inserito per ultimo, secondo la politica LIFO (Last In, First Out). Nello specifico, le operazioni di \code{insert} e \code{delete} prendono rispettivamente il nome di \code{push} e \code{pop} \footnote{Questa operazione non prende nessun argomento, in quanto l'elemento da eliminare è predeterminato}: la prima inserisce in cima alla pila l'elemento passato come argomento, mentre la seconda operazione elimina l'unico elemento accessibile dalla pila, ovvero la cima. 
+
+Questa struttura dati può essere implementata tramite un array con un massimo di \(n\) elementi \code{S[1..n]}, che presenta degli attributi specifici come \code{S.top}, ovvero l'indice tramite cui accedere all'ultimo elemento inserito. L'array è dunque composto dagli elementi \code{S[1..S.top]}, dove \code{S[1]} rappresenta l'elemento in fondo alla pila, mentre \code{S[S.top]} rappresenta l'elemento in cima. Ovviamente, se \code{S.top} = 0, si dice che la pila è vuota, in quanto non contiene nessun elemento. In questo caso, se si tenta di estrarre un elemento dallo stack, si ottiene un errore di underflow dello stack, mentre se si cerca di inserire un elemento sulla pila piena (che conta quindi di \(n\) elementi), si ottiene un errore di overflow dello stack.
+
+Le operazioni dello stack possono essere implementate molto semplicemente in pseudocodifica come segue:
+
+\begin{lstlisting}
+  isEmpty(S):
+    if S.top = 0:
+      return TRUE
+    else return FALSE
+\end{lstlisting} 
+
+\begin{lstlisting}
+  push(S, x):
+    S.top := S.top + 1
+    S[S.top] := x
+\end{lstlisting}
+
+\begin{lstlisting}
+  pop(S):
+    if isEmpty(S):
+      error "underflow"
+    else:
+      S.top := S.top - 1
+      return S[S.top + 1]
+\end{lstlisting}
+
+Si noti come, in questo caso, l'operazione di \code{pop} ritorna l'elemento appena eliminato dallo stack.
+
+\section{Queue}
+Le \textbf{code} sono insiemi dinamici dove l'elemento da rimuovere tramite l'operazione \code{delete} è predeterminato. In questa struttura dati, l'elemento cancellato è quello inserito per primo, secondo la politica FIFO (First In First Out). Nello specifico, la coda presenta un inizio detto \code{head} e una fine detta \code{tail}, e le operazioni di \code{insert} e \code{delete} prendono rispettivamente il nome di \code{enqueue} e \code{dequeue} \footnote{Anche in questo caso, questa operazione non prende nessun argomento, in quanto l'elemento da eliminare è predeterminato}: la prima inserisce in fondo alla fila l'elemento passato come argomento, mentre la seconda operazione elimina il primo elemento della fila. 
+
+Questa struttura dati può essere implementata tramite un array di \(n\) elementi \code{Q[1..n]}, che contiene un massimo di \(n-1\) elementi, per ragioni che verranno chiarite in seguito. L'attributo \code{Q.head} punta all'inizio della coda, mentre l'attributo \code{Q.tail} punta alla posizione in cui l'ultimo elemento che dovrà essere inserito prenderà posto (ovvero alla posiziove vuota successiva all'ultimo elemento della coda). Gli elementi della coda, quindi, occupano le posizioni \code{Q.head}, \code{Q.head + 1}, ..., \code{Q.tail - 1}. Alla fine dell'array la posizione 1 della queue segue immediatamete la posizione \(n\) secondo un ordine circolare. Se \code{Q.head = Q.tail} allora la coda è vuota. All'inizio le posizioni \code{Q.head} e \code{Q.tail} combaciano e sono entrambe inizializzate al valore 1.
+
+Come per gli stack, se la coda è vuota, il tentativo di rimuovere un elemento provoca un errore di underflow, mentre se \code{Q.head = Q.tail + 1} la coda è piena e il tentativo di inserire un nuovo elemento provoca un errore di overflow. 
+
+\vspace{1in}
+
+Le operazioni della queue possono essere implementate molto semplicemente in pseudocodifica come segue:
+
+\begin{lstlisting}
+  enqueue(Q, x):
+    Q[Q.tail] := x
+    if Q.tail = Q.length:
+      Q.tail := 1
+    else:
+      Q.tail := Q.tail + 1
+\end{lstlisting}
+
+\begin{lstlisting}
+  dequeue(Q, x):
+    x := Q[Q.head]
+    if Q.head = Q.length:
+      Q.head := 1
+    else:
+      Q.head := Q.head + 1
+    return x
+\end{lstlisting}
+
+\section{Liste Concatenate}
+
+% \section{Tavole Hash}
+% \section{Alberi Binari}
+% \section{Alberi RB}
+% \section{Grafi}
