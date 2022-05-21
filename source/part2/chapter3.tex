@@ -124,7 +124,176 @@ listDelete(L, x):
 
 Anche questa procedura impiega un tempo di esecuzione \(\Theta(1)\).
 
-\section{Tavole Hash}
+\section{Hash Table}
+\subsection{Indirizzamento diretto}
+Prima di procedere con l'introduzione alle tavole di hash, è prima necessario introdurre il concetto di indirizzamento diretto, una tecnica molto efficiente nel caso in cui l'insieme da cui vengono acquisite le chiavi, detto insieme universo \(U = \{0,1,2...,m-1\}\), è un insieme ragionevolmente piccolo. Si suppone, inoltre, che due elementi distinti non possano avere chiavi coincidenti. Per rappresentare un tale insieme dinamico si utilizza un array, oppure una tavola ad indirizzamento diretto, indicata con \(T[0..m-1]\), dove ogni cella \(k\) di tale tabella punta all'elemento dell'insieme di chiave \(k\). Se la \(k\)-esima cella non contiene nessun elemento, viene inizializzata con il valore \code{NIL}.
+
+Le operazioni di dizionario sono semplici da implementare in pseudocodifica e impiegano tutte un tempo costante \(O(1)\) (nel caso peggiore):
+
+\begin{lstlisting}
+directAddressSearch(T, k):
+  return T[k]
+\end{lstlisting}
+
+\begin{lstlisting}
+directAddressInsert(T, x):
+  T[x.key] := x 
+\end{lstlisting}
+
+\begin{lstlisting}
+directAddressDelete(T, x):
+  T[x.key] := NIL
+\end{lstlisting}
+
+In alcune implementazioni è possibile memorizzare l'elemento di chaive \(k\) direttamente all'interno della tabella, anzichè in un oggetto esterno, risparmiando spazio in memoria. 
+
+\subsection{Introduzione alle Tavole di Hash}
+
+La difficoltà nell'implementazione di una tale struttura dati è evidente: l'insieme universo \(U\), nella maggior parte dei casi, è troppo grande per essere memorizzato in una tavola \(T\) di dimensione \(|U|\). Inoltre, l'insieme \(K\) delle chiavi effettivamente memorizzate è molto più piccolo dell'inisieme \(U\) delle chiavi disponibili e, dunque, la maggior parte dello spazio allocato per la tavola \(T\) non verrebbe mai utilizzato. A questo proposito si introduce una nuova struttura dati, detta \textbf{tavola di hash}, che utilizza una memoria proporzionale al numero delle chiavi effettivamente memorizzate nel dizionario, riducendo lo spreco di memoria. 
+
+Quando l'insieme \(K\) delle chiavi memorizzate in un dizionario è molto più piccolo dell'universo \(U\) di tutte le chiavi possibili, utilizzando una tavola di hash si può ridurre lo spazio richiesto fino a \(\Theta(|K|)\), rdiucendo però l'efficienza temporale a \(O(1)\) nel caso medio (anzichè pessimo). Nella tabella di hash, l'elemento di chiave \(k\) non viene memorizzato direttamente nella cella \(k\), ma viene utilizzata una cosiddetta funzione di hash \(h(k)\) che calcola l'indice \(k\) della cella. La funzione di hash \(h(k)\) associa ad ogni chiave dell'universo \(U\) una specifica chiave della tavola di hash \(T[0..m-1]\). Formalmente:
+
+\(h(k):U\to \{0,1,..., m-1\},\;\;\; m<<|U|\)
+
+Si dice che \(h(k)\) è il valore hash della chiave \(k\).
+
+\subsection{Hashing Concatenato}
+
+Il problema principale con la tecnica di indirizzamento appena analizzata è che, riducendo l'intervallo degli indici da \(|U|\) ad \(m<<|U|\), è molto probabile che due chiavi vengano mappate nella stessa cella: in tal caso si dice che avviene una collisione. Per evitare un evento simile è possibile, in prima analisi, implementare una funzione di hash totalmente deterministica il più randomica possibile, in modo da minimizzare le collisioni. Si dimostra però che un evento di collisione è impossibile da evitare in quanto \(|U| > m\) e quindi, dopo l'\(m\)-esima chiamata alla funzione di hash, avverà sicuramente una collisione. 
+
+Si rende necessario, dunque, implementare un meccanismo che gestisca tali eventi. Nello specifico, la tecnica più utilizzata è il concatenamento (o chaining), tramite cui, tutti gli elementi associati ad una stessa cella \(k\) sono posti in una lista concatenata. La cella \(k\), in questo caso, punta al nodo di testa della lista che contiene gli elementi mappati in tale cella, oppure ha valore \code{NIL}, nel caso in cui la cella non contenga nessun elemento. 
+
+Le operazioni di dizionario su una tavola di hash \(T\) sono facili da implementare in pseudocodifica nel caso di gestione delle collisioni tramite concatenamento:
+
+\begin{lstlisting}
+chainedHashInsert(T, x):
+  listInsert(T[h(x.key)], x)
+\end{lstlisting}
+
+\begin{lstlisting}
+chainedHashSearch(T, x):
+  listSearch(T[h(x.key)], x)
+\end{lstlisting}
+
+\begin{lstlisting}
+chainedHashDelete(T, x):
+  listDelete(T[h(x.key)])
+\end{lstlisting}
+
+In cui le procedure \code{listInsert}, \code{listSearch} e \code{listDelete}, sono le stesse analizzate nella sezione delle liste concatenate e hanno il compito, rispettivamente, di inserire in testa alla lista un nodo, cercare un nodo nella lista ed eliminare un nodo dalla lista. 
+
+Si passa ora all'analisi del tempo di esecuzione di tali procedure: nel caso peggiore, l'inserimento in lista di un nodo è \(O(1)\), la ricerca avviene in tempo proporzionale alla lunghezza della lista, quindi \(O(n)\), mentre l'eliminazione di un nodo dalla lista avviene, sempre nel caso peggiore, in tempo \(O(1)\) se la lista è doppiamente concatenata. 
+
+Si noti che la funzione \code{chainedHashDelete} prende come input un elemento \(x\), non la sua chiave \(k\), quindi non occorre cercare prima l'elemento \(x\). Se la tavola di hash supporta la cancellazione, allora le sue liste dovrebbero essere doppiamente concatenate in modo che la cancellazione di un elemento sia più rapida. Se le liste fossero singolarmente concatenate, per cancellare l'elemento \(x\), si dovrebbe prima trovare \(x\) nella lista \(T[h(x.key)]\) in modo da poter aggiornare l'attributo \code{next} dell'elemento precedente in lista, assegnandogli il valore \code{NIL}.
+
+\subsection{Analisi della Funzione di Hash}
+Data una tavola di hash \(T\), che conta \(m\) celle in cui sono memorizzati \(n\) elementi, si definisce il fattore di carico \(\alpha\) della tavola \(T\) come il rapporto \(n/m\), ossia il numero medio di elementi memorizzati in una lista. Il caso peggiore nell'hashing si verifica quando tutte le \(n\) chiavi sono associate alla stessa cella, creando una lista di lunghezza \(n\). Il tempo di esecuzione della ricerca diventa quindi \(\Theta(n)\) a cui si aggiunge il tempo di esecuzione della funzione di hashing. Ovviamente, un caso del genere è molto improbabile nel caso in cui la funzione di hash sia ben progettata. Per il momento si suppone che ogni elemento ha uguale probabilità di essere mappato in una qualsiasi delle \(m\) celle, indipendentemente dalle celle in cui sono stati mappati gli altri elementi. Tale ipotesi viene definita hashing uniforme semplice. Per ogni \(j=0,1,..., m-1\), si indica con \(n_j\) la lunghezza della lista \(T[j]\), ottenendo quindi il numero di elementi totali memorizzati in tabella è \(n=n_0+n_1+...+n_{m-1}\). Il valore atteso di ogni \(n_j\) sarà \(E[n_j] = \alpha = n/m\), quindi il tempo medio per la ricerca di un elemento di chiave \(k\) non presente nella lista (caso pessimo) è \(\Theta(1+\alpha)\), che si dimostra essere anche il tempo di ricerca dello stesso elemento, questa volta presente tabella. Nella pratica, se il numero di celle nella tavola di hash è almeno proporzionale al numero di elementi della tavola, si ottiene che \(n=O(m)\) e quindi \(\alpha = n/m = O(m)/m = O(1)\). Pertanto, la ricerca di un elemento della tavola richiede un tempo costante.Ogni operazione di dizionario può essere svolta, in media, in un tempo \(O(1)\).
+
+\subsection{Funzione di Hash}
+Per progettare una buona tabella di hash è necessario implementare una funzione di hash che sia altamente efficiente. A questo proposito si introducono tre possibili schemi di implementazione: hashing per divisione (uristico), hashing per moltiplicazione (euristico) e hashing universale (aleatorio, non analizzato in questa sezione). In generale, una buona funzione di hashing deve soddisfare approssimativamente la condizione di hashing uniforme semplice: ogni chiave deve avere la stessa probabilità di essere mappata in una qualsiasi cella della tabella. Di solito non è possibile verificare questa condizione, in quanto non è nota la distribuzione delle probabilità secondo cui vengono estratte le chiavi. Quindi, nella pratica, spesso si utilizzano delle tecniche euristiche per la realizzazione di tali funzioni.
+
+La maggior parte delle funzioni di hashing suppone che l'universo delle chiavi sia l'insieme dei numeri naturali \(\mathbb{N}\) e quindi, se nella struttura dati progettata, la chiave non è un numero naturale ma, ad esempio, una stringa, è necessario studiare un metodo di conversione: nei calcolatori questo metodo è tipicamente già implementato, in quanto ogni informazione analogica viene convertita in una stringa binaria di bit (appartenente ad \(\mathbb{N}\)). Nello studio dei tre metodi di hashing si suppone che le chiavi siano numeri naturali.
+
+\vspace{10pt}
+
+\textbf{Metodo della Divisione}. Quando si applica il metodo della divisione per creare una funzione di hash, una chiave \(k\) viene associata a una delle \(m\) celle prendeno il resto della divisione fra \(k\) ed \(m\). Formalmente, la funzione di hash è così definita:
+
+\(h(k)=k\; mod\; m\)
+
+\noindent Il vantaggio principale di questo metodo è che si può implementare molto rapidamente e richiede un tempo di esecuzione costante. 
+
+Quando si utilizza il metodo della divisione, si cerca di evitare alcuni valori di \(m\). Nello specifico si evitano le potenze di 2, in quanto se \(m=2^p\), allora \(h(k)\) rappresenta proprio i \(p\) bit meno significativi di \(k\): infatti, sarebbe più corretto far dipendere la funzione di hash da tutti i bit della chiave. Inoltre, si evita di scegliere \(m+2^p-1\) quando \(k\) è una stringa di caratteri interpretata in base \(2^p\), in quanto la permutazione dei caratteri di \(k\) non cambia il suo valore di hash. Una buona scelta di \(m\), invece, potrebbe essere un numero primo non troppo vicino a una potenza esatta di 2.
+
+\vspace{10pt}
+
+\textbf{Metodo della Moltiplicazione}. Il metodo della moltiplicazione per la creazione di funzioni di hash consiste in due passi. Nel primo passaggio si moltiplica la chiave \(k\) per una costante \(A\), tale che \(0<A<1\), per poi estrarre la parte frazionaria del numero appena ottenuto. Nel secondo passaggio si moltiplica questo valore per \(m\) e si prende la parte intera inferiore del risultato. Formalmente, la funzione di hash è così definita:
+
+\(h(k) = \lfloor m\,(k\cdot A\;mod\;1)\rfloor\)
+
+\noindent dove \(k\cdot A \; mod \;1 \) rappresenta la parte frazionaria di \(kA\), ovvero \(kA-\lfloor kA\rfloor\). 
+
+Il vantaggio principale di questo metodo è che il valore di \(m\) non è critico. Tipicamente si sceglie un valore di \(m\) tale per cui sia una potenza di 2, in modo da rendere più semplice implementare tale funzione in un calcolatore reale. Si upponga, infatti, che la dimensione di una parola nel calcolatore sia \(w\) bit e che il numero \(k\) sia contenuto in una sola parola. Si scelga poi un valore di \(A\) che sia una frazione nella forma \(s/2^w\), con \(s\) intero nell'intervallo \(0<s<2^w\). A questo punto, si moltiplica \(k\) per \(s=A\cdot 2^w\): il risultato sarà un numero di \(2w\) bit \(r_1 2^w+r_0\), in cui \(r_1\) rappresenta la parte più significativa del prodotto ed \(r_0\) la parte meno significativa. Il valore hash desiderato di \(p\) bit è formato dai \(p\) bit più significativi di \(r_0\). Sebbene queste operazioni funzionino con qualsiasi valore della costante \(A\), la scelta spesso adoperata è \(A \approx (\sqrt{5}-1)/2 \approx 0.6180339887...\)
+
+\subsection{Indirizzamento Aperto}
+UN altro metodo per evitare le collisioni è tramite l'indirizzamento aperto, in cui tutti gli elementi sono memorizzati nella tavola hash, ovvero ogni cella contiene un elemento dell'insieme dinamico o la costante \code{NIL} se non contiene nessun elemento. Quando si cerca un elemento, si esamina sistematicamente la tabella fino a quando non si trova l'elemento desiderato, oppure finchè non ci sono più elementi da controllare (l'elemento non è nell'array). Nell'indirizzamento aperto, a differenza degli altri metodi, la tavola hash può riempirsi fino a quando non può più fisicamente contenere altri elementi. Una conseguenza di questo design è che il fattore di carico \(\alpha\) non supera mai il valore 1. Il vantaggio di questo metodo sta nel fatto che elimina completamente l'utilizzo dei puntatori, in quanto calcola la sequenza delle celle da esaminare, e libera quindi una notevole quantità di memoria, utilizzata per incrementare la capacità della tabella, riducendo il rischio di collisioni. 
+
+Per effettuare un insierimento mediante il metodo dell'indirizzamento aperto, si esamina in successione le posizioni della tavola hash fino a che non si trova una cella libera in cui inserire la chiave. L'efficienza di questo metodo consiste nel calcolare una nuova sequenza di accesso alla tabella in base alla chiave dell'oggetto da inserire, anzichè seguire sempre lo stesso cammino di accessi, che impiegherebbe un tempo di esecuzione \(\Theta(n)\). Per determinare quali celle esaminare durante la fase di ispezione, si estende la funzione di hash in modo da includere l'ordine di ispezione (a partire da 0), come secondo input. Formalmente, la funzione di hash modificata è definita come segue:
+
+\(h(k,i):U\times \{0,1,...,m-1\} \to \{0,1,...,m-1\}\)
+
+\noindent Si richiede, inoltre, che per ogni chiave \(k\) la sequenza di ispezione \(<h(k,0), h(k,1),..., h(k,m-1)>\) sia una permutazione della sequenza \(<0,1,...,m-1>\), in modo tale che ogni cella della tavola possa essere considerata come possibile cella in cui inserire una nuova chiave. In pseudocodifica:
+
+\begin{lstlisting}
+hashInsert(T, k):
+  i := 0
+  repeat
+    j := h(k, i)
+    if T[j] = NIL or T[j] = DELETED:
+      T[j] := k
+      return j
+    else:
+      i := i + 1
+  until i = m
+  error "hash table overflow"
+\end{lstlisting}
+
+Questa procedura prende in input una tavola di hash \(T\) e una chiave \(k\) da inserire in tabella, e ritorna l'indice della cella in cui è stato inserito l'elemento, oppure \code{error} di overflow se non è presente nessuna cella libera. Si noti nella condizione in riga 5, che viene verificato se la cella \(T[k]\) contiene il valore \code{DELETED}: questo valore speciale verrà ripreso e analizzato più avanti, con la procedura di eliminazione delle chiavi dalla tabella.
+
+\vspace{10pt}
+
+Per la ricerca di una determinata chiave \(k\) esamina la stessa sequenza di celle che ha esaminato l'algoritmo di inserimento quando ha inserito l'elemento di chiave \(k\). Dunque, la procedura di ricerca potrebbe terminare la propria esecuzione senza successo quando trova una cella vuota, in quanto la chiave \(k\) sarebbe stata inserita in quella posizione (si presuppone che le chiavi non possano essere eliminate dalla tavola). In pseudocodifica:
+
+\begin{lstlisting}
+hashSearch(T, k):
+  i := 0
+  repeat
+    j := h(k, i)
+    if T[j] = k:
+      return j
+    i := i + 1
+  until T[j] = NIL or i = m
+  return NIL
+\end{lstlisting}
+
+Questa procedura, come la precedente, prende in input una tavola di hash \(T\) e una chiave \(k\) da ricercare in tabella, e ritorna l'indice della cella in cui è stato trovato l'elemento, oppure \code{NIL} se non è presente nessuna cella che contiene l'elemento oppure se nella sequenza di ricerca si trova una cella libera (per le ragioni precedentemente analizzate).
+
+\vspace{10pt}
+
+La procedura di cancellazione di una chiave dalla tavola di hash ad indirizzamento aperto è un'operazione molto complessa, in quanto non è possibile semplicemente cancellare il contenuto della cella \(i\), assegnandone il valore \code{NIL}, in quanto sarebbe impossibile ricercare qualsiasi elemento in tabella per come è stata definita la procedura di ricerca. Dunque, si rende necessario marcare la cella il cui contenuto è stato eliminato con il valore speciale \code{DELETED}, anzichè \code{NIL}. È per questo motivo che in riga 5 della procedura di inserimento viene anche verificato se la cella ispezionata contanga il valore \code{DELETED}. Si noti inoltre che, utilizzando questa nuova notazione, il tempo di esecuzione della procedura di ricerca non dipende più dal fattore di carico \(\alpha\). Per questo motivo, nella pratica si preferisce spesso utilizzare il metodo della concatenazione quando è necessario che la tabella di hash supporti l'operazione di cancellazione delle chiavi. 
+
+\vspace{10pt}
+
+Nell'analisi delle tabelle hash con indirizzamento aperto si ipotizza hashing uniforme: si suppone, infatti, che ogni chiave abbia la stessa probabilità di avere come sequenza di ispezione una delle \(m!\) permutazioni di \(<0,1,...,m-1>\). L'hashing uniforme estende il concetto di hashing uniforme semplice, impiegato più volte precedentemente, al caso in cui la funzione di hash produce, non un singolo numero, ma un'intera sequenza di ispezione. Nella pratica non è possibile ottenere una funzione di hash uniforme, ma si utilizzano delle approssimazioni accettabili. Si esaminano nel seguito tre tecniche utilizzate per calcolare le sequenze di ispezione richieste nell'indirizzamento aperto: ispezione lineare, ispezione quadratica e doppio hashing. Tali tecniche grantiscono che la sequenza \(<h(k,0), h(k,1),..., h(k,m-1)>\) sia una permutazione di \(<0,1,...,m-1>\) per ogni chiave \(k\), ma nessuna di loro può garantire l'ipotesi di hashing uniforme, in quanto nessuna di esse è in grado di generare più di \(m^2\) sequenze di ispezioni differenti (invece delle \(m!\) sequenze richieste). 
+
+\vspace{10pt}
+
+\textbf{Ispezione Lineare}. Data una funzione di hash ordinaria \(h':U\to \{0,1,...,m-1\}\), detta funzione di hash ausiliaria, il metodo di ispezione lineare utilizza la funzione di hash
+
+\(h(k,i)=(h'(k)+i)\;mod\;m\)
+
+\noindent per \(i=0,1,...,m-1\). Data la chiave \(k\), la prima cella esaminata è \(T[h'(k)]\), che è la cella data dalla funzione di hash ausiliaria, la seconda cella è \(T[h'(k)+1]\) e così via fino alla cella \(T[m-1]\). Poi, l'ispezione riprende dalle celle \(T[0], T[1],...,T[h'(k)-1]\). Poichè la prima cella ispezionata determina l'intera sequenza di ispezioni, ci sono soltanto \(m\) sequenze di ispezione distinte. Questa tecnica è facile da implementare ma presenta un problema noto come addensamento primario: si formano lunghe file di celle occupate che aumentano il tempo medio di ricerca. Tale fenomeno si presenta perchè una cella vuota preceduta da \(i\) celle piene ha probabilità \((i+1)/m\) di essere la prossima ad essere occupata e le lunghe file di celle occupate tendono, dunque, a diventare sempre più lunghe.
+
+\vspace{10pt}
+
+\textbf{Ispezione Quadratica}. Data la funzione di hash ausiliaria \(h':U\to \{0,1,...,m-1\}\), il metodo di ispezione qudratica utilizza la funzione di hash
+
+\(h(k,i)=(h'(k)+c_1i+c_2i^2)\;mod\;m\)
+
+\noindent per \(i=0,1,...,m-1\), con \(c_1, c_2 \neq 0 \) costanti ausiliarie. Data la chiave \(k\), la prima cella esaminata è \(T[h'(k)]\), mentre le successive posizioni esaminate sono distanti dalle precedenti di quantità che dipendono in modo quadratico dal numero d'ordine di ispezione \(i\). Questa tecnica funziona meglio della precedente, ma i valori \(c_1, c_2\) ed \(m\) non possono essere scelti in maniera arbitraria, ma devono essere tali per cui si possa percorrere l'intera tabella. Inolte, se due chiavi hanno la stessa posizione iniziale di ispezione, allora le due sequenze di ispezione saranno identiche portando al cosiddetto addensamento secondario.
+
+\vspace{10pt}
+
+\textbf{Doppio Hashing}. Date la funzioni di hash ausiliarie \(h_1\) ed \(h_2\), il metodo di ispezione lineare utilizza la funzione di hash
+
+\(h(k,1) = (h_1(k)+ih_2(k))\;mod\;m\)
+
+\noindent per \(i=0,1,...,m-1\). Il doppio hashing è il metodo migliore disponibile per l'indirizzamento aperto, in quanto le permutazioni prodotte hanno molte caratteristiche comuni con le permutazioni casuali. Data la chiave \(k\), la prima cella esaminata è \(T[h_1(k)]\), mentre le successive posizioni sono distanziate dalle precedenti di quantità \(h_2(k)\;mod\;m\). Differentemente dai precedenti, il metodo del doppio hashing produce sequenze che dipendono in due modi dalla chiave \(k\), in quanto possono variare sia la posizione iniziale della sequenza di ispezione, sia la distanza fra due posizioni successive. 
+
+Inoltre, il valore \(h_2(k)\) deve essere relativamente primo con la dimensione \(m\) della tavola hash perchè venga ispezionata l'intera tabella. Un modo pratico per garantire tale condizione è scegliere \(m\) potenza di due e definire \(h_2\) in modo che produca sempre un numero dispari. Un altro modo è scegliere \(m\) primo e definire \(h_2\) in modo che generi sempre un numero intero positivo minore di \(m\). In questo contesto, il doppio hashing è migliore delle precedenti tecniche in quanto utilizza \(\Theta(m^2)\) sequenze di ispezione, anzichè \(\Theta(m)\), perchè ogni possibile coppia di \(h_1, h_2\) produce una distinta sequenza di ispezione.
+
+
+
+
 
 % \section{Alberi Binari}
 % \section{Alberi RB}

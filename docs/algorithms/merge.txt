@@ -16,5 +16,5 @@ merge(A, p, q, r):
       A[k] := L[i]
       i := i + 1
     else:
-      A[k] := R[j]:
+      A[k] := R[j]
       j := j + 1
