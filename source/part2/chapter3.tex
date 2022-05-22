@@ -194,9 +194,7 @@ Per progettare una buona tabella di hash è necessario implementare una funzione
 
 La maggior parte delle funzioni di hashing suppone che l'universo delle chiavi sia l'insieme dei numeri naturali \(\mathbb{N}\) e quindi, se nella struttura dati progettata, la chiave non è un numero naturale ma, ad esempio, una stringa, è necessario studiare un metodo di conversione: nei calcolatori questo metodo è tipicamente già implementato, in quanto ogni informazione analogica viene convertita in una stringa binaria di bit (appartenente ad \(\mathbb{N}\)). Nello studio dei tre metodi di hashing si suppone che le chiavi siano numeri naturali.
 
-\vspace{10pt}
-
-\textbf{Metodo della Divisione}. Quando si applica il metodo della divisione per creare una funzione di hash, una chiave \(k\) viene associata a una delle \(m\) celle prendeno il resto della divisione fra \(k\) ed \(m\). Formalmente, la funzione di hash è così definita:
+\paragraph{Metodo della Divisione} Quando si applica il metodo della divisione per creare una funzione di hash, una chiave \(k\) viene associata a una delle \(m\) celle prendeno il resto della divisione fra \(k\) ed \(m\). Formalmente, la funzione di hash è così definita:
 
 \(h(k)=k\; mod\; m\)
 
@@ -204,9 +202,7 @@ La maggior parte delle funzioni di hashing suppone che l'universo delle chiavi s
 
 Quando si utilizza il metodo della divisione, si cerca di evitare alcuni valori di \(m\). Nello specifico si evitano le potenze di 2, in quanto se \(m=2^p\), allora \(h(k)\) rappresenta proprio i \(p\) bit meno significativi di \(k\): infatti, sarebbe più corretto far dipendere la funzione di hash da tutti i bit della chiave. Inoltre, si evita di scegliere \(m+2^p-1\) quando \(k\) è una stringa di caratteri interpretata in base \(2^p\), in quanto la permutazione dei caratteri di \(k\) non cambia il suo valore di hash. Una buona scelta di \(m\), invece, potrebbe essere un numero primo non troppo vicino a una potenza esatta di 2.
 
-\vspace{10pt}
-
-\textbf{Metodo della Moltiplicazione}. Il metodo della moltiplicazione per la creazione di funzioni di hash consiste in due passi. Nel primo passaggio si moltiplica la chiave \(k\) per una costante \(A\), tale che \(0<A<1\), per poi estrarre la parte frazionaria del numero appena ottenuto. Nel secondo passaggio si moltiplica questo valore per \(m\) e si prende la parte intera inferiore del risultato. Formalmente, la funzione di hash è così definita:
+\paragraph{Metodo della Moltiplicazione} Il metodo della moltiplicazione per la creazione di funzioni di hash consiste in due passi. Nel primo passaggio si moltiplica la chiave \(k\) per una costante \(A\), tale che \(0<A<1\), per poi estrarre la parte frazionaria del numero appena ottenuto. Nel secondo passaggio si moltiplica questo valore per \(m\) e si prende la parte intera inferiore del risultato. Formalmente, la funzione di hash è così definita:
 
 \(h(k) = \lfloor m\,(k\cdot A\;mod\;1)\rfloor\)
 
@@ -215,7 +211,7 @@ Quando si utilizza il metodo della divisione, si cerca di evitare alcuni valori 
 Il vantaggio principale di questo metodo è che il valore di \(m\) non è critico. Tipicamente si sceglie un valore di \(m\) tale per cui sia una potenza di 2, in modo da rendere più semplice implementare tale funzione in un calcolatore reale. Si upponga, infatti, che la dimensione di una parola nel calcolatore sia \(w\) bit e che il numero \(k\) sia contenuto in una sola parola. Si scelga poi un valore di \(A\) che sia una frazione nella forma \(s/2^w\), con \(s\) intero nell'intervallo \(0<s<2^w\). A questo punto, si moltiplica \(k\) per \(s=A\cdot 2^w\): il risultato sarà un numero di \(2w\) bit \(r_1 2^w+r_0\), in cui \(r_1\) rappresenta la parte più significativa del prodotto ed \(r_0\) la parte meno significativa. Il valore hash desiderato di \(p\) bit è formato dai \(p\) bit più significativi di \(r_0\). Sebbene queste operazioni funzionino con qualsiasi valore della costante \(A\), la scelta spesso adoperata è \(A \approx (\sqrt{5}-1)/2 \approx 0.6180339887...\)
 
 \subsection{Indirizzamento Aperto}
-UN altro metodo per evitare le collisioni è tramite l'indirizzamento aperto, in cui tutti gli elementi sono memorizzati nella tavola hash, ovvero ogni cella contiene un elemento dell'insieme dinamico o la costante \code{NIL} se non contiene nessun elemento. Quando si cerca un elemento, si esamina sistematicamente la tabella fino a quando non si trova l'elemento desiderato, oppure finchè non ci sono più elementi da controllare (l'elemento non è nell'array). Nell'indirizzamento aperto, a differenza degli altri metodi, la tavola hash può riempirsi fino a quando non può più fisicamente contenere altri elementi. Una conseguenza di questo design è che il fattore di carico \(\alpha\) non supera mai il valore 1. Il vantaggio di questo metodo sta nel fatto che elimina completamente l'utilizzo dei puntatori, in quanto calcola la sequenza delle celle da esaminare, e libera quindi una notevole quantità di memoria, utilizzata per incrementare la capacità della tabella, riducendo il rischio di collisioni. 
+Un altro metodo per evitare le collisioni è tramite l'indirizzamento aperto, in cui tutti gli elementi sono memorizzati nella tavola hash, ovvero ogni cella contiene un elemento dell'insieme dinamico o la costante \code{NIL} se non contiene nessun elemento. Quando si cerca un elemento, si esamina sistematicamente la tabella fino a quando non si trova l'elemento desiderato, oppure finchè non ci sono più elementi da controllare (l'elemento non è nell'array). Nell'indirizzamento aperto, a differenza degli altri metodi, la tavola hash può riempirsi fino a quando non può più fisicamente contenere altri elementi. Una conseguenza di questo design è che il fattore di carico \(\alpha\) non supera mai il valore 1. Il vantaggio di questo metodo sta nel fatto che elimina completamente l'utilizzo dei puntatori, in quanto calcola la sequenza delle celle da esaminare, e libera quindi una notevole quantità di memoria, utilizzata per incrementare la capacità della tabella, riducendo il rischio di collisioni. 
 
 Per effettuare un insierimento mediante il metodo dell'indirizzamento aperto, si esamina in successione le posizioni della tavola hash fino a che non si trova una cella libera in cui inserire la chiave. L'efficienza di questo metodo consiste nel calcolare una nuova sequenza di accesso alla tabella in base alla chiave dell'oggetto da inserire, anzichè seguire sempre lo stesso cammino di accessi, che impiegherebbe un tempo di esecuzione \(\Theta(n)\). Per determinare quali celle esaminare durante la fase di ispezione, si estende la funzione di hash in modo da includere l'ordine di ispezione (a partire da 0), come secondo input. Formalmente, la funzione di hash modificata è definita come segue:
 
@@ -237,7 +233,7 @@ hashInsert(T, k):
   error "hash table overflow"
 \end{lstlisting}
 
-Questa procedura prende in input una tavola di hash \(T\) e una chiave \(k\) da inserire in tabella, e ritorna l'indice della cella in cui è stato inserito l'elemento, oppure \code{error} di overflow se non è presente nessuna cella libera. Si noti nella condizione in riga 5, che viene verificato se la cella \(T[k]\) contiene il valore \code{DELETED}: questo valore speciale verrà ripreso e analizzato più avanti, con la procedura di eliminazione delle chiavi dalla tabella.
+Questa procedura prende in input una tavola di hash \(T\) e una chiave \(k\) da inserire in tabella, e ritorna l'indice della cella in cui è stato inserito l'elemento, oppure \code{error} di overflow se non è presente nessuna cella libera. Si noti nella condizione in riga 5, che viene verificato se la cella \(T[k]\) contiene il valore \code{DELETED}: questo valore speciale verrà ripreso e analizzato più avanti assieme alla procedura di eliminazione delle chiavi dalla tabella.
 
 \vspace{10pt}
 
@@ -265,25 +261,20 @@ La procedura di cancellazione di una chiave dalla tavola di hash ad indirizzamen
 
 Nell'analisi delle tabelle hash con indirizzamento aperto si ipotizza hashing uniforme: si suppone, infatti, che ogni chiave abbia la stessa probabilità di avere come sequenza di ispezione una delle \(m!\) permutazioni di \(<0,1,...,m-1>\). L'hashing uniforme estende il concetto di hashing uniforme semplice, impiegato più volte precedentemente, al caso in cui la funzione di hash produce, non un singolo numero, ma un'intera sequenza di ispezione. Nella pratica non è possibile ottenere una funzione di hash uniforme, ma si utilizzano delle approssimazioni accettabili. Si esaminano nel seguito tre tecniche utilizzate per calcolare le sequenze di ispezione richieste nell'indirizzamento aperto: ispezione lineare, ispezione quadratica e doppio hashing. Tali tecniche grantiscono che la sequenza \(<h(k,0), h(k,1),..., h(k,m-1)>\) sia una permutazione di \(<0,1,...,m-1>\) per ogni chiave \(k\), ma nessuna di loro può garantire l'ipotesi di hashing uniforme, in quanto nessuna di esse è in grado di generare più di \(m^2\) sequenze di ispezioni differenti (invece delle \(m!\) sequenze richieste). 
 
-\vspace{10pt}
-
-\textbf{Ispezione Lineare}. Data una funzione di hash ordinaria \(h':U\to \{0,1,...,m-1\}\), detta funzione di hash ausiliaria, il metodo di ispezione lineare utilizza la funzione di hash
+\paragraph{Ispezione Lineare}
+ Data una funzione di hash ordinaria \(h':U\to \{0,1,...,m-1\}\), detta funzione di hash ausiliaria, il metodo di ispezione lineare utilizza la funzione di hash
 
 \(h(k,i)=(h'(k)+i)\;mod\;m\)
 
 \noindent per \(i=0,1,...,m-1\). Data la chiave \(k\), la prima cella esaminata è \(T[h'(k)]\), che è la cella data dalla funzione di hash ausiliaria, la seconda cella è \(T[h'(k)+1]\) e così via fino alla cella \(T[m-1]\). Poi, l'ispezione riprende dalle celle \(T[0], T[1],...,T[h'(k)-1]\). Poichè la prima cella ispezionata determina l'intera sequenza di ispezioni, ci sono soltanto \(m\) sequenze di ispezione distinte. Questa tecnica è facile da implementare ma presenta un problema noto come addensamento primario: si formano lunghe file di celle occupate che aumentano il tempo medio di ricerca. Tale fenomeno si presenta perchè una cella vuota preceduta da \(i\) celle piene ha probabilità \((i+1)/m\) di essere la prossima ad essere occupata e le lunghe file di celle occupate tendono, dunque, a diventare sempre più lunghe.
 
-\vspace{10pt}
-
-\textbf{Ispezione Quadratica}. Data la funzione di hash ausiliaria \(h':U\to \{0,1,...,m-1\}\), il metodo di ispezione qudratica utilizza la funzione di hash
+\paragraph{Ispezione Quadratica} Data la funzione di hash ausiliaria \(h':U\to \{0,1,...,m-1\}\), il metodo di ispezione qudratica utilizza la funzione di hash
 
 \(h(k,i)=(h'(k)+c_1i+c_2i^2)\;mod\;m\)
 
 \noindent per \(i=0,1,...,m-1\), con \(c_1, c_2 \neq 0 \) costanti ausiliarie. Data la chiave \(k\), la prima cella esaminata è \(T[h'(k)]\), mentre le successive posizioni esaminate sono distanti dalle precedenti di quantità che dipendono in modo quadratico dal numero d'ordine di ispezione \(i\). Questa tecnica funziona meglio della precedente, ma i valori \(c_1, c_2\) ed \(m\) non possono essere scelti in maniera arbitraria, ma devono essere tali per cui si possa percorrere l'intera tabella. Inolte, se due chiavi hanno la stessa posizione iniziale di ispezione, allora le due sequenze di ispezione saranno identiche portando al cosiddetto addensamento secondario.
 
-\vspace{10pt}
-
-\textbf{Doppio Hashing}. Date la funzioni di hash ausiliarie \(h_1\) ed \(h_2\), il metodo di ispezione lineare utilizza la funzione di hash
+\paragraph{Doppio Hashing} Date la funzioni di hash ausiliarie \(h_1\) ed \(h_2\), il metodo di ispezione lineare utilizza la funzione di hash
 
 \(h(k,1) = (h_1(k)+ih_2(k))\;mod\;m\)
 
@@ -291,10 +282,155 @@ Nell'analisi delle tabelle hash con indirizzamento aperto si ipotizza hashing un
 
 Inoltre, il valore \(h_2(k)\) deve essere relativamente primo con la dimensione \(m\) della tavola hash perchè venga ispezionata l'intera tabella. Un modo pratico per garantire tale condizione è scegliere \(m\) potenza di due e definire \(h_2\) in modo che produca sempre un numero dispari. Un altro modo è scegliere \(m\) primo e definire \(h_2\) in modo che generi sempre un numero intero positivo minore di \(m\). In questo contesto, il doppio hashing è migliore delle precedenti tecniche in quanto utilizza \(\Theta(m^2)\) sequenze di ispezione, anzichè \(\Theta(m)\), perchè ogni possibile coppia di \(h_1, h_2\) produce una distinta sequenza di ispezione.
 
+\section{Alberi Binari}
+
+\paragraph{Alberi binari di ricerca}
+Un albero binario di ricerca è una struttura dati ad albero\footnote{consultare appendice A per approfondire la definizione di struttura dati ad albero.} che supporta molte operazioni degli insiemi dinamici, come \code{search}. \code{delete}, \code{insert}, \code{minimum}, \code{maximum}, \code{successor} e \code{predecessor}. Tali alberi sono rappresentati da strutture concatenate in cui ogni nodo è un oggetto, che oltre ad avere una chiave e i dati satellite, contengono anche gli attributi \code{left}, \code{right} e \code{parent}, che puntano rispettivamente al figlio sinistro, al figlio destro e al padre. Se manca un figlio o un padre, i corrispondenti attributi sono inizializzati a \code{NIL}. Il nodo radice, detto anche root, è l'unico nodo nell'albero il cui attributo padre è inizializzato con \code{NIL}.
+
+Le chiavi dell'albero binario di ricerca sono memorizzate in maniera da rispettare sempre la proprietà fondamentale per cui se \(x\) è un nodo in un albero binario di ricerca ed \(y\) è il nodo nel sottoalbero sinistro di \(x\), allora \(y.key \le x.key\), mentre se \(y\) è un nodo nel sottoalbero destro di \(x\), allora \(y.key \ge x.key\). Tale proprietà permette di elencare ordinatamente tutte le chiavi di un albero binario di ricerca con un semplice algoritmo ricorsivo di attraversamento simmetrico di un albero, tramite cui la chiave della radice di un sottoalbero viene stampata nel mezzo tra la stampa dei valori nel sottoalbero sinistro e la stampa dei valori nel sottoalbero destro. In pseudocodice:
+
+\begin{lstlisting}
+inorderTreeWalk(x):
+  if x != NIL:
+    inorderTreeWalk(x.left)
+    print x.key
+    inorderTreeWalk(x.right)
+\end{lstlisting}
+
+Per attraversare un albero binario di ricerca costituito da \(n\) nodi, è necessario un tempo \(\Theta(n)\), in quanto, dopo la chiamata iniziale, la procedura viene chiamata ricorsivamente esattamente due volte per ogni nodo dell'albero. 
+
+\vspace{10pt}
+
+Un'altra tipica operazione svolta su un albero binario di ricerca è quella di cercare una chiave memorizzata nell'albero: oltre all'operazione \code{search}, gli alberi binari supportano anche query come \code{minimum}, \code{maximum}, \code{successor} e \code{predecessor}. 
+
+Dato un puntatore alla radice dell'albero e una chiave \(k\) da cercare, la procedura \code{treeSearch} restituisce il puntatore al nodo di chiave \(k\), se esiste, oppure \code{NIL}, se la chiave non è presente nell'albero. In pseudocodifica:
+
+\begin{lstlisting}
+treeSearch(x, k):
+  if x = NIL or k = x.key:
+    return x
+  if k < x.key:
+    return treeSearch(x.left, k)
+  else:
+    return treeSearch(x.right, k)
+\end{lstlisting}
+
+Questo algoritmo inizia la sua ricerca dalla radice dell'albero e ad ogni iterazione confronta il valore \(k\) passato come argomento con \(x.key\). Se le due chiavi sono uguali la ricerca termina e viene restituito il puntatore al nodo, mentre se la chiave è minore della chiave corrente analizzata, per la proprietà fondamentale degli alberi binari, si chiama ricorsivamente la procedura sul sottoalbero sinistro, altrimenti sul sottoalbero destro. Il tempo di esecuzione di tale algoritmo è \(O(h)\), dove \(h\) rappresenta l'altezza dell'albero. 
+
+\vspace{10pt}
+
+Un elemento con chaive minima in un albero binario di ricerca può sempre essere trovato seguendo, a partire dalla radice, i puntatori \code{left} dei figli a sinistra, fino a quando non viene incontrato un valore \code{NIL}, sempre per la proprietà fondamentale degli alberi binari di ricerca. In pseudocodifica:
+
+\begin{lstlisting}
+treeMinimum(x):
+  while x.left != NIL:
+    x := x.left
+  return x
+\end{lstlisting}
+
+\vspace{10pt}
+
+La procedura per trovare l'elemento massimo, invece, è simmetrica alla procedura appena analizzata. In pseudocodifica:
+
+\begin{lstlisting}
+treeMaximum(x):
+  while x.right != NIL:
+    x := x.right
+  return x
+\end{lstlisting}
+
+Entrambe queste procedure vengono eseguite in un tempo \(O(h)\), in un albero di altezza h. 
+
+\vspace{10pt}
+
+Dato un nodo in un albero binario di ricerca, spesso è necessario trovare il suo successore, nell'ordine stabilito da un attraversamento simmetrico. Il successore di un nodo \(x\) è il nodo con la più piccola chiave maggiore di \(x.key\). La struttura di un albero binario consente di trovare tale nodo senza il bisogno di confrontare le chiavi. In pseudocodifica:
+
+\begin{lstlisting}
+treeSuccessor(x):
+  if x.right != NIL:
+    return treeMinimum(x.right)
+  y := x.parent
+  while y != NIL and x = y.right:
+    x := y
+    y := y.parent
+  return y
+\end{lstlisting}
+
+Se il sottoalbero destro del nodo \(x\) non è vuoto, allora il successore di \(x\) è proprio il nodo più a sinistra nel sottoalbero destro, che viene trovato chiamando la procedura precedentemente analizzata \code{treeMinimum}. Altrimenti, se il sottoalbero destro del nodo \(x\) è vuoto e \(x\) ha un successore \(y\), allora \(y\) è l'antenato più prossimo di \(x\) il cui figlio sinistro è anche antenato di \(x\). Per trovare il nodo \(y\), è necessario risalire l'albero partendo da \(x\), fino a quando non si trova un nodo che è figlio sinistro di suo padre. Questa operazione è svolta in un tempo \(O(h)\), con \(h\) l'altezza dell'albero. 
+
+La procedura per trovare il successore è simmetrica alla procedura appena anlizzata e viene svolta nello stesso tempo. 
+
+\vspace{10pt}
+
+Per inserire un nuovo valore \(v\) all'interno dell'albero binario di ricerca \(T\), si utilizza la seguente procedura, che riceve in input un nodo \(z\), tale per cui \(z.key = v\):
+
+\begin{lstlisting}
+treeInsert(T, z):
+  y := NIL
+  x := T.root
+  while x != NIL:
+    y := x
+    if z.key < x.key:
+      x := x.left
+    else:
+      x := z.right
+  z.parent := y
+  if y = NIL:
+    T.root = z
+  else if z.key < y.key:
+    y.left := z
+  else:
+    y.right := z
+\end{lstlisting}
+
+La procedura appena vista inizia dalla radice dell'albero e il puntatore \(x\) traccia un cammino semplice in discesa cercando un \code{NIL} da sostituire con l'elemento di input \(z\). La procedura mantiene anche un puntatore \(y\) detto inseguitore che punta sempre al padre di \(x\). Le righe 4-9 del ciclo \code{while} spostano questi due puntatori verso il basso, andando a sinistra o a destra a seconda dell'esito del confronto fra \({z.key}\) e \(x.key\), finchè a \(x\) non viene assegnato il valore \code{NIL}. A questo punto si rende necessario il puntatore \(y\) perchè, quando si arriva a trovare il valore \code{NIL} da sostituire con il nodo \(z\), la ricerca è andata un passo oltre il nodo che deve essere modificato. Le righe successive inseriscono il nodo passato come argomento all'interno dell'albero binario di ricerca. In generale, questo algoritmo viene eseguito in un tempo \(O(h)\), in un albero di altezza \(h\).
+
+\vspace{10pt}
+
+La procedura per la cancellazione di un nodo \(z\) da un albero binario di ricerca si suddivide in tre casi:
+\begin{enumerate}
+  \item se il nodo \(z\) non ha figli, si modifica il nodo \(z.parent\) in modo che non punti più a \(z\), ma a \code{NIL};
+  \item Se il nodo \(z\) ha un solo figlio, si eleva il figlio di tale nodo in modo che occupi la posizione di \(z\) nell'albero, modificando il padre di \(z\) affinchè punti al figlio di \(z\);
+  \item Se il nodo \(z\) ha due figli, si trova prima di tutto il successore \(y\) di \(z\), che deve necessariamente trovarsi nel sottoalbero destro di \(z\), per poi fare in modo che \(y\) assuma la posizione di \(z\) nell'albero. La parte restante del sottoalbero destro originale diventa il nuovo sottoalbero destro di \(y\) e il sottoalbero sinistro di \(z\) diventa il nuovo sottoalbero sinistro di \(y\).
+\end{enumerate}
+
+Per poter spostare i sottoalberi all'interno dell'albero binario di ricerca si deve prima definire una procedura che sostituisca il sottoalbero figlio di suo padre con un altro sottoalbero. Questa procedura sosituisce il sottoalbero con radice nel nodo \(u\) con il sottoalbero con radice nel nodo \(v\), in modo che il padre del nodo \(u\) diventa il padre del nodo \(v\). In pseudocodifica:
+
+\begin{lstlisting}
+transplant(T, u, v):
+  if u.parent = NIL:
+    T.root := v
+  else if u = u.parent.left:
+    u.parent.left := v
+  else:
+    u.parent.right := v
+  if v != NIL:
+    v.parent := u.parent 
+\end{lstlisting}
+
+Una volta introdotto questo algoritmo, è possibile ora analizzare la procedura di eliminazione di un nodo:
+
+\begin{lstlisting}
+treeDelete(T, z):
+  if z.left = NIL:
+    transplant(T, z, z.right)
+  else if z.right = NIL:
+    transplant(T, z, z.left)
+  else:
+    y := treeMinimum(z.right)
+    if y.parent != z:
+      transplant(T, y, y.right)
+      y.right := z.right
+      y.right.parent := y
+    transplant(T, z, y)
+    y.left := z.left
+    y.left.parent := y
+\end{lstlisting}
+
+Questa procedura gestisce i tre casi analizzati precedentemente. Le righe 2-3 gestiscono il caso in cui il nodo \(z\) non ha figlio sinistro, le righe 4-5 gestiscono il caso in cui il nodo \(z\) ha un figlio sinistro, ma non un figlio destro, mentre le restanti righe gestiscono il caso in cui il nodo ha sia figlio destro che sinistro. Nello specifico, la riga 7 trova il nodo \(y\), successore di \(z\): poichè \(z\) ha un sottoalbero destro non vuoto, il suo successore deve essere il nodo di quel sottoalbero cion la chiave più piccola (per questo motivo viene invocata la procedura \code{treeMinimum}). Come già detto, \(y\) non ha figlio sinistro, quindi bisogna staccare \(y\) dalla sua posizione corrente e metterlo al posto di \(z\). Se \(y\) è figlio destro di \(z\), le ultime tre righe sostituiscono \(z\) con \(y\), per poi sostituire il figlio sinistro di \(y\) con il figlio sinistro di \(z\). Se \(y\) non è figlio sinistro di \(z\), le righe 9-11 sostituiscono \(y\) con il figlio destro di \(y\) e cambiano il figlio destro di \(z\) nel figlio destro di \(y\). Tale procedura richiede un tempo di esecuzione nell'ordine di \(O(h)\), in un albero binario di ricerca alto \(h\).
 
 
 
 
-% \section{Alberi Binari}
 % \section{Alberi RB}
 % \section{Grafi}

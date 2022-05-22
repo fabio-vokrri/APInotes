@@ -3,7 +3,8 @@ maxHeapify(A, i):
   r := right(i)
   if l <= A.heapSize and A[l] > A[i]:
     max := l
-  else: max := i
+  else: 
+    max := i
   if r <= A.heapSize and A[r] > A[max]:
     max := r
   if max != i:
