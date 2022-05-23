@@ -1,0 +1,8 @@
+treeSuccessor(x):
+  if x.right != NIL:
+    return treeMinimum(x.right)
+  y := x.parent
+  while y != NIL and x = y.right:
+    x := y
+    y := y.parent
+  return y

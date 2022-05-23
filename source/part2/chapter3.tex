@@ -21,24 +21,9 @@ Gli \textbf{stack} sono insiemi dinamici dove l'elemento da rimuovere tramite l'
 Questa struttura dati può essere implementata tramite un array con un massimo di \(n\) elementi \code{S[1..n]}, che presenta lo specifico atrtibuto \code{S.top}, ovvero l'indice tramite cui accedere all'ultimo elemento inserito. L'array è dunque composto dagli elementi \code{S[1..S.top]}, dove \code{S[1]} rappresenta l'elemento in fondo alla pila, mentre \code{S[S.top]} rappresenta l'elemento in cima. Ovviamente, se \code{S.top} = 0, si dice che la pila è vuota, in quanto non contiene nessun elemento. In questo caso, se si tenta di estrarre un elemento dallo stack, si ottiene un errore di underflow dello stack, mentre se si cerca di inserire un elemento sulla pila piena (che conta quindi di \(n\) elementi), si ottiene un errore di overflow dello stack.
 
 Le operazioni dello stack possono essere implementate molto semplicemente in pseudocodifica come segue:
+\lstinputlisting{../docs/data_structures/stack_push.txt}
 
-\begin{lstlisting}
-push(S, x):
-  if S.top = S.length:
-    error "overflow"
-  else:
-    S.top := S.top + 1
-    S[S.top] := x
-\end{lstlisting}
-
-\begin{lstlisting}
-pop(S):
-  if iS.top = 0:
-    error "underflow"
-  else:
-    S.top := S.top - 1
-    return S[S.top + 1]
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/stack_pop.txt}
 
 Si noti come, in questo caso, l'operazione di \code{pop} ritorna l'elemento appena eliminato dallo stack. Entrambe le procedure vengono eseguite in tempo costante \(\Theta(1)\).
 
@@ -51,24 +36,9 @@ Come per gli stack, se la coda è vuota, il tentativo di rimuovere un elemento p
 
 Le operazioni della queue possono essere implementate molto semplicemente in pseudocodifica come segue:
 
-\begin{lstlisting}
-enqueue(Q, x):
-  Q[Q.tail] := x
-  if Q.tail = Q.length:
-    Q.tail := 1
-  else:
-    Q.tail := Q.tail + 1
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/queue_enqueue.txt}
 
-\begin{lstlisting}
-dequeue(Q, x):
-  x := Q[Q.head]
-  if Q.head = Q.length:
-    Q.head := 1
-  else:
-    Q.head := Q.head + 1
-  return x
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/queue_dequeue.txt}
 
 Entrambe le procedure vengono eseguite in un tempo costante \(\Theta(1)\).
 
@@ -79,48 +49,24 @@ Questa struttura dati può presentare varie forme: può essere doppiamente conca
 
 Nel seguito si fa riferimento a liste non ordinate doppiamente concatenate per lo sviluppo degli algoritmi che le manipolano. 
 
-\vspace{10pt}
-
+\paragraph{Ricerca}
 La prima procedura che sia analizza è \code{listSearch(L, k)}, che trova il primo elemento con la chiave \(k\) nella lista \(L\), restituendo un puntatore a tale oggetto. Se nessun oggetto con chiave \(k\) è presente nella lista, allora viene restituito il valore \code{NIL}. In pseudocodifica:
 
-\begin{lstlisting}
-listSearch(L, k):
-  x := L.head
-  while x != NIL and x.key != key:
-    x := x.next
-  return x  
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/list_search.txt}
 
 Si noti quindi che l'algoritmo \code{listSearch} cerca l'elemento di chiave \(k\) tramite una ricerca lineare sulla list \(L\) di \(n\) elementi. Dunque, l'algoritmo impiega un tempo \(\Theta(n)\) nel caso peggiore, in quanto potrebbe essere necessario scorrere l'intera lista.
 
-\vspace{10pt}
-
+\paragraph{Inserimento}
 La seconda procedura analizzata è \code{listInsert(L, x)} che inserisce l'elemento x di attributo key (già inizializzato) in testa alla lista. In pseudocodifica:
 
-\begin{lstlisting}
-listInsert(L, x):
-  x.next := L.head
-  if L.head != NIL:
-    L.head.prev := x
-  L.head := x
-  x.prev := NIL 
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/list_insert.txt}
 
 Questa procedura impiega un tempo costante \(\Theta(1)\) per la sua esecuzione.
 
-\vspace{10pt}
-
+\paragraph{Rimozione}
 L'ultima procedura analizzata per le linked list è \code{listDelete(L, x)}, che rimuove l'elemento \(x\) dalla lista \(L\). Per poter eliminare tale elemento è prima necessario chiamare la funzione \code{listSearch} per ottenere il puntatore all'elemento desiderato. In pseudocodifica:
 
-\begin{lstlisting}
-listDelete(L, x):
-  if x.prev != NIL:
-    x.prev.next := x.next
-  else:
-    L.head := x.next
-  if x.next != NIL:
-    x.next.prev := x.prev
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/list_delete.txt}
 
 Anche questa procedura impiega un tempo di esecuzione \(\Theta(1)\).
 
@@ -145,7 +91,7 @@ directAddressDelete(T, x):
   T[x.key] := NIL
 \end{lstlisting}
 
-In alcune implementazioni è possibile memorizzare l'elemento di chaive \(k\) direttamente all'interno della tabella, anzichè in un oggetto esterno, risparmiando spazio in memoria. 
+In alcune implementazioni è possibile memorizzare l'elemento di chiave \(k\) direttamente all'interno della tabella, anzichè in un oggetto esterno, risparmiando spazio in memoria. 
 
 \subsection{Introduzione alle Tavole di Hash}
 
@@ -213,56 +159,32 @@ Il vantaggio principale di questo metodo è che il valore di \(m\) non è critic
 \subsection{Indirizzamento Aperto}
 Un altro metodo per evitare le collisioni è tramite l'indirizzamento aperto, in cui tutti gli elementi sono memorizzati nella tavola hash, ovvero ogni cella contiene un elemento dell'insieme dinamico o la costante \code{NIL} se non contiene nessun elemento. Quando si cerca un elemento, si esamina sistematicamente la tabella fino a quando non si trova l'elemento desiderato, oppure finchè non ci sono più elementi da controllare (l'elemento non è nell'array). Nell'indirizzamento aperto, a differenza degli altri metodi, la tavola hash può riempirsi fino a quando non può più fisicamente contenere altri elementi. Una conseguenza di questo design è che il fattore di carico \(\alpha\) non supera mai il valore 1. Il vantaggio di questo metodo sta nel fatto che elimina completamente l'utilizzo dei puntatori, in quanto calcola la sequenza delle celle da esaminare, e libera quindi una notevole quantità di memoria, utilizzata per incrementare la capacità della tabella, riducendo il rischio di collisioni. 
 
+\paragraph{Inserimento}
 Per effettuare un insierimento mediante il metodo dell'indirizzamento aperto, si esamina in successione le posizioni della tavola hash fino a che non si trova una cella libera in cui inserire la chiave. L'efficienza di questo metodo consiste nel calcolare una nuova sequenza di accesso alla tabella in base alla chiave dell'oggetto da inserire, anzichè seguire sempre lo stesso cammino di accessi, che impiegherebbe un tempo di esecuzione \(\Theta(n)\). Per determinare quali celle esaminare durante la fase di ispezione, si estende la funzione di hash in modo da includere l'ordine di ispezione (a partire da 0), come secondo input. Formalmente, la funzione di hash modificata è definita come segue:
 
 \(h(k,i):U\times \{0,1,...,m-1\} \to \{0,1,...,m-1\}\)
 
 \noindent Si richiede, inoltre, che per ogni chiave \(k\) la sequenza di ispezione \(<h(k,0), h(k,1),..., h(k,m-1)>\) sia una permutazione della sequenza \(<0,1,...,m-1>\), in modo tale che ogni cella della tavola possa essere considerata come possibile cella in cui inserire una nuova chiave. In pseudocodifica:
 
-\begin{lstlisting}
-hashInsert(T, k):
-  i := 0
-  repeat
-    j := h(k, i)
-    if T[j] = NIL or T[j] = DELETED:
-      T[j] := k
-      return j
-    else:
-      i := i + 1
-  until i = m
-  error "hash table overflow"
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/hash_insert.txt}
 
 Questa procedura prende in input una tavola di hash \(T\) e una chiave \(k\) da inserire in tabella, e ritorna l'indice della cella in cui è stato inserito l'elemento, oppure \code{error} di overflow se non è presente nessuna cella libera. Si noti nella condizione in riga 5, che viene verificato se la cella \(T[k]\) contiene il valore \code{DELETED}: questo valore speciale verrà ripreso e analizzato più avanti assieme alla procedura di eliminazione delle chiavi dalla tabella.
 
-\vspace{10pt}
-
+\paragraph{Ricerca}
 Per la ricerca di una determinata chiave \(k\) esamina la stessa sequenza di celle che ha esaminato l'algoritmo di inserimento quando ha inserito l'elemento di chiave \(k\). Dunque, la procedura di ricerca potrebbe terminare la propria esecuzione senza successo quando trova una cella vuota, in quanto la chiave \(k\) sarebbe stata inserita in quella posizione (si presuppone che le chiavi non possano essere eliminate dalla tavola). In pseudocodifica:
 
-\begin{lstlisting}
-hashSearch(T, k):
-  i := 0
-  repeat
-    j := h(k, i)
-    if T[j] = k:
-      return j
-    i := i + 1
-  until T[j] = NIL or i = m
-  return NIL
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/hash_search.txt}
 
 Questa procedura, come la precedente, prende in input una tavola di hash \(T\) e una chiave \(k\) da ricercare in tabella, e ritorna l'indice della cella in cui è stato trovato l'elemento, oppure \code{NIL} se non è presente nessuna cella che contiene l'elemento oppure se nella sequenza di ricerca si trova una cella libera (per le ragioni precedentemente analizzate).
 
-\vspace{10pt}
-
+\paragraph{Rimozione}
 La procedura di cancellazione di una chiave dalla tavola di hash ad indirizzamento aperto è un'operazione molto complessa, in quanto non è possibile semplicemente cancellare il contenuto della cella \(i\), assegnandone il valore \code{NIL}, in quanto sarebbe impossibile ricercare qualsiasi elemento in tabella per come è stata definita la procedura di ricerca. Dunque, si rende necessario marcare la cella il cui contenuto è stato eliminato con il valore speciale \code{DELETED}, anzichè \code{NIL}. È per questo motivo che in riga 5 della procedura di inserimento viene anche verificato se la cella ispezionata contanga il valore \code{DELETED}. Si noti inoltre che, utilizzando questa nuova notazione, il tempo di esecuzione della procedura di ricerca non dipende più dal fattore di carico \(\alpha\). Per questo motivo, nella pratica si preferisce spesso utilizzare il metodo della concatenazione quando è necessario che la tabella di hash supporti l'operazione di cancellazione delle chiavi. 
 
-\vspace{10pt}
-
+\subsection{Hashing Uniforme}
 Nell'analisi delle tabelle hash con indirizzamento aperto si ipotizza hashing uniforme: si suppone, infatti, che ogni chiave abbia la stessa probabilità di avere come sequenza di ispezione una delle \(m!\) permutazioni di \(<0,1,...,m-1>\). L'hashing uniforme estende il concetto di hashing uniforme semplice, impiegato più volte precedentemente, al caso in cui la funzione di hash produce, non un singolo numero, ma un'intera sequenza di ispezione. Nella pratica non è possibile ottenere una funzione di hash uniforme, ma si utilizzano delle approssimazioni accettabili. Si esaminano nel seguito tre tecniche utilizzate per calcolare le sequenze di ispezione richieste nell'indirizzamento aperto: ispezione lineare, ispezione quadratica e doppio hashing. Tali tecniche grantiscono che la sequenza \(<h(k,0), h(k,1),..., h(k,m-1)>\) sia una permutazione di \(<0,1,...,m-1>\) per ogni chiave \(k\), ma nessuna di loro può garantire l'ipotesi di hashing uniforme, in quanto nessuna di esse è in grado di generare più di \(m^2\) sequenze di ispezioni differenti (invece delle \(m!\) sequenze richieste). 
 
 \paragraph{Ispezione Lineare}
- Data una funzione di hash ordinaria \(h':U\to \{0,1,...,m-1\}\), detta funzione di hash ausiliaria, il metodo di ispezione lineare utilizza la funzione di hash
+Data una funzione di hash ordinaria \(h':U\to \{0,1,...,m-1\}\), detta funzione di hash ausiliaria, il metodo di ispezione lineare utilizza la funzione di hash
 
 \(h(k,i)=(h'(k)+i)\;mod\;m\)
 
@@ -283,110 +205,51 @@ Nell'analisi delle tabelle hash con indirizzamento aperto si ipotizza hashing un
 Inoltre, il valore \(h_2(k)\) deve essere relativamente primo con la dimensione \(m\) della tavola hash perchè venga ispezionata l'intera tabella. Un modo pratico per garantire tale condizione è scegliere \(m\) potenza di due e definire \(h_2\) in modo che produca sempre un numero dispari. Un altro modo è scegliere \(m\) primo e definire \(h_2\) in modo che generi sempre un numero intero positivo minore di \(m\). In questo contesto, il doppio hashing è migliore delle precedenti tecniche in quanto utilizza \(\Theta(m^2)\) sequenze di ispezione, anzichè \(\Theta(m)\), perchè ogni possibile coppia di \(h_1, h_2\) produce una distinta sequenza di ispezione.
 
 \section{Alberi Binari}
-
-\paragraph{Alberi binari di ricerca}
 Un albero binario di ricerca è una struttura dati ad albero\footnote{consultare appendice A per approfondire la definizione di struttura dati ad albero.} che supporta molte operazioni degli insiemi dinamici, come \code{search}. \code{delete}, \code{insert}, \code{minimum}, \code{maximum}, \code{successor} e \code{predecessor}. Tali alberi sono rappresentati da strutture concatenate in cui ogni nodo è un oggetto, che oltre ad avere una chiave e i dati satellite, contengono anche gli attributi \code{left}, \code{right} e \code{parent}, che puntano rispettivamente al figlio sinistro, al figlio destro e al padre. Se manca un figlio o un padre, i corrispondenti attributi sono inizializzati a \code{NIL}. Il nodo radice, detto anche root, è l'unico nodo nell'albero il cui attributo padre è inizializzato con \code{NIL}.
 
 Le chiavi dell'albero binario di ricerca sono memorizzate in maniera da rispettare sempre la proprietà fondamentale per cui se \(x\) è un nodo in un albero binario di ricerca ed \(y\) è il nodo nel sottoalbero sinistro di \(x\), allora \(y.key \le x.key\), mentre se \(y\) è un nodo nel sottoalbero destro di \(x\), allora \(y.key \ge x.key\). Tale proprietà permette di elencare ordinatamente tutte le chiavi di un albero binario di ricerca con un semplice algoritmo ricorsivo di attraversamento simmetrico di un albero, tramite cui la chiave della radice di un sottoalbero viene stampata nel mezzo tra la stampa dei valori nel sottoalbero sinistro e la stampa dei valori nel sottoalbero destro. In pseudocodice:
 
-\begin{lstlisting}
-inorderTreeWalk(x):
-  if x != NIL:
-    inorderTreeWalk(x.left)
-    print x.key
-    inorderTreeWalk(x.right)
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/tree_inorder.txt}
 
 Per attraversare un albero binario di ricerca costituito da \(n\) nodi, è necessario un tempo \(\Theta(n)\), in quanto, dopo la chiamata iniziale, la procedura viene chiamata ricorsivamente esattamente due volte per ogni nodo dell'albero. 
 
-\vspace{10pt}
-
+\paragraph{Ricerca}
 Un'altra tipica operazione svolta su un albero binario di ricerca è quella di cercare una chiave memorizzata nell'albero: oltre all'operazione \code{search}, gli alberi binari supportano anche query come \code{minimum}, \code{maximum}, \code{successor} e \code{predecessor}. 
 
 Dato un puntatore alla radice dell'albero e una chiave \(k\) da cercare, la procedura \code{treeSearch} restituisce il puntatore al nodo di chiave \(k\), se esiste, oppure \code{NIL}, se la chiave non è presente nell'albero. In pseudocodifica:
 
-\begin{lstlisting}
-treeSearch(x, k):
-  if x = NIL or k = x.key:
-    return x
-  if k < x.key:
-    return treeSearch(x.left, k)
-  else:
-    return treeSearch(x.right, k)
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/tree_search.txt}
 
 Questo algoritmo inizia la sua ricerca dalla radice dell'albero e ad ogni iterazione confronta il valore \(k\) passato come argomento con \(x.key\). Se le due chiavi sono uguali la ricerca termina e viene restituito il puntatore al nodo, mentre se la chiave è minore della chiave corrente analizzata, per la proprietà fondamentale degli alberi binari, si chiama ricorsivamente la procedura sul sottoalbero sinistro, altrimenti sul sottoalbero destro. Il tempo di esecuzione di tale algoritmo è \(O(h)\), dove \(h\) rappresenta l'altezza dell'albero. 
 
-\vspace{10pt}
+\paragraph{Minimo e Massimo}
+Un elemento con chiave minima in un albero binario di ricerca può sempre essere trovato seguendo, a partire dalla radice, i puntatori \code{left}, fino a quando non viene incontrato un valore \code{NIL}, sempre per la proprietà fondamentale degli alberi binari di ricerca. In pseudocodifica:
 
-Un elemento con chaive minima in un albero binario di ricerca può sempre essere trovato seguendo, a partire dalla radice, i puntatori \code{left} dei figli a sinistra, fino a quando non viene incontrato un valore \code{NIL}, sempre per la proprietà fondamentale degli alberi binari di ricerca. In pseudocodifica:
-
-\begin{lstlisting}
-treeMinimum(x):
-  while x.left != NIL:
-    x := x.left
-  return x
-\end{lstlisting}
-
-\vspace{10pt}
+\lstinputlisting{../docs/data_structures/tree_minimum.txt}
 
 La procedura per trovare l'elemento massimo, invece, è simmetrica alla procedura appena analizzata. In pseudocodifica:
 
-\begin{lstlisting}
-treeMaximum(x):
-  while x.right != NIL:
-    x := x.right
-  return x
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/tree_maximum.txt}
 
 Entrambe queste procedure vengono eseguite in un tempo \(O(h)\), in un albero di altezza h. 
 
-\vspace{10pt}
-
+\paragraph{Successore e Predecessore}
 Dato un nodo in un albero binario di ricerca, spesso è necessario trovare il suo successore, nell'ordine stabilito da un attraversamento simmetrico. Il successore di un nodo \(x\) è il nodo con la più piccola chiave maggiore di \(x.key\). La struttura di un albero binario consente di trovare tale nodo senza il bisogno di confrontare le chiavi. In pseudocodifica:
 
-\begin{lstlisting}
-treeSuccessor(x):
-  if x.right != NIL:
-    return treeMinimum(x.right)
-  y := x.parent
-  while y != NIL and x = y.right:
-    x := y
-    y := y.parent
-  return y
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/tree_successor.txt}
 
 Se il sottoalbero destro del nodo \(x\) non è vuoto, allora il successore di \(x\) è proprio il nodo più a sinistra nel sottoalbero destro, che viene trovato chiamando la procedura precedentemente analizzata \code{treeMinimum}. Altrimenti, se il sottoalbero destro del nodo \(x\) è vuoto e \(x\) ha un successore \(y\), allora \(y\) è l'antenato più prossimo di \(x\) il cui figlio sinistro è anche antenato di \(x\). Per trovare il nodo \(y\), è necessario risalire l'albero partendo da \(x\), fino a quando non si trova un nodo che è figlio sinistro di suo padre. Questa operazione è svolta in un tempo \(O(h)\), con \(h\) l'altezza dell'albero. 
 
 La procedura per trovare il successore è simmetrica alla procedura appena anlizzata e viene svolta nello stesso tempo. 
 
-\vspace{10pt}
-
+\paragraph{Inserimento}
 Per inserire un nuovo valore \(v\) all'interno dell'albero binario di ricerca \(T\), si utilizza la seguente procedura, che riceve in input un nodo \(z\), tale per cui \(z.key = v\):
 
-\begin{lstlisting}
-treeInsert(T, z):
-  y := NIL
-  x := T.root
-  while x != NIL:
-    y := x
-    if z.key < x.key:
-      x := x.left
-    else:
-      x := z.right
-  z.parent := y
-  if y = NIL:
-    T.root = z
-  else if z.key < y.key:
-    y.left := z
-  else:
-    y.right := z
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/tree_insert.txt}
 
 La procedura appena vista inizia dalla radice dell'albero e il puntatore \(x\) traccia un cammino semplice in discesa cercando un \code{NIL} da sostituire con l'elemento di input \(z\). La procedura mantiene anche un puntatore \(y\) detto inseguitore che punta sempre al padre di \(x\). Le righe 4-9 del ciclo \code{while} spostano questi due puntatori verso il basso, andando a sinistra o a destra a seconda dell'esito del confronto fra \({z.key}\) e \(x.key\), finchè a \(x\) non viene assegnato il valore \code{NIL}. A questo punto si rende necessario il puntatore \(y\) perchè, quando si arriva a trovare il valore \code{NIL} da sostituire con il nodo \(z\), la ricerca è andata un passo oltre il nodo che deve essere modificato. Le righe successive inseriscono il nodo passato come argomento all'interno dell'albero binario di ricerca. In generale, questo algoritmo viene eseguito in un tempo \(O(h)\), in un albero di altezza \(h\).
 
-\vspace{10pt}
-
+\paragraph{Cancellazione}
 La procedura per la cancellazione di un nodo \(z\) da un albero binario di ricerca si suddivide in tre casi:
 \begin{enumerate}
   \item se il nodo \(z\) non ha figli, si modifica il nodo \(z.parent\) in modo che non punti più a \(z\), ma a \code{NIL};
@@ -396,41 +259,61 @@ La procedura per la cancellazione di un nodo \(z\) da un albero binario di ricer
 
 Per poter spostare i sottoalberi all'interno dell'albero binario di ricerca si deve prima definire una procedura che sostituisca il sottoalbero figlio di suo padre con un altro sottoalbero. Questa procedura sosituisce il sottoalbero con radice nel nodo \(u\) con il sottoalbero con radice nel nodo \(v\), in modo che il padre del nodo \(u\) diventa il padre del nodo \(v\). In pseudocodifica:
 
-\begin{lstlisting}
-transplant(T, u, v):
-  if u.parent = NIL:
-    T.root := v
-  else if u = u.parent.left:
-    u.parent.left := v
-  else:
-    u.parent.right := v
-  if v != NIL:
-    v.parent := u.parent 
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/tree_transplant.txt}
 
-Una volta introdotto questo algoritmo, è possibile ora analizzare la procedura di eliminazione di un nodo:
+Una volta introdotto questo algoritmo, è possibile ora analizzare la procedura di eliminazione:
 
-\begin{lstlisting}
-treeDelete(T, z):
-  if z.left = NIL:
-    transplant(T, z, z.right)
-  else if z.right = NIL:
-    transplant(T, z, z.left)
-  else:
-    y := treeMinimum(z.right)
-    if y.parent != z:
-      transplant(T, y, y.right)
-      y.right := z.right
-      y.right.parent := y
-    transplant(T, z, y)
-    y.left := z.left
-    y.left.parent := y
-\end{lstlisting}
+\lstinputlisting{../docs/data_structures/tree_delete.txt}
 
-Questa procedura gestisce i tre casi analizzati precedentemente. Le righe 2-3 gestiscono il caso in cui il nodo \(z\) non ha figlio sinistro, le righe 4-5 gestiscono il caso in cui il nodo \(z\) ha un figlio sinistro, ma non un figlio destro, mentre le restanti righe gestiscono il caso in cui il nodo ha sia figlio destro che sinistro. Nello specifico, la riga 7 trova il nodo \(y\), successore di \(z\): poichè \(z\) ha un sottoalbero destro non vuoto, il suo successore deve essere il nodo di quel sottoalbero cion la chiave più piccola (per questo motivo viene invocata la procedura \code{treeMinimum}). Come già detto, \(y\) non ha figlio sinistro, quindi bisogna staccare \(y\) dalla sua posizione corrente e metterlo al posto di \(z\). Se \(y\) è figlio destro di \(z\), le ultime tre righe sostituiscono \(z\) con \(y\), per poi sostituire il figlio sinistro di \(y\) con il figlio sinistro di \(z\). Se \(y\) non è figlio sinistro di \(z\), le righe 9-11 sostituiscono \(y\) con il figlio destro di \(y\) e cambiano il figlio destro di \(z\) nel figlio destro di \(y\). Tale procedura richiede un tempo di esecuzione nell'ordine di \(O(h)\), in un albero binario di ricerca alto \(h\).
+Questa procedura gestisce i tre casi analizzati precedentemente. Le righe 2-3 gestiscono il caso in cui il nodo \(z\) non ha figlio sinistro, le righe 4-5 gestiscono il caso in cui il nodo \(z\) ha un figlio sinistro, ma non un figlio destro, mentre le restanti righe gestiscono il caso in cui il nodo ha sia figlio destro che sinistro. Nello specifico, la riga 7 trova il nodo \(y\), successore di \(z\): poichè \(z\) ha un sottoalbero destro non vuoto, il suo successore deve essere il nodo di quel sottoalbero con la chiave più piccola (per questo motivo viene invocata la procedura \code{treeMinimum}). Come già detto, \(y\) non ha figlio sinistro, quindi bisogna staccare \(y\) dalla sua posizione corrente e metterlo al posto di \(z\). Se \(y\) è figlio destro di \(z\), le ultime tre righe sostituiscono \(z\) con \(y\), per poi sostituire il figlio sinistro di \(y\) con il figlio sinistro di \(z\). Se \(y\) non è figlio sinistro di \(z\), le righe 9-11 sostituiscono \(y\) con il figlio destro di \(y\) e cambiano il figlio destro di \(z\) nel figlio destro di \(y\). Tale procedura richiede un tempo di esecuzione nell'ordine di \(O(h)\), in un albero binario di ricerca alto \(h\).
 
+\section{Alberi Red Black}
+Gli alberi rosso nero sono strutture dati ad albero di ricerca binaria con un bit aggiuntivo di memoria per ogni nodo, che rappresenta il colore di tale nodo. Questa struttura dati, garantisce che nessun cammino semplice dalla radice dell'albero fino ad una sua qualsiasi foglia si più lungo del doppio di qualsiasi altro cammino: si dice, quindi, che l'albero è approssimativamente bilanciato. Ogni nodo dell'albero contiene ora gli attributi \code{key}, \code{left}, \code{right}, \code{parent} e \code{color}. Se un nodo non contiene riferimenti a figli o al nodo padre, il corrispondente attributo viene inizializzato con il valore \code{NIL}. In questo caso, i puntatori a \code{NIL} vengono trattati come puntatori a nodi (vuoti) esterni dell'albero, mentre i nodi che contengono informazioni sono trattati come nodi interni all'albero: dunque, tutte le foglie dell'albero sono nodi che non contengono nessuna informazione. In realtà, per semplificare le condizioni al contorno nello pseudocodice, si è soliti utilizzare un unico nodo sentinella inizializzato a \code{NIL}, in modo che per ogni albero \(T\), le sue foglie puntano al nodo \(T.nil\) di color nero.
 
+I nodi dell'albero rosso nero vengono colorati tramite le seguenti regole:
+\begin{enumerate}
+  \item Ogni nodo è rosso o nero;
+  \item La radice è nera;
+  \item Ogni foglia (vuota - \code{NIL}) è nera;
+  \item Se un nodo è rosso, allora entrambi i suoi figli sono neri;
+  \item Per ogni nodo, tutti i cammini semplici, che vanno dal nodo alle sue foglie discendenti, contengono lo stesso numero di nodi neri.  
+\end{enumerate}
 
+Si definisce a questo proposito, altezza nera di un nodo \(x\), indicato con \(bh(x)\), il numero di nodi neri lungo un cammino semplice che inizia dal nodo \(x\) (non incluso). Per la proprietà degli alberi rosso nero, il concetto di altezza nera è ben definito in quanto tutti i cammini semplici che scendono dal nodo hanno lo stesso numero di nodi neri. In generale:
 
-% \section{Alberi RB}
+\begin{theorem}
+  L'altezza massima di un albero rosso nero con \(n\) nodi è \(2\,log_2(n+1)\).
+\end{theorem}
+
+\noindent La conseguenza immediata di questo teorema è che le operazioni sugli insiemi dinamici possono tutte essere implementate in un tempo \(O(log_2\,n)\) negli alberi rosso neri, perchè possono essere eseguite nel tempo  \(O(h)\) in un albero binario di ricerca di altezza \(h\) e qualsiasi albero rosso nero di \(n\) nodi è un albero binario di ricerca di altezza \(O(log_2\,n)\).
+
+\paragraph{Rotazione}
+Le operazioni di \code{treeInsert} e \code{treeDelete} sugli alberi rosso nero, potrebbero violare le proprietà della struttura, proprio perchè modificano l'albero. Si rende quindi necessario ricalcolare i colori di qualche nodo dell'albero e anche la struttura dei puntatori, dopo la chiamata a una delle due procedure. La struttura dei puntatori viene modificata tramite una rotazione, ovvero un'operazione locale che preserva le proprietà degli alberi binari di ricerca. Quando si esegue una rotazione sinistra in un nodo \(x\), supponendo che il nodo \(y = x.right\) sia diverso da \code{NIL}, si fa "perno" sul collegamento tra \(x\) e \(y\): il nodo \(y\)diventa la nuova radice del sottoalbero, con \(x\) come figlio sinistro di \(y\) e il figlio sinistro di \(y\) come figlio destro di \(x\). In pseudocodifica:
+
+\lstinputlisting{../docs/data_structures/RB_left_rotate.txt}
+
+Il codice per la procedura \code{rightRotate} è simmetrico a quello appena analizzato. Entrambe le procedure vengono eseguite nel tempo \(O(1)\).
+
+\paragraph{Inserimento}
+L'inserimento di un nodo in un albero rosso nero viene eseguito tramite una versione leggermente modificata della procedura di inserimento analizzata per gli alberi binari di ricerca. Inoltre, per poter preservare le condizioni degli alberi rosso neri, è necessario utilizzare una seconda procedura che ricolora i nodi dell'albero in seguito alla chiamata della procedura di inserimento. In pseudocodifica:
+
+\lstinputlisting{../docs/data_structures/RB_insert.txt}
+
+Dunque, tramite questa procedura, il nodo \(z\) viene inserito nella posizione corretta all'interno dell'albero rosso nero, inizializzando gli attributi \code{left} e\code{right} a \code{NIL} (per rispettare la struttura dell'albero) e il suo colore a rosso. Dato che l'inserimento di questo nodo potrebbe aver causato la violazione delle proprietà fondamentali degli alberi rosso neri, viene chiamata la procedura di ripristino \code{RBFixup}, implementata con la seguente pseudocodifica:
+
+\lstinputlisting{../docs/data_structures/rb_insert_fixup.txt}
+
+da completare.
+
+\paragraph{Rimozione}
+La procedura di rimozione di un determinato nodo dall'albero rosso nero si basa sulla subroutine \code{transplant}, che deve essere opportunamente modificata in modo da adattarsi alla struttura degli alberi rosso nero. In pseudocodifica:
+
+\lstinputlisting{../docs/data_structures/RB_transplant.txt}
+
+Una volta introdotta questa procedura, è possibile analizzare l'algoritmo di rimozione, simile a quella analizzata per gli alberi di ricerca binaria, con l'unica differenza che si tiene traccia del nodo \(y\), che potrebbe violare le proprietà degli alberi rosso nero. Per evitare tali violazioni, si utilizza una seconda procedura di supporto che ha il compito di ricalcolare i colori dell'albero, in modo da rispettare le sue proprietà. In pseudocodifica:
+
+\lstinputlisting{../docs/data_structures/RB_delete.txt}
+
+\lstinputlisting{../docs/data_structures/RB_delete_fixup.txt}
+
 % \section{Grafi}

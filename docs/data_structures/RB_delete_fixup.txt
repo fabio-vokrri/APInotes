@@ -1,0 +1,30 @@
+RBDeleteFixup(T, x):
+  while x != T.root and x.color = BLACK:
+    if x = x.parent.left:
+      w := x.parent.right
+      if w.color = RED:
+        w.color := BLACK                                  // caso 1
+        x.parent.color := RED                             // caso 1
+        leftRotate(T, x.parent)                           // caso 1
+        w := x.parent.right                               // caso 1
+      if w.left.color = BLACK and w.roght.colr = BLACK:
+        w.color := RED                                    // caso 2
+        x := x.parent                                     // caso 2
+      else:
+        if w.right.color = BLACK:
+          w.left.color = BLACK                            // caso 3
+          w.color = RED                                   // caso 3
+          rightRotate(T, w)                               // caso 3
+          w := x.parent.right                             // caso 3
+        w.color := x.parent.color                         // caso 4
+        x.parent.color := BLACK                           // caso 4
+        w.right.color := BLACK                            // caso 4
+        leftRotate(T, x.parent)                           // caso 4
+        x := T.root                                       // caso 4
+    else:
+      come righe 4-23 con "left" e "right" scambiati
+  x.color := BLACK
+    
+
+
+      

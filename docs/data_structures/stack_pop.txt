@@ -1,0 +1,6 @@
+pop(S):
+  if iS.top = 0:
+    error "underflow"
+  else:
+    S.top := S.top - 1
+    return S[S.top + 1]

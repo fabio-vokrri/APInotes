@@ -1,0 +1,6 @@
+push(S, x):
+  if S.top = S.length:
+    error "overflow"
+  else:
+    S.top := S.top + 1
+    S[S.top] := x

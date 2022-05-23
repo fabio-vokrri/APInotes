@@ -1,0 +1,14 @@
+treeDelete(T, z):
+  if z.left = NIL:
+    transplant(T, z, z.right)
+  else if z.right = NIL:
+    transplant(T, z, z.left)
+  else:
+    y := treeMinimum(z.right)
+    if y.parent != z:
+      transplant(T, y, y.right)
+      y.right := z.right
+      y.right.parent := y
+    transplant(T, z, y)
+    y.left := z.left
+    y.left.parent := y
