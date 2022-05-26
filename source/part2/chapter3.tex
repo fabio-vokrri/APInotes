@@ -360,4 +360,37 @@ Per tenere traccia del lavoro, la visita colora i vertici di bianco, grigio oppu
 In pseudocodifica:
 \lstinputlisting[mathescape]{../docs/data_structures/graph_BFS.txt}
 
-Informalmente, le righe 2-4 inizializzano ogni vertice, colorandolo di bianco, eccetto il vertice \(s\) che in riga 5 viene colorato di grigio, in quanto è il vertice sorgente già visitato ad inizio ricerca, e a cui viene assegnata la distanza 0. Le righe 7 e 8 inizializzano la coda \(Q\) inserendo il solo vertice \(s\). Il ciclo \code{while} di riga 10-16 viene reiterato fin tanto che ci sono ancora vertici grigi, la cui frontiera protrebbe ancora presentare vertici di colore bianco. La riga 10 determina il vertice grigio \(u\) che si trova in testa alla coda, rimuovendolo dalla coda stessa (\code{dequeue}), in modo da poter accedere ai suoi nodi adiacenti. Il ciclo \code{for}, di righe 11-15, esamina ciascun vertice \(v\) della lista di adiacenza di \(u\): se questo vertice è bianco, allora non è ancora stato scoperto e, quindi, l'algoritmo lo colora di grigio e lo inserisce nella coda dopo avergli assegnato il valore di distanza \(u.dist + 1\). Dopo aver esaminato ogni vertice nella lista di adiacenza di \(u\), tale vertice viene colorato di nero in riga 16.
+Informalmente, le righe 2-4 inizializzano ogni vertice, colorandolo di bianco, eccetto il vertice \(s\) che in riga 5 viene colorato di grigio, in quanto è il vertice sorgente già visitato ad inizio ricerca, e a cui viene assegnata la distanza 0. Le righe 7 e 8 inizializzano la coda \(Q\) inserendo il solo vertice \(s\). Il ciclo \code{while} di riga 10-16 viene reiterato fin tanto che ci sono ancora vertici grigi, la cui frontiera protrebbe ancora presentare vertici di colore bianco. La riga 10 determina il vertice grigio \(u\) che si trova in testa alla coda, rimuovendolo dalla coda stessa (\code{dequeue}), in modo da poter accedere ai suoi vertici adiacenti. Il ciclo \code{for}, di righe 11-15, esamina ciascun vertice \(v\) della lista di adiacenza di \(u\): se questo vertice è bianco, allora non è ancora stato scoperto e, quindi, l'algoritmo lo colora di grigio e lo inserisce nella coda dopo avergli assegnato il valore di distanza \(u.dist + 1\). Dopo aver esaminato ogni vertice nella lista di adiacenza di \(u\), tale vertice viene colorato di nero in riga 16.
+
+Dato un grafo \(G=(V, E)\), il tempo di esecuzione dell'algoritmo BFS è \(O(|E|+|V|)\).
+
+\subsection{Visita in Profondità}
+La visita in profondità (o depth-first search) è un algoritmo che adotta una strategia differente rispetto al precedente: consiste, infatti, nel visitare il grafo sempre più in profondità se possibile. Nella visita in profondità, gli archi vengono ispezionati a partire dall'ultimo vertice \(v\) scoperto, che ha ancora archi non ispezionati nella sua lista di adiacenza. Questo processo continua fino a quando non sono stati scoperti tutti i vertici che sono raggiungibili dal vertice \(v\) da cui inizia la ricerca. Se rimane ancora qualche vertice da ispezionare, allora se ne sceglie uno nuovo come sorgente e si reitera il processo. 
+
+Dunque, si può affermare che se l'algoritmo BFS si basa sulla strategia di visitare i vertici secondo una politica LIFO, l'algoritmo DFS si basa su una politica di tipo FIFO: una volta inserito un nodo in cima alla pila, si visitano tutti i vertici adiacenti relativi a quel nodo, prima di procedere alla visita dei vertici adiacenti del successivo. 
+
+Come per il precedente algoritmo, anche in questo caso i vertici vengono colorati durante la loro visita, per indicarne lo stato. Inizialmente tutti i vertici sono colorati di bianco e nel momento in cui un determinato vertice viene visitato per la prima volta, questo viene colorato di grigio. Infine, un vertice è colorato di nero nel momento in vui sono ispezionati tutti i suoi vertici adiacenti. Oltre alla lista di adiacenza e al colore, i vertici all'interno di un grafo visitato in profondità, contengono anche due informazioni temporali: la prima, memorizzata in \(v.d\), registra il momento in cui il vertice viene scoperto e colorato di grigio, mentre le seconda, memorizzata in \(v.f\), registra il momento in cui la visita completa l'ispezione della lista di adiacenza di \(v\) e viene colorato di nero. Quindi, un vertice \(v\) è bianco prima del tempo \(v.d\), grigio fra il tempo \(v.d\) e \(v.f\), nero successivamente. Queste informazioni aggiuntive servono per agevolare la scrittura di procedure e sono utilizzate anche da parte di algoritmi più avanzati. 
+
+Si introduce di seguito la procedura in pseudocodifica che realizza la strategia di visita in profondità:
+
+\lstinputlisting{../docs/data_structures/graph_DFS.txt}
+
+La procedura imposta, in righe 2-3, il colore di tutti i vertici di bianco, per poi inizializzare una variabile globale \code{time},tramite cui si memorizzano le informazioni temporali precedentemente discusse. Le righe successive servono ad ispezionare in profondità tutti i vertici che hanno colore bianco, tramite la procedura di supporto \code{DFSVisit}, introdotta di seguito.
+
+\lstinputlisting{../docs/data_structures/graph_DFS_visit.txt}
+
+In ogni chiamata della procedura \code{DFSVisit}, il vertice \(u\) passato come argomento è inizialmente bianco, quindi gli si assegna subito il colore grigio dopo aver assegnato al vertice il tempo di scoperta (\(u.d\)) il tempo incrementato di una unità (righe 2-4). Subito dopo, il ciclo \code{for} di righe 5-7 esplora tutti i vertici \(v\) di colore bianco adiacenti ad \(u\) e chiama ricorsivamente la procedura in modo da visitare il vertice \(v\) e i vertici a lui adiacenti, sempre se di colore bianco. Dopo aver terminato la visita in profondità di tutti i vertici a partire dal vertice sorgente \(u\), il colore di tale vertice viene cambiato in nero e si assegna al tempo di fine esplorazione \(u.f\) il valore temporale, dopo averlo nuovamente incrementato di una unità (righe 8-10).
+
+Anche in questo caso, come per il procedimento precedente, il tempo medio di esecuzione dell'algoritmo di ispezione in profondità è \(\Theta(|V|+|E|)\).
+
+\subsection{Ordinamento Topologico}
+La visita in profondità può essere utilizzata per eseguire l'ordinamento  topologico di un determinato grafo orientato aciclico (detto anche DAG - Directed Acyclic Graph). Un ordinamento topologico di un dag \(G=(V,E)\) è un ordinamento lineare di tutti i suoi vertici, tale che se \(G\) contiene un arco \((u,v)\), allora \(u\) appare prima di \(v\) nell'ordinamento. Un ordinamento topologico di un grafo può essere visto come un ordinamento dei suoi vertici lungo una linea orizzontale ion modo che tutti gli archi orientati siano diretti da sinistra verso destra: intuitivamente, questo tipo di ordinamento, serve a rappresentare la precedenza di determinati eventi. 
+
+In pseudocodifica:
+
+\lstinputlisting[mathescape]{../docs/data_structures/graph_topsort.txt}
+\lstinputlisting{../docs/data_structures/graph_topsort_visit.txt}
+
+L'idea di questo algoritmo è quella di visitare il dag con l'algoritmo di vista DFS e, quando un vertice viene colorato di nero, lo si inserisce in testa alla lista \(L\) che rappresenta tutti i nodi ordinati. Una volta completata la visita di ogni vertice, la lista ottenuta rappresenta l'ordinamento topologico del grafo. 
+
+Anche in questo caso, l'algoritmo impiega un tempo di esecuzione medio \(\Theta(|V|+|E|)\).  

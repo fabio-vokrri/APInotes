@@ -1,0 +1,8 @@
+topologicalSort(G):
+  L := $\emptyset$
+  for each u in G.V:
+    u.color := WHITE
+  for each u in G.V:
+    if u.color = WHITE:
+      topologicalSortVisit(L, u)
+  return L

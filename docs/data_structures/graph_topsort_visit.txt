@@ -1,0 +1,8 @@
+topologicalSortVisit(L, u):
+  u.color := GRAY
+  for each v in G.Adj[u]
+    if v.color = WHITE:
+      topologicalSortVisit(L, v)
+  x.key := u
+  listInsert(L, x)
+  u.color := BLACK
