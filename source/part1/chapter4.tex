@@ -115,6 +115,24 @@
     La classe dei linguaggi denotati dalle espressioni regolari coincide con la classe dei linguaggi regolari. 
   \end{theorem}
 
+  \section{Pattern}
+
+  \begin{definition}
+    Un sistema di pattern è una tripla \(<A, V, p>,\) dove:
+    \begin{itemize}
+      \item \(A\) è un alfabeto;
+      \item \(V\) è un insieme di variabili tale che \(A\cap V=\emptyset\);
+      \item \(p\) è una stringa su \(A\cup V\) detta pattern.
+    \end{itemize}
+  \end{definition}
+
+  \noindent
+  Il linguaggio generato dal sistema di pattern consiste in tutte le stringhe su \(A\) ottenute da \(p\) sostituendo ogni variabile in \(p\) con una stringa su \(A\). 
+
+  Ad esempio, il pattern \(<{0,1}, {v_1, v_2}, v_1v_10v_2>\) rappresenta il linguaggio composto dalle stringhe che iniziano con 0 (nel caso in cui \(v_1 = \varepsilon\)) oppure che iniziano con una qualunque stringa sull'alfabeto \(A\) (in questo caso binario) ripetuta due volte, seguita da uno 0 e terminano con una qualunque altra stringa dell'alfabeto \(A\) (inclusa \(\varepsilon\)).
+
+  Le espressioni regolari seguono la stessa idea dei sistemi di pattern, ma hanno un potere espressivo differente: nello specifico è possibile esprimere certi linguaggi con i pattern, ma non con le espressioni regolare, e viceversa, è possibile esprimere alcuni linguaggi con le espressioni regolari, ma non con i pattern. Per tale motivo, i due modelli si dicono essere non confrontabili
+
   \section{Riepilogo}
 
   \begin{table}[ht]
@@ -131,4 +149,4 @@
     \end{tabular}
   \end{table}
 
-  * Gli LBA (Linear Bounded Automata) sono un particolare tipo di macchina di Turing non deterministica in cui la lunghezza del nastro è dunzione lineare della dimensione della stringa in ingresso. Tali automi non sono stati trattati in questo documento. 
+  * Gli LBA (Linear Bounded Automata) sono un particolare tipo di macchina di Turing non deterministica in cui la lunghezza del nastro è funzione lineare della dimensione della stringa in ingresso. Tali automi non sono stati trattati in questo documento. 

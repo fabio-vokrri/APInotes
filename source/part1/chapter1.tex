@@ -1,7 +1,7 @@
 \chapter{Linguaggi Formali}
 
   \section{Alfabeti e Stringhe}
-  Di seguito soo riportate alcune definizioni importanti riguardanti i linguaggi formali:
+  Di seguito sono riportate alcune definizioni importanti riguardanti i linguaggi formali:
   \begin{definition}[Alfabeto]
     Un alfabeto (o vocabolario) V è un insieme finito di oggetti elementari detti simboli (o caratteri)
   \end{definition} 
@@ -10,12 +10,12 @@
     Una stringa x appartenente ad un alfabeto V è una sequenza finita e ordinata di caratteri appartenenti a tale alfabeto.
   \end{definition}
 
-  Data una stringa \(x\), la notazione \(\;|\;x\;|\;\) indica la lunghezza della stringa \(x\), ovvero il numero di caratteri di cui è composta la stringa (la cardinalità del suo dominio \(V\)). Per convenzione la stringa vuota, ovvero non composta da nessun carattere, è indicata con la lettera \(\varepsilon\): la stringa vuota \(\varepsilon\) ha, quindi, lunghezza zero. 
+  Data una stringa \(x\), la notazione \(|\,x\,|\) indica la lunghezza di tale stringa, ovvero il numero di caratteri di cui è composta (la cardinalità del suo dominio \(V\)). Per convenzione la stringa vuota, che non contiene nessun carattere, è indicata con la lettera \(\varepsilon\). La stringa vuota \(\varepsilon\) ha lunghezza zero. 
 
   Per poter confrontare due stringhe è necessario verificare che:
   \begin{itemize}
-    \item \(\;|\;x\;|\; = \;|\;y\;|\;\)
-    \item \(x_i = y_i\, \forall i=0,1,2,...,\;|\;x\;|\;\)
+    \item \(|x| = |y|\)
+    \item \(x_i = y_i\; \forall i=0,1,2,...,|x|\)
   \end{itemize}
 
   La concatenazione (o prodotto) \(x.y\) di due stringhe \(x\) e \(y\) è una stringa composta da tutti i caratteri di \(x\) seguiti da tutti i caratteri di \(y\). Inoltre, la concatenazione \(x.\varepsilon\) produce come risultato la stringa \(x\).
@@ -27,7 +27,7 @@
     \item se \(z=y=\varepsilon\), \(x=s\)
   \end{itemize}
 
-  Data una stringa \(x\), l'espressione \(x^i\) indica la concatenazione della stringa \(x\) con sè stessa per \(i-1\) volte, ovvero \(x^0 = \varepsilon\) e \(x^{i+1} = x\cdot x^{i}\).
+  Data una stringa \(x\), l'espressione \(x^i\) indica la concatenazione della stringa \(x\) con sè stessa per \(i-1\) volte, ovvero \(x^0 = \varepsilon\) e \(x^{i+1} = x.x^{i}\).
 
   \section{Operatori di Kleene}
   Per poter proseguire con il trattato, è prima necessario introdurre alcuni concetti matematici fondamentali. Si danno quindi le seguenti definizioni:
