@@ -1,236 +1,270 @@
-\chapter{Computabilità}
-  In questa sezione si cercherà di rispondere alla domanda: quali problemi possono essere affrontati e risolti mediante gli automi analizzati?
-  Si ricordi che automi e grammatiche, pur essendo modelli matematici, si possono considerare dispositivi meccanici per la risoluzione di problemi e che esistono formalismi che hanno un potere espressivo maggiore di altri, ossia sono in grado di riconoscere una classe di linguaggi che altri formalismi non riescono a riconoscere. Inoltre, si ricordi che, nessun formalismo è più potente delle macchine di Turing, sia dal punto di vista del riconoscimento che della traduzione di linguaggi e, per tanto, sono detti formalismi massimi.
+\chapter{Logica}
+Come già visto più volte, i linguaggi possono essere rappresentati in modi differenti, tramite modelli e astrazioni via via più potenti, tra cui:
+\begin{itemize}
+  \item Insiemi;
+  \item Pattern;
+  \item Espressioni Regolari;
+  \item Modelli Operazionali (come gli Automi);
+  \item Modelli Generativi (come le Grammatiche);
+  \item Modelli Dichiarativi (come la Logica).
+\end{itemize}
 
-  \section{Formalizzazione dei Problemi}
-  Molti problemi possono essere opportunamente descritti come il riconoscimento di un determinato linguaggio o coma la sua traduzione in un altro linguaggio. Ogni problema matematico è descrivibile mediante una di queste forme, alla sola condizione che il dominio di tale problema sia un insieme numerabile, in maniera tale che i suoi elementi si possono porre in corrispondenza biunivoca con gli elementi di \(\mathbb N\) o, se si preferisce, di \(V^*\), in cui \(V\) rappresenta un alfabeto. Dunque, il problema di origine si può riformulare come il problema di calcolo di una funzione \(f:\mathbb N\to\mathbb N\). Quanto detto è in perfetto accordo con tutti i formalismi matematici esaminati fino ad ora: questi, infatti, sono discreti e hanno un dominio matematico numerabile.
+\noindent
+I concetti di logica introdotti di seguito sono utilizzati per definire in maniera differente i linguaggi.
 
-  Il riconoscimento di linguaggi e la loro traduzione sono due formulazioni differenti di un problema, che sono facilmente riducibili l'uno all'altro. Infatti, dato il problema di stabilire se una determinata stringa \(x\) appartenga al linguaggio \(L\), tale problema può anche essere impostato come la traduzione \(\tau_L(x)\), per cui \(\tau_L(x) = 1\) se \(x\in L\), \(\tau_L(x)=0\) altrimenti. Viceversa, data la traduzione \(\tau:V_1^*\to V_2^*\), si può definire il linguaggio seguente:
-  
-  \(L_{\tau}=\{z\;|\;z=x\$y,\; x\in V_1^*,\; y=\tau(x)\in V_2^*,\; \$ \notin (V_1\cup V_2)\} \)
-  Ovvero il linguaggio formato da una stringa e la sua traduzione, separati dal simbolo \(\$\). Un dispositivo che riconosce il linguaggio \(L_{\tau}\) può essere utilizzato come trasduttore che calcola \(\tau\): per ogni \(x\), infatti, è possibile enumerare tutte le \(y\in V_2^*\) e verificare se \(x\$y\in L_{\tau}\) oppure no. Prima o poi, se la funzione \(\tau(x)\neq \bot \), verrà trovata una stringa per cui la macchina risponderà positivamente.
+\section{Logica Proposizionale}
+Il calcolo proposizionale, detto anche logica proposizionale, è un modello dichiarativo formale della logica matematica che si basa sul concetto di proposizione, ovvero frasi che possono assumere solamente il valore vero o il valore falso. In generale, ogni linguaggio consiste di una sintassi e di una semantica: la sintassi è l'insieme delle regole attraverso cui è possibile costruire le frasi di cui il linguaggio è composto, mentre la semantica spiega il significato delle varie frasi del linguaggio. 
 
-  \section{Tesi di Church}
-  Le macchine di Turing, come visto in precedenza, sono il formalismo più potente che si ha a disposizione per il calcolo computazionale: ogni programma eseguibile da un calcolatore moderno può essere eseguito anche da una macchina di Turing. Dunque, le macchine di Turing hanno la stessa espressività dei linguaggi di programmazione ad alto livello, detti anche Turing completi. 
-
-  Più formalmente, data una TM M, è possibile costruire un programma, scritto in un determinato linguaggio di programmazione (come C, Java ecc...), che simuli il ocmportamento di M, purchè il calcolatore disponga di una quantità di memoria sufficiente durante l'esecuzione. Inoltre, dato un programma scritto in un determinato linguaggio di programmazione, è possibile coistruire una TM M che calcoli la stessa funzione calcolata dal programma.
-
-  \begin{thesis}[Tesi di Church - Prima Parte]
-    Non esiste alcun formalismo, per modellare una determinata computazione meccanica, che sia più potente delle TM e dei formalismi ad essi equivalenti.
-  \end{thesis}
-
-  La tesi di Church non è un teorema perchè per sua natura non è dimostrabile, in quanto andrebbe verificato ogni qual volta si introducesse un nuovo formalismo computazionale.
-
-  In base a questo risultato si può affermare che, se si riesce a dimostrare che un determinato problema è risolvibile da una TM, allora è sicuramente possibile risolverlo mediante un modello matematico di calcolo, che abbia la stessa potenza delle macchine di Turing. Viceversa, se si dimostra che un problema non può essere risolto da una TM, allora è verificato che tale problema è irrisolvibile da qualunque modello matematico.
-
-  Si introduce ora il concetto di algoritmo, centrale nell'informatica. Per algoritmo si intende la procedura di risoluzione di un problema mediante un dispositivo automatico di calcolo. Gli algoritmi si possono anche intendere come un metodo astratto di descrizione dei programmi eseguibili, ovvero una sequenza di comandi che, una volta eseguiti, portano alla risoluzione del problema.
-  
-  Ogni algoritmo ha le seguneti proprietà:
+\paragraph*{Sintassi}
+In modo formale:
+\begin{definition}
+  La logica proprosizionale è composta da un linguaggio \(\mathcal L\), il cui alfabeto è costituito dai seguenti elementi:
   \begin{enumerate}
-    \item Un algoritmo deve contenere una sequenza finita di istruzioni;
-    \item Ogni istruzione deve essere immediatamente eseguibile da qualche procedimento meccanico di calcolo, ossia deve esistere un processore che sia in grado di comprendere univocamente le istruzioni e di eseguirle producendo risultati precisi ed inequivocabili;
-    \item Il processore è dotato di celle di memoria in cui possono essere immagazzinati i riultati intermedi;
-    \item La computazione è discreta, ossia l'informazione è codificata in forma digitale e la computazione procede attraverso passi discreti;
-    \item Gli algorimi vengono eseguiti deterministicamente;
-    \item Non esiste un limite finito sui dati di ingresso e di uscita: ogni calcolatore può ricevere in ingresso o emettere in uscita stringhe di lunghezza arbitraria;
-    \item Non esiste un limite alla quantità di memoria richiesta per effettuare i calcoli;
-    \item Non esiste un limite al numero di passi discreti richiesti per effettuare un calcolo ed è dunque possibile avere computazioni infinite.
+    \item Un insieme numerabile (finito o non) di proposizioni (simboli di relazione nullaria), che possono essere simboli, stringhe o frasi;
+    \item Un insieme di connettivi logici: \(\lnot\) (NOT), \(\wedge\) (AND), \(\vee\) (OR), \(\Rightarrow\) (Implicazione) e \(\Leftrightarrow \)(Coimplicazione);
+    \item Un insieme di simboli di punteggiatura: ( e )
   \end{enumerate}
+  I simboli che compongono l'alfabeto sono privi di significato: assegnarne uno è compito della semantica. 
+\end{definition}
 
-  La tesi di Church non si ferma solo nell'affermazione che nessun formalismo sia più espresivo delle TM, ma afferma anche che nessun algoritmo è in grado di risolvere un problema che non è risolvibile da una TM. Formalmente:
+\begin{table}[!th] \label{Tabella delle verità}
+  \caption{Tabella della verità dei connettivi logici}
+  \vspace*{10pt}
 
-  \begin{thesis}[Tesi di Church - Seconda Parte]
-    Ogni algoritmo per la soluzione automatica di un problema può essere codificato in termini di una TM (o di un formalismo a potenza equivalente).
-  \end{thesis}
+  \centering
+  \begin{tabular}{c c || c | c | c | c | c }
+    \(F\) & \(G\) & \(\lnot F\) & \(F \wedge G\) & \(F \vee G\) & \(F \Rightarrow G\) & \(F\Leftrightarrow G\) \\
+    \hline
+    T & T & F & T & T & T & T \\
+    T & F & F & F & T & F & F \\
+    F & T & T & F & T & T & F \\
+    F & F & T & F & F & T & T \\
+  \end{tabular}  
+\end{table}
 
-  \begin{theorem}
-    Ogni funzione (o problema), per cui esiste una TM che la calcoli (o risolva), si dice computabile o calcolabile (o risolvibile). Un problema risolvibile la cui risposta sia booleana ed esistente per ogni valore del dominio di definizione (ossia è formalizzato da una funzione calcolabile e totale) si dice decidibile.
-  \end{theorem}
+Una proposizione si dice essere atomica quando non può essere scomposta in parti più piccole. Nel caso contrario, la proposizione è composta da due o più proposizioni più piccole legate fra loro tramite i connettivi logici appena introdotti. Le parentesi sono utilizzare per modificare la precedenza dei connettivi, che di base avrebbero il seguente ordine logico: \(\lnot, \wedge, \vee, \Rightarrow, \Leftrightarrow\).
 
-  Grazie alla seconda parte della tesi di Church si può affermare che è possibile studiare i limiti del calcolo automatico indipendentemente dalla formalizzazione del problema e del particolare modello computazionale.
+La sintassi del linguaggio definisce le sequenze ammissibili di simboli sull'alfabeto, le cosiddette formule ben formate (fbf). L'insieme di queste formule ben definite su \(\mathcal L\) è il più piccolo insieme tale che ogni proposizione è una formula e, se \(F\) e \(G\) sono formule, allora anche \(\lnot F\), \(F \wedge G\), \(F \vee G\), \(F \Rightarrow G\) \(F \Leftrightarrow G\) sono formule. In logica proposizionale si ha che se \(A\) è una proposizione, allora \(A\) e \(\lnot A\) sono letterali, in cui \(A\) è letterale positivo, mentre \(\lnot A\) è letterale negativo. Infine, si dice letterale complementare la proposizione \(\bar L\) definito come \(\lnot A\) se \(L=A\), oppure \(A\) se \(L=\lnot A\). 
 
-  \section{Enumerazione delle TM}
-  Le macchine di Turing possono essere viste come dei calcolatori astratti, specializzati nella risoluzione di un solo problema e non porgrammabili. Ci si pone quindi la domanda: 'le TM sono in grado di simulare i calcolatori programmabili e di risolvere i problemi da \(\mathbb{N}\) a \(\mathbb{N}\)?'
+\break
 
-  Per poter risondere a tale domanda, si noti innanzitutto che dato un qualsiasi insieme S, questo può essere enumerato algoritmicamente se è possibile stabilire una biiezione fra l'insieme \(S\) e l'insieme dei numeri naturali \(\mathbb{N}\), calcolabile attraverso un algoritmo o da una TM.
-  Alla stessa maniera è possibile enumerare algoritmicamente l'insieme delle TM tramite una biiezione \(E:\{TM\}\leftrightarrow\mathbb{N}\). Tale biiezione è implementabile da un algoritmo che riceve in ingresso un numero \(n\) e ritorna la \(n\)-esima macchina di Turing. Un'enumerazione calcolabile da una TM viene chiamata Gödelizzazione, mentre il numero naturale biiettivamente associato da tale enumerazione ad una TM è detto numero di Gödel della TM. 
+Una volta introdotte le formule ben formate, è possibile definire le sottoformule, ovvero una parte di una fbf che è a sua volta una fbf. L'insieme  \(Stfm(F)\) delle sottoformule di \(F\) è definito come il più piccolo insieme di formule tale che:
+\begin{itemize}
+  \item \(F \in Stfm(F)\);
+  \item Se \(\lnot G \in Stfm(F)\), allora \(G \in Stfm(F)\);
+  \item se \(G \wedge H, G\vee H, G \Rightarrow H, G \Leftrightarrow H \in Stfm(F)\), allora \(H, G \in Stfm(F)\). 
+\end{itemize}
 
-  Inoltre, è noto che una TM M può risolvere una funzione \(f_M:D\to R\), con \(D\) ed \(R\) opportunamente codificati nell'alfabeto di \(M\), dunque si indicherà con \(f_y\) la funziuone calcolata dalla \(y\)-esima macchina di Turing, indicata con \(M_y=E(y)\).
+\paragraph*{Semantica}
+La semantica, invece, ha lo scopo di assegnare un significato alle formule appena definite, tramite una funzione \(I\), detta interpretazione, che mappa ogni proposizione ad un valore di verità (vero o falso): formalmente, \(I: \{fbf\} \to \{0,1\}\). Tale funzione, quindi, non fa altro che assegnare il valore di vero (1) o falso (0) alle lettere proposizionali costanti \footnote{Le lettere proposizionali costanti sono \(T\) (o \(V\)) per rappresentare una proposizione vera, oppure \(\bot\) (o \(F\)) per rappresentare una proposizione falsa} e valuta il valore di verità di \(\lnot F, F \wedge G, F \vee G, F \Rightarrow G, F \Leftrightarrow G\) sulla base dei valori di verità delle proposizioni \(F\) e \(G\). 
 
-  \section{Macchine di Turing Universali}
-  Le UTM (Universal Turing Machines) sono TM in grado di modellare dispositivi generali di risoluzione dei problemi, in cui il problema da risolvere non viene codificato nella struttura del dispositivo (come avviene per le TM), ma gli viene fornito come input, assieme ai dati con cui operare (esattamente come gli oderni calcolatori). Le UTM sono quindi MT che calcolano la funzione \(g(y,x)=f_y(x)\), in cui \(y\) rappresenta la funzione \(f_y\), calcolata dalla TM \(M_y\), ed \(x\) rappresenta l'ingresso su cui \(M_y\) opera; calcolano, dunque, il valore della funzione \(f_y\) applicata ad \(x\).
+Da qui, si introduce il simbolo \(\vDash\) (doppio tornello), che si utilizza per associare formule ed interpretazioni. Dunque, la scrittura \(I \vDash F\), che si legge \(I\) rende vera \(F\), vale nei seguenti casi:
+\begin{itemize}
+  \item \(I \vDash A\) se e solo se \(I(A) = T\), con \(A\) proposizione;
+  \item \(I \vDash \lnot F\) se e solo se \(I \nvDash F\);
+  \item \(I \vDash F \wedge G\) se e solo se \(I\vDash F\) e \(I \vDash G\);
+  \item \(I \vDash F \vee G\) se e solo se \(I \vDash F\) o \(I \vDash G\);
+  \item \(I \vDash F \Rightarrow G\) se e solo se \(I \nvDash G\) o \(I \vDash G\);
+  \item \(I \vDash F \Leftrightarrow G\) se e solo se \(I \vDash F\Rightarrow G\) e \(I \vDash G \rightarrow F\).
+\end{itemize}
 
-  Come si può osservare, la UTM così definita non sembra appartenere all'insieme delle macchine di Turing, in quanto la funzione \(g(y,x)\) è opera da \(\mathbb{N}\times\mathbb{N}\) ad \(\mathbb{N}\), anzichè da \(\mathbb{N}\) ad \(\mathbb{N}\) come tutte le altre TM. È però possibile, come già dimostrato in precedenza, definire una biiezione calcolabile algoritmicamente, tramite la funzione:
-  \begin{equation*}
-    \displaystyle d(x,y) = x+\frac{(x+y)(x+y-1)}{2}
-  \end{equation*}
-  che mette in corrispondenza l'insieme \(\mathbb{N}\times\mathbb{N}\), composto dalle coppie di numeri naturali, all'insieme \(\mathbb{N}\), composto da numeri naturali.
+\noindent
+Dal concetto di interpretazione, si possono definire le seguenti proprietà della semantica delle formule proposizionali:
+\begin{itemize}
+  \item Se \(I\vDash F \), allora si dice che \(I\) è un modello di \(F\);
+  \item \(F\) si dice valida (o si dice essere una tautologia) se e solo se per ogni interpretazione \(I\) vale che \(I \vDash F\);
+  \item \(F\) è soddisfacibile se e solo se esiste un'interpretazione \(I\) tale che \(I \vDash F\);
+  \item \(F\) è falsificabile se e solo se esiste un'interpretazione \(I\) tale che \(I \nvDash F\);
+  \item \(F\) è insoddisfacibile se e solo se per ogni interpretazione \(I\) vale che \(I \nvDash F\);
+  \item \(F\) è contingente se e solo se è sia soddisfacibile che falsificabile;
+  \item Ogni formula del tipo \(F \wedge \lnot F\) è una contraddizione, indicata con \(\bot\);
+  \item Ogni formula del tipo \(F \vee \lnot F\) è detta principio del terzo escluso, indicata con \(\top \)
+\end{itemize}
 
-  Graficamente, è come visitare le coppie di punti nel piano in un ordine prefissato, dove la posizione di un punto nella visita rappresenta il numero naturale associato alla coppia che identifica le coordinate del punto.
-  
-  \begin{figure}[!h]
-    \centering
-    \includegraphics[width=8cm]{biiezione.png} 
-    \caption{Grafico di biiezione}
-  \end{figure}
+\paragraph{}
+Un insieme di formule \(\mathcal F\) comporta logicamente una formula \(G\) o, equivalentemente, una formula \(G\) è una conseguenza logica di un insieme di formule \(\mathcal F\), se ogni modello di \(\mathcal F\) è anche un modello di \(G\) e si scrive con \(\mathcal F \vDash G\). Dopo aver stabilito una corrispondenza semantica fra due formule logiche, è possibile anche stabilire una relazione di equivalenza fra due formule logiche, relazione che vale solamente se la corrispondenza fra le due formule è biunivoca, ovvero se vale sia \(F \vDash G\) che \(G \vDash F\): una tale relazione si rappresenta con la scrittura \(F \equiv G\).
 
-  Si osservi che la funzione \(g(y,x)\) è computabile da una macchina di Turing, ossia \(\exists i\in \mathbb N : f_i=g\), ed è possibile calcolarla tramite i seguenti passaggi:
+Esistono innumerevoli equivalenze notevoli:
+  \begin{flalign*}
+    F \wedge F &\equiv F \\
+    F \vee F &\equiv F \\
+    F \wedge G &\equiv G\wedge F \\
+    F \vee G &\equiv G \vee F \\
+    F \wedge (G \wedge H) &\equiv (F \wedge G) \wedge H\\
+    F \vee (G \vee H) &\equiv (F \vee G) \vee H \\
+    (F \wedge G) \vee F &\equiv F \\
+    (F \vee G) \wedge F &\equiv F \\
+    F \wedge (G \vee H) &\equiv (F\wedge G) \vee (F\wedge H) \\
+    F \vee (G \wedge H) &\equiv (F \vee G) \wedge (F \vee H) \\
+    \lnot\lnot F &\equiv F \\
+    \lnot (F\wedge G) &\equiv \lnot F \wedge \lnot G\\
+    \lnot (F \vee G) &\equiv \lnot F \wedge \lnot G \\
+    F \Leftrightarrow G &\equiv (F \Rightarrow G) \wedge (G \Rightarrow F) \\
+    F \Rightarrow G &\equiv \lnot F \vee G \\
+    F \Rightarrow G &\equiv \lnot G \Rightarrow  \lnot F
+  \end{flalign*}  
+In logica prposizionale è anche possibile sostituire una sottoformula \(G\), di una formula ben formata \(F\), con una formula \(H\): la formula risultate viene indicata con la scrittura \(F[G \backslash H]\). Tale sostituzione, però, può avvenire solamente se \(G \equiv H\). 
+
+In base a questi concetti si può notare che non tutti i connettivi logici sono strettamente necessari, in quanto possono essere sostituiti con altri. A questo proposito, un insieme di connettivi è detto funzionalmente completo se e solo se qualunque formula proposizionale può essere trasformata in una formula semanticamente equivalente che contiene solamente i connettivi dell'insieme dato. Sfruttando tali insiemi, detti minimali, e le equivalenze semantiche, è possibile definire delle forme normali, che introducono degli schemi sintattici di completa generalità semantica per scrivere formule, permettendo così di formalizzare il significato di qualsiasi formula che si possa scrivere con la completa generalità della logica proposizionale. In altre parole, per ogni formula ben formata esistono una o più formule logicamente equivalenti ad essa scritte in una forma normale. Esistono tre principali forme normali per la logica proposizionale, chiamate forma negativa, forma congiuntiva e forma disgiuntiva. Una formula è in forma normale negativa se e solo se è composta solamente da letterali, congiunzioni e disgiunzioni; una formula è in forma normale congiuntiva (detta anche CNF) se e solo se ha la forma \(C_1 \wedge C_2 \wedge ... \wedge C_n\), dove \(C_i\) è una disgiunzione di letterali; una formula è in forma normale disgiuntiva (detta anche DFN) se e solo se ha la forma \(D_1 \vee D_2 \vee ... \vee D_n\), dove \(D_i\) è una congiunzione di letterali. 
+
+A questo punto è possibile completare la definizione della logica proposizionale attraverso i concetti di assioma e regole di inferenza, che costituiscono un sistema formale assiomatico-deduttivo (in inglese calculus). Questi elementi definiscono una relazione di derivabilità (relazione già analizzata nel contesto delle grammatiche), detta anche dimostrabilità, tra un insieme di formule \(\mathcal F\) e una formula \(G\). Dunque, i sistemi formali della logica hanno un compito molto simile a quello assolto dalle grammatiche, ovvero producono meccanicamente una formula risultante a partire da un insieme iniziale di formule, applicando assiomi e regole di inferenza. Si scrive, quindi, \(\mathcal F \vdash G\) se \(G\) può essere ottenuto da \(\mathcal F\). Idealmente, la relazione di derivabilità dovrebbe essere corretta (cioè se \(\mathcal F \vdash G\) allora \(\mathcal F \vDash G\)) e completa (cioè se \(\mathcal F\vDash G\) allora \(\mathcal F\vdash G\)). Se una formula \(F\) può essere derivata in una teoria \(\mathcal F\) usando solamente assiomi e regole di inferenza di un sistema, allora si dice che \(F\) è un teorema. 
+
+\section{Logica del Primo Ordine}
+La logica proposizionale appena analizzata ha molte applicazioni, ma il suo potere espressivo è ristretto. Per questo motivo, nel 1979 è stata sviluppata  la logica del primo ordine, che permette dal punto di vista ontologico di considerare non solo fatti (come avveniva nella logica proposizionale), ma anche proprietà, relazioni e funzioni. 
+
+\paragraph*{Sintassi}
+In modo formale:
+\begin{definition}
+  La logica del primo ordine è composta da un linguaggio \(\mathcal L\), il cui alfabeto è costituito dai seguenti elementi:
   \begin{enumerate}
-    \item Si sceglie un alfabeto finito \(A\) per codificare i numeri naturali ed ogni altra informazione richiesta per la computazione;
-    \item Si traduce la rappresentazione di \(n\) in un'opportuna rappresentazione della coppia \(<x,y>\) corrispondente ad \(n\). La rappresentazione decimale di \(n\) può essere tradotta nelle due rappresentazioni decimali di \(x\) ed \(y\), separate dal simbolo \(\$\);
-    \item Si traduce \(y\) in un'opportuna codifica della TM \(y\)-esima \(M_y\) nella enumerazione di Gödel;
-    \item Si simula la computazione di \(M_y\) su \(x\).
+    \item Un insieme numerabile infinito di variabili;
+    \item Un insieme di simboli di funzione;
+    \item Un insieme di simboli di predicati (o relazioni);
+    \item Un insieme di connettivi logici: \(\lnot\) (NOT), \(\wedge\) (AND), \(\vee\) (OR), \(\Rightarrow\) (Implicazione) e \(\Leftrightarrow \)(Coimplicazione);
+    \item Un insieme di quantificatori: \(\exists\) (Esiste) e \(\forall\) (Per ogni);
+    \item Un insieme di simboli di punteggiatura: ( , ) e le virgole.
   \end{enumerate}
+  Ogni simbolo di funzione e relazione ha una arietà fissata, che indica il numero di argomenti associati a quella determinata funzione. Le funzioni nullarie sono dette costanti, mentre i predicati costanti sono detti proposizioni. I simboli dell'alfabeto sono privi di significato: assegnarne uno è compito della semantica.
+\end{definition}
 
-  \begin{theorem}
-    Per ogni x ed ogni y, esiste e si può costruire una macchina di Turing universale in grado di calcolare \(g(y,x)=f_y(x)\)
-  \end{theorem}  
-  Tramite questo teorema si può affermare che è possibile creare una macchina di Turing che simuli il comportamento degli odierni calcolatori "general purpose".
+Per poter scrivere formule nella logica del primo ordine c'è la necessità di denotare tutti gli oggetti di cui il linguaggio \(\mathcal L\) può parlare, detti termini. Tale denotazione avviene induttivamente come segue:
+\begin{itemize}
+  \item ogni variabile è un termine della formula;
+  \item se \(f\) è un simbolo di funzione \(n\)-aria e \(t_1, t_2, ..., t_n\) sono termini, allora \(f(t_1, t_2,...,t_n)\) è un termine.
+\end{itemize}
 
-  \section{Problemi Algoritmicamente Irrisolvibili}
-  Come si è visto in precedenza, tutte le funzioni computabili \(f_y:\mathbb{N}\to\mathbb{N}\) si possono enumerare: questo significa che la cardinalità dell'insieme delle funzioni computabili è pari ad \(\aleph_0\), ovvero alla cardinalità dei numeri naturali \(\mathbb{N}\). L'insieme delle funzioni \(\{f:\mathbb{N}\to\mathbb{N}\}\) contiene la classe delle funzioni \(\{f:\mathbb{N}\to\{0,1\}\), in quanto \(\{0,1\}\subseteq \mathbb{N}\). Quindi, poichè \(\;|\;\{f:\mathbb{N}\to\mathbb{N}\}\;|\; \ge \;|\;\{f:\mathbb{N}\to\{0,1\}\}\;|\; = \wp (\mathbb{N}) = 2^{\aleph_0}\), si può dedurre che la cardinalità della classe delle funzioni da \(\mathbb{N}\) ad \(\mathbb{N}\) è strettamente maggiore della cardinalità della classe delle funzioni computabili: dunque, gran parte delle funzioni di \(\mathbb{N}\) non può essere calcolata. 
+Gli oggetti appena denotati attraverso i termini, si possono utilizzare all'interno delle formule della logica del primo ordine, definite anch'esse in maniera induttiva. L'insieme delle formule della logica del primo ordine è definito come il più piccolo insieme tale che:
+\begin{itemize}
+  \item Se \(p\) è un simbolo di relazione \(n\)-aria e \(t_1, t_2,...,t_n\) sono termini, allora \(p(t_1, t_2,...,t_n)\) è una formula detta atomica o semplicemente atomo;
+  \item Se \(F\) e \(G\) sono formule e \(X\) è una variabile, allora \(\lnot F, F\vee G, F\wedge G, F \Rightarrow G, F \Leftrightarrow G, \exists XF, \forall XF\) sono formule.
+\end{itemize}
 
-  Ora, quando si vuole definire una funzione si usa un linguaggio che la esprima, ovvero un sottoinsieme del monoide libero su di un determinato alfabeto finito: dunque, il linguaggio è un insieme numerabile. Si ricava quindi che la classe delle funzioni denotabili è a sua volta numerabile.
+Nella scrittura di formule appartenenti alla logica del primo ordine, c'è un'osservazione da fare: quando si utilizza il quantificatore \(\forall\) il connettivo principale utilizzato è \(\Rightarrow\), mentre nel caso si utilizzi il quantificatore \(\exists\) allora il connettivo principale è \(\wedge\). Inoltre, se \(QX(F)\) rappresenta una formula in cui \(Q\) è un quantificatre, allora \(F\) si dice ambito di \(Q\) e che \(Q\) è applicato ad \(F\). Un'occorrenza di una variabile in una formula è legata se e solo se la sua occorrenza è entro l'ambito di un quantificatore che impiega quella variabile, altrimenti è libera. Una formula è chiusa se e solo se non contiene occorrenze libere di variabili. Le formule chiuse sono quelle per le quali, data un'interpretazione \(I\), si può calcolare la veridicità.
 
-  Quando si scrive un programma, ci sono diverse proprietà che si vorebbero garantire. Una di queste è la terminazione del programma, ovvero la garanzia che, dato un qualsiasi ingresso conforme al programma stesso, esso termini la propria computazione e non vada, dunque, in un ciclo infinito. Nella realtà, però, non è possibile garantire a priori la terminazione del programma per un generico valore in ingresso, nè decidere atgtraverso un algoritmo se ciò possa avvenire in corrispondenza di uno specifico valore in ingresso. Più in generale, il problema della terminazione del calcolo automatico è in generale non decidibile, nonostante tale problema sia definibile.
-  Si è quindi constatato che esistono problemi definibili, ma che non possono essere risolti algoritmicamente: dunque, l'insieme dei problemi definibili contiene strettamente l'insieme dei problemi risolvibili, nonostante entrambi siano numerabili e con la stessa cardinalità.
+\paragraph*{Semantica}
+Come per il caso della logica proposizionale, anche la logica del primo ordine ha una semantica basata sul concetto di interpretazione: un'interpretazione \(I\) di un alfabeto \(A\) è un dominio non vuoto \(D\) (indicato anche con \(|I|\)) e una funzione che che associa ogni costante \(c\in A\) a un oggetto \(c_I \in D\), ogni simbolo \(n\)-ario di funzione \(f\in A\) a una funzione \(f_I:D^n\to D\) e ogni simbolo \(n\)-ario di predicato \(p\in A\) a una relazione \(p_I\subseteq D\times D\times ... \times D\), \(n\) volte. Prima di poter assegnare un significato alle fromule, va definito il significato di ogni termine, indicato con \(\phi_I(t)\) con \(t\) il termine a cui dare singificato nell'interpretazione \(I\). 
 
-  \begin{figure}[!h]
-    \begin{center}    
-      \begin{tikzpicture}
-        \foreach \X [count=\Y starting from 0.75] 
-        in {\(f_y\) risolvibili, \(f\) definibili, \(f:\mathbb{N}\to\mathbb{N}\) (problemi totali)} {
-          \draw (-\Y,-\Y/2) circle ({2*\Y} and \Y);
-          \node at (1-2*\Y,-1.1*\Y) {\X}; 
-        }
-      \end{tikzpicture}
-    \end{center}
-    \caption{Gerarchia dei problemi}    
-  \end{figure}
+\break
 
-  \begin{theorem} [Halting Problem]
-    Nessuna TM può calcolare la funzione \(g:\mathbb N\times \mathbb N \to \{0,1\}\) definita nel seguente modo:
-    
-    \(g(x,y) = if\; f_y(x) = \bot \; then \; 1 \; else \; 0\)
-  \end{theorem}
+\noindent \(\phi\) è induttivamente definito nel seguente modo:
+\begin{enumerate}
+  \item \(c_I\) se \(t\) è una costante \(c\);
+  \item \(\phi(X)\) se \(t\) è una variabile \(X\);
+  \item \(f_I(\phi_I(t_1),...,\phi_I(t_n))\) se \(t\) è nella forma \(f(t_1,...,t_n)\).
+\end{enumerate}
+Ora, sia \(\phi\) una valutazione, \(X\) una variabile, \(I\) un'interpretazione e \(c_I\in |I|\), allora \(\phi[X\to c_I]\) è una valutazione identica a \(\phi\), eccetto per il fatto che mappa \(X\) in \(c_I\). Il significato di una formula, quindi, è un valore di verità che è definito induttivamente. Dunque la scrittura \(I \vDash_\phi F\), che si legge \(F\) è vero rispetto all'interpretazione \(I\) e al significato \(\phi\), vale nei seguenti casi:
+\begin{itemize}
+  \item \(I \vDash_\phi p(t_1,...,t_n)\) se e solo se \(<\phi_I(t_1),..., \phi_I(t_n)>\in p_I\);
+  \item \(I \vDash_\phi \lnot F\) se e solo se \(I\nvDash_\phi F\);
+  \item \(I \vDash_\phi (F\wedge G)\) se e solo se \(I \vDash_\phi F\) e \(I \vDash_\phi G\);
+  \item \(I \vDash_\phi (F \vee G)\) se e solo se \(I \vDash_\phi F\) o \(I \vDash_\phi G\);
+  \item \(I \vDash_\phi (F \Rightarrow G)\) se e solo se \(I\nvDash_\phi F\) o \(I\vDash_\phi G\)
+  \item \(I \vDash_\phi (F \Leftrightarrow G)\) se e solo se \(I \vDash_\phi (F \Rightarrow G)\) e \(I\vDash_\phi (G \Rightarrow F)\);
+  \item \(I\vDash_\phi\forall X(F)\) se e solo se \(I \vDash_{\phi[X\to c_I]} F\) per ogni \(c_I\in |I|\);
+  \item \(I\vDash_\phi\exists X(F)\) se e solo se \(I \vDash_{\phi[X\to c_I]} F\) per qualche \(c_I\in |I|\)
+\end{itemize}
 
-  La dimostrazione di tale teorema si ottiene tramite la tecnica della diagonale, detta anche metodo di Cantor: l'obiettivo è quello di mostrare che un'enumerazione di oggetti di cardinalità almeno 2, non è completa, ossia che un oggetto che si vorrebbe trovare all'interno di tale enumerazione in realtà non è presente. L'enumerazione di una successione può essere rappresentata come una tabella con un numero infinito di righe. L'elemento che non compare in tale tabella viene individuato per assurdo considerando inizialmente la diagonale \(d\) (dunque \(d_i\) è l'elemento che si trova all'\(i\)-esima riga e all'\(i\)-esima colonna) e poi componendo una diagonale \(d'\) tale che, per ogni \(i\), \(d'_i\) sia diverso da \(d_i\).
-  
-  \begin{theorem}
-    Nessuna TM è in grado di calcolare la funzione totale k definita nel seguente modo:
+Se \(F\) è una formula chiusa, il suo significato dipende solamente dall'interpretazione \(I\), che viene detta modello per \(F\) (\(I\vDash F\)) se e solo se per ogni valutazione \(\phi\) si ha che \(I\vDash_\phi F\). Inoltre, se \(\mathcal F\) è un insieme di formule, un'interpretazione è modello di \(\mathcal F\) se e solo se tale interpretazione è modello per ogni \(F \in \mathcal F\). La relazione di conseguenza logica \(\vDash\) tra insiemi di formule e formule può essere estesa anche per la logica del primo ordine, così come anche i concetti di validità, soddisfacibilità, falsificabilità, contingenza e insoddisfacibilità, analizzati nello studio della logica proposizionale.  
 
-    \(k(x)= if\;f_x(x)\neq\bot\;then\;1\;else\;0\)
-  \end{theorem}
+Come nel caso della logica proposizionale, esistono innumerevoli equivalenze notevoli:
+\begin{flalign*}
+  \forall X(F) &\equiv \lnot(\exists X(\lnot F))\\
+  \exists X(F) &\equiv \lnot(\forall X(\lnot F))\\
+  \forall X(F)\wedge (\forall X)G &\equiv \forall X(F\wedge G)\\
+  \exists X(F) \vee (\exists X)G &\equiv \exists X(F\vee G)\\
+  (\forall X)(\forall Y)F &\equiv (\forall Y)(\forall X)F\\
+  (\exists X)(\exists Y)F &\equiv (\exists Y)(\exists X)F\\
+  (\forall X(F))\wedge G &\equiv \forall X(F \wedge G)^*\\
+  (\forall X(F))\vee G &\equiv \forall X(F \vee G)^*\\
+  (\exists X(F))\wedge G &\equiv \exists X(F\wedge G)^*\\
+  (\exists X(F))\vee G &\equiv \exists X(F\vee G)^*
+\end{flalign*}
+Le equivalenze segnate con * sono valide solo se \(X\) non è libera in \(G\).
 
-  Questo problema rappresenta un caso speciale della funzione \(g(y,x)\) in quanto \(k(x)=g(x,x)\), dunque la calcolabilità della funzione \(k\) è direttamente correlata alla calcolabilità della funzione \(g\).
-  Si noti che, in generale, se un problema è irrisolvibile, può accadere che un suo caso particolare sia risolvibile, mentre una sua generalizzazione è necessariamente irrisolvibile. Al contrario, se un problema è risolvibile, può accadere che una sua generalizzazione diventi irrisolvibile, mentre un suo caso particolare rimane sicuramente risolvibile.
+\break
 
-  Un altro teorema certamente importante è il seguente:
-  \begin{theorem}
-    Nessuna TM è in grado di calcolare la funzione k definita nel seguente modo:
+\section{Logica Monadica del Primo Ordine}
+In questa sezione si analizza un frammento della logica monadica del primo ordine, che permette di descrivere certe stringhe su un determinato alfabeto \(I\). La logica monadica, come suggerisce il nome, si occupa solamente dei predicati monadici, ovvero di tutti quei predicati che hanno arietà pari ad uno.
 
-    \(k(y)=if\; f_y(x)\neq\bot\;then\;1\;else\;0\)
-  \end{theorem}
-  
-  Da un punto di vista pratico questo problema è interessante perchè qualifica tutti i possibili dati in ingresso. Afferma, infatti, l'irrisolvibilità del problema di decidere se un certo programma termini la propria esecuzione per qualsiasi dato in ingresso o se, al contrario, per qualche dato il programma andrebbe in loop.Nel caso precedente, invece, si era interessati al problema di sapere se un certo programma con certi dati avrebbe terminato o meno la propria esecuzione.
-  
-  In definitiva, si è constatato che esistono problemi non risolvibili algoritmicamente. Ciò non esclude comunque la possibilità di trovare una soluzione per tali problemi, in quanto non tutti i problemi sono risolvibili tramite un procedimento algoritmico. 
+\paragraph*{Sintassi}
+ Una generica formula \(F\) appartenente alla logica monadica del primo ordine ha una sintassi molto semplice, articolata nei seguenti casi:
+\begin{itemize}
+  \item \(a(x)\) con \(a\in I\), ovvero un predicato unario per ogni simbolo dell'alfabeto \(I\);
+  \item \(x < y\), che costituisce l'unica eccezzione della logica monadica in quanto non è un operatore unario, ma binario;
+  \item \(\lnot F\), operatore NOT;
+  \item \(F \wedge F\), operatore AND;
+  \item \(\forall x(F)\), quantifcatore di una formula  rispetto ad una variabile;
+\end{itemize}
+Il dominio delle variabili è \(\mathbb N\).
 
-  \section{Problemi di Decisione}
-  Un problema di decisione è una domanda che ha come uniche risposte si o no (0, 1). Questo può anche essere espresso come un problema di appartenenza di un determinato elemento ad un certo insieme. Più in generale si noti che una qualsiasi proprietà di un determinato elemento di un insieme può essere formalizzata come un suo sottoinsieme (ad esempio, la proprietà di terminazione del calcolo per ogni valore dei dati in ingresso individua un sottoinsieme dell'insieme di tutti i programmi). 
-  
-  In questa sezione si prendono in particolare considerazione i sottoinsiemi di \(\mathbb N\), indicati convenzionalmente con \(S\subseteq\mathbb{N}\). Quindi, formalmente, dato un determinato elemento \(x\in\mathbb{N}\) e un insieme \(S\), si cerca di capire se \(x\) appartenga ad \(S\).
+Si può osservare come, rispetto alla logica proposizionale e del primo ordine, la logica monadica non fa uso della maggior parte degli operatori logici, del quantificatore esistenziale, della maggior parte degli operatori matematici, di oggetti o funzioni. Tutti i costrutti non utilizzati da tale logica possono essere drivati dagli operatori che sono stati presentati.
 
-  \begin{definition}
-    La funzione caratteristica \(c_S:\mathbb{N}\to\{0,1\}\) di un insieme S è definita come segue:
+Le formule scritte in questa logica possono confrontare dei numeri rappresentati dalle variabili, che a loro volta rappresentano posizioni all'interno delle stringhe scritte sull'alfabeto di riferimento. Quindi con l'alfabeto \(I\) di riferimento posso scrivere delle stringhe mediante i predicati unari e, con la logica monadica è possibile calcolare la posizione, di determinati caratteri all'interno di tali stringhe per poterli confrontare con altre posizioni.
 
-    \(c_S(x)=if\;x\in S\;then\;1\;else\;0\)
-  \end{definition}
+Con gli operatori logici, matematici e i quantificatori utilizzati nella logica monadica del primo ordine, come già detto in precedenza, è possibile derivare tutti gli altri operatori. Nello specifico:
+\begin{flalign*}
+  F_1 \vee F_2 &\equiv \lnot(\lnot F_1 \and \lnot F_2)\\
+  F_1 \Rightarrow F_2 &\equiv \lnot F_1 \vee F_2\\
+  \exists x(F) &\equiv \lnot \forall x(\lnot F)\\
+  x = y &\equiv \lnot(x<y) \wedge \lnot(y<x)\\
+  x\le y &\equiv \lnot(y<x)
+\end{flalign*}
 
-  La risolvibilità del problema di appartenenza ad un insieme (detta anche ricorsività dell'insieme) dipende dalla computabilità della funzione caratteristica \(c_S\), come definito di seguito:
+In realtà si possono anche introdurre alcune abbraviazioni di comodo. Le più utilizzate sono:
+\begin{flalign*}
+  x = 0 &\equiv \forall y(\lnot(y<x))\\
+  successor(x,y) &\equiv x < y \wedge \exists z(x<z \wedge z<y)\\
+  y = x + 1 &\equiv successor(x,y)\\
+  y=x+k\,(k>1)&\equiv\exists z_1,...,z_{k-1}(y=z_{k-1}+1\wedge...\wedge z_1=x+1)\\
+  y = x - 1 &\equiv successor(y,x)\\
+  last(x) &\equiv \lnot \exists y(y>x)
+\end{flalign*}
 
-  \begin{definition}
-    Un insieme S è ricorsivo (o decidibile) se e solo se la sua funzione caratteristica è computabile.
-  \end{definition}
+Le altre costanti (1, 2, 3, ...) possono essere ricavate tramite l'utilizzo del predicato successor (di arietà due) applicata alla costante 0 tante volte quanto il numero che si vuole ottenere.
 
-  Si noti, inoltre, che per ogni insieme \(S\), la sua funzione caratteristica \(c_S\) è totale: infatti, dato un qualsiasi elemento \(x\in\mathbb{N}\), questo necessariamente apparteniene o non appartiene all'insieme.
-  
-  \begin{definition}
-    Un insieme S è ricorsivamente enumerabile (o semidecidibile) se e solo se è l'insieme vuoto oppure è l'immagine di una funzione totale e computabile \(g_s\), ovvero:
+Una volta introdotti tutti questi concetti della logica monadica del primo ordine, si può ora analizzare l'interpretazione di queste formule logiche rispetto a stringhe di un determinato alfabeto di riferimento.
 
-    \(S=I_{g_s} = \{x\;|\;\exists y, y\in\mathbb{N} \land x=g_s(y)\}\)
-  \end{definition}
+Dato un alfabeto \(I\), una stringa \(w\in I^+\) ed un simbolo \(a\in I\), \(a(x)\) è vero se e solo se l'\(x\)-esimo simbolo di \(w\) è \(a\), considerando un'indicizzazione che parte da 0.
 
-  Gli insiemi decidibili devono il loro nome al fatto che il problema di appartenenza può essere risolto tramite un algoritmo meccanico e che, quindi, una TM che implementi la loro funzione caratteristica fornisce necessariamente una risposta al quesito se \(x\in S, \forall x \in \mathbb{N} \). Inoltre, per ogni insieme ricorsivamente numerabile \(S\) è possibile costruire una sequenza \(x_0=g_S(0), x_1=g_S(1), x_2=g_S(2),...\) tale per cui, se \(x\in S\), allora esiste \(i\) tale che \(x=g_S(i)\). In questo caso, esaminando la sequenza di elementi \(\{x_i\}\) si riuscirà a trovare l'elemento \(x\), concludendo che questo appartiene all'insieme \(S\). Perciò, se per un qualsiasi \(\bar{i}\) risultasse che \(x\notin\{g_S(i)\;|\;0\le i \le \bar{i}\}\) non si potrebbe concludere nè che \(x\in S\), nè che \(x\notin S\): per questo motivo, l'insieme \(S\) viene anche detto semidecidibile.
+\paragraph*{Semantica} La semantica, nella logica monadica del primo ordine, assegna un valore di verità o falsità alle formule, tramite una funzione di assegnamento \(v_1 : V_1\to [0,...,|w|-1]\), in cui \(w\in I^+\) è una stringa composta a partire dall'alfabeto \(I\), mentre \(V_1\) è l'insieme delle variabili. Tale funzione si comporta nel seguente modo:
+\begin{itemize}
+  \item \(w, v_1 \vDash a(x)\) se e solo se \(w = uav\) e \(|u| = v_1(x)\);
+  \item \(w, v_1 \vDash x<y\) se e solo se \(v_1(x) < v_1(y)\);
+  \item \(w, v_1 \vDash \lnot F\) se e solo se \(w, v_1 \nvDash F\);
+  \item \(w, v_1 \vDash F_1 \wedge F_2\) se e solo se \(w,v_1 \vDash F_1\) e \(w,v_1\vDash F_2\);
+  \item \(w, v_1 \vDash \forall x(F)\) se e solo se \(w, v_1' \vDash F\,\, \forall v_1'\) con \(v_1'(y) = v_1(y),\, y\neq x\).
+\end{itemize}
 
-  \begin{theorem}
-    Se S è ricorsivo, è anche ricorsivamente enumerabile. \\
-    S è ricorsivo se e solo se sia S che \(\bar{S}=\mathbb{N}-S\) sono ricorsivamente enumerabili.
-  \end{theorem}
+\paragraph*{Proprietà} La logica monadica del primo ordine ha delle importanti proprietà che consentono di identificare quali linguaggi è possibile rappresentare con tale logica. Nello specifico, tutti i linguaggi esprimibili mediante questa logica sono chiusti rispetto all'unione, all'intersezione e al complemento, Inoltre, si può dimostrare che non è possibile esprimere il linguaggio \(L_p\) composto da tutte e sole le stringhe di lunghezza pari con \(I = \{a\}\): quindi, si può osservare come la logica monadica del primo ordine è strettamente meno espressiva rispetto agli automi a stati finiti, il che significa che data una formula di tale logica, si può sempre costruire un FSA equivalente, ma non il contrario. Infine, i linguaggi definiti da questa logica non sono chiusi rispetto alla stella di Kleene, ed è per questo motivo che tali linguaggi sono anche detti star-free, definibili tramite l'unione, l'intersezione, il complemento e la concatenazione di linguaggi finiti. 
 
-  \break
+\section{Logica Monadica del Secondo Ordine}
+Per riuscire ad ottenere lo stesso potere espressivo degli FSA è necessario permettere alla logica del primo ordine di quantificare sui predicati monadici, ovvero di poter quantificare anche su insiemi di posizioni. Si ammettono quindi formule del tipo \(\exists X(F)\) oppure \(\exists X(x)\), in cui \(X\) è detta essere una variabile del secondo ordine, il cui dominio non è più l'insieme dei numeri naturali \(\mathbb N\), ma l'insieme dei predicati monadici. Per convenzione si utilizzano le lettere maiuscole per indicare le variabili del secondo ordine e lettere minuscole per le variabili del primo ordine.
 
-  Quindi, riepilogando, si dice che un insieme \(S\) è:
-  \begin{itemize}
-    \item Ricorsivo (o Decidibile), se e solo se la sua funzione caratteristica \(c_S\) è computabile;
-    \item Ricorsivamente enumerabile (o Semidecidibile), se e solo se:
-    \begin{itemize}
-      \item S è l'insieme vuoto;
-      \item S è l'immagine di una funzione \(g_S\) totale e computabile (detta generatrice); \\ quindi, \(S=I_{g_S}=\{g_S(0), g_s(1), g_S(2),...\}\)
-    \end{itemize}
-  \end{itemize}
+\paragraph*{Semantica}
+L'assegnamento delle variabili del secondo ordine, che fanno parte dell'insieme\(V_2\), avviene attraverso la funzione \(v_2: V_2 \to \wp ([0,...,|w|-1])\) tale che:
+\begin{itemize}
+  \item \(w,v_1,v_2 \vDash X(x)\) se e solo se \(v_1(x) \in v_2(X)\);
+  \item \(w,v_1,v_2 \vDash \exists X(F)\) se e solo se \(w,v_1, v_2'\vDash F\) per qualche \(v_2'(Y) = v_2(Y),\, Y\neq X\)
+\end{itemize}
 
-  Si consideri ora il seguente teorema:
-  \begin{theorem}
-    Per ogni insieme S, se \(i \in S\) implica che \(f_i\) sia totale e se per ogni funzione \(f\) totale e computabile, esiste \(i\in S\;|\;f=f_i\), allora S non è ricorsivamente enumerabile. 
-  \end{theorem}
+Tramite questa logica, si possono scrivere formule che risolvono il problema della rappresentazione del linguaggio \(L_p\), composto da tutte e sole le stringhe di lunghezza pari con \(I=\{a\}\), che si può indicare nel seguente modo: \(\exists D(\forall x(\lnot D(0) \wedge (\lnot D(x) \Leftrightarrow D(x+1)) \wedge a(x) \wedge (last(x) \Rightarrow D(x))))\), in cui \(D\) è una variabile del secondo ordine che indica le posizioni dispari.
 
-  Informalmente, questo teorema stabilisce che tutte le funzioni totali computabili non sono ricorsivamente enumerabili (mentre le funzioni parziali computabili lo sono). Dunque, tale teorema afferma implicitamente che non esiste nessun formalismo ricorsivamente enumerabile in grado di definire tutte e sole le funzioni totali e computabili: infatti, gli FSA sono in grado di definire le funzioni totali, ma non tutte, le TM definiscono tutte le funzioni computabili, ma anche quelle non totali, e un linguaggio di programmazione (come il C) è in grado di definire tutti gli algoritmi, ma anche anche quelli che non terminano mai. 
-  
-  Si cerca quindi di comprendere se sia possibile eliminare le funzioni non totali: per far ciò, si prenda in considerazione una generica funzione parziale, ad esempio, arricchendo \(\mathbb{N}\) con il valore \(\{\bot\}\) o con qualsiasi altro simbolo che indichi che la funzione non è definita per certi valori. Tale trasformazione da funzione parziale a totale, però, non può essere applicata perchè nel passaggio è possibile perdere la computabilità della funzione. Questo risultato è enunciato nel seguente teorema:
-  
-  \begin{theorem}
-    Non esiste una funzione totale e computabile h che sia un'estensione della seguente funzione:
-    \(g(x)=if\;f_x(x)\neq\bot\;then\;f_x(x)+1\;else\;\bot\)
-  \end{theorem}
+\paragraph{}
+Si può dimostrare che, data una qualsiasi formula \(F\) appartenente alla logica monadica del secondo ordine, è possibile costruire un automa a stati finiti che accetta lo stesso linguaggio \(L\) definito da \(F\) e, viceversa, dato un qualsiasi automa a stati finiti, è possibile enunciare una formula che riconosce lo stesso linguaggio. Di conseguenza, si può affermare che la classe dei linguaggi definibili dalle formule della logica monadica del secondo ordine coincide con i linguaggi regolari. 
 
-  Tale teorema, afferma quindi che non è possibile estendere una funzione parziale ad una totale, in quanto si potrebbe perdere la sua computabilità.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=17cm]{gerarchia linguaggi.png} 
+  \caption{Gerarchia dei linguaggi}
+\end{figure}
 
-  Vale anche il seguente risultato:
-  \begin{theorem}
-    Un insieme S è ricorsivamente enumerabile se e solo se \(S=D_h\), in cui h è una funzione parziale e computabile (\(S=\{x\;|\;h(x)\neq \bot\}\)), oppure se e solo se \(S=I_g\), in cui g è una funzione parziale e computabile (\(S=\{x\;|\;x=g(y), y\in \mathbb{N}\}\)).
-  \end{theorem}
+\break
 
-  Quindi, dato l'insieme \(K=\{x\;|\;f(x) \neq \bot\}\) questo è semidecidibile perchè \(K=D_h\), con \(h(x)=f_x(x)\), ma è anche indecidibile in quanto la funzione caratteristica dell'insieme \(K\), definita come \(c_K(x)=if\;f_x(x)\neq \bot\;then\;1\;else\;0\), non è computabile. Si è appena dimostrato che esistono insiemi che sono semidecidibili, ma allo stesso tempo indecidibili.
+\section{Logica per la descrizione di Proprietà}
+Quando si programma una funzione è importante definire con precisione quale sia il suo funzionamento, senza necessariamente descrivere come funzioni. A tal proposito si è soliti scrivere le cosiddette prcondizioni e postcondizioni:
+\begin{itemize}
+  \item Precondizione: indica le condizioni che devono valere prima che la funzione venga invocata;
+  \item Postcondizione: indica le condizioni che devono valere al termine dell'esecuzione del programma.  
+\end{itemize}
 
-  \begin{figure}[!h]
-    \begin{center}    
-      \begin{tikzpicture}
-        \foreach \X [count=\Y starting from 0.75] 
-        in {insiemi ricorsivi, insiemi RE*, \(\wp(\mathbb{N})\)} {
-          \draw (-\Y,-\Y/2) circle ({2*\Y} and \Y);
-          \node at (1-2*\Y,-1.1*\Y) {\X}; 
-        }
-      \end{tikzpicture}
-    \end{center}
-    \caption{Gerarchia degli insiemi}    
-  \end{figure}
-
-  *Con RE si indicano gli insiemi Ricorsivamente Enumerabili.
-
-  Si noti che tutte le inclusioni sono strette.
-
-  \section{Teoremi di Kleene e Rice}
-
-  \begin{theorem} [Teorema di Kleene del punto fisso]
-    Sia t una qualunque funzione totale e computabile. Allora è sempre possibile trovare un intero p, tale per cui:
-    
-    \(f_p=f_{t(p)}\)\\
-    La funzione \(f_p\) è detta punto fisso di t, perchè t trasforma \(f_p\) in \(f_p\) stessa.
-  \end{theorem}
-
-  \begin{theorem}[Teorema di Rice]
-    Sia F un insieme generico di funzioni computabili. L'insieme \(S=\{x\;|\;f_x\in F\}\) degli indici delle TM che calcolano le funzioni di F, è ricorsivo se e solo se \(F=\emptyset\) oppure F è l'insieme di tutte le funzioni computabili.
-  \end{theorem}
-
-  Il teorema di Rice ha un forte impatto pratico negativo, in quanto afferma che. in tutti i casi non banali, \(S\) non è decidibile. Non è quindi possibile stabilire algoritmicamente se un dato algoritmo sia in grado di risolvere un determinato problema, nè se due programmi siano equivalenti (ossia se calcolino la stessa funzione). Il grande impatto pratico del teorema di Rice deriva dal fatto che il concetto di sottoinsieme \(F\) di funzioni computabili è un'espressione formale del concetto generale di proprietà di problemi risolvibili: una proprietà degli elementi di un insieme è un sottoinsieme dell'insieme dato e una funzione computabile è una formalizzazione del concetto di problema risolvibile; quindi, il teorema di Rice efferma che non è possibile stabilire se un determinato algoritmo risolve un problema pur risolvibile che godia di una qualsiasi proprietà non banale.
+Dunque, il programma \(P\) deve essere tale per cui se la precondizione \(Pre\) vale prima dell'esecuzione di tale programma, allora la post condizione \(Post\) deve valere dopo l'esecuzione. Tali condizioni possono essere espresse in linguaggi diversi, ma il più comune è la logica del primo ordine.

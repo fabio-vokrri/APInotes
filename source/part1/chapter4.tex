@@ -1,13 +1,12 @@
 \chapter{Grammatiche}
   Come visto in precedenza, spesso gli automi vengono utilizzati come modelli per il riconoscimento di linguaggi. Gli automi sono quindi uno strumento formale per la descrizione e la definizione di un determinato linguaggio, costituito dall'insieme delle stringhe accettate dall'automa stesso.
 
-  Un altro formalismo utilizzato per la definizione di linguaggio sono le cosiddette grammatiche formali, che definiscono un linguaggio fornendo il procedimento mediante cui si ottengono le stringhe appartenenti al linguaggio stesso. 
+  Un altro formalismo utilizzato per la definizione di un linguaggio sono le cosiddette grammatiche formali, che froniscono il procedimento mediante cui si ottengono le stringhe appartenenti al linguaggio stesso. 
   
   \section{Introduzione}
-
   Una grammatica formale è un insieme di regole per costruire stringhe appartenenti ad un determinato linguaggio, attraverso il meccanismo di riscrittura, che consiste in un insieme di tecniche che determinano come sostituire le parti di una formula con parti più semplificate. In generale, un meccanismo di riscrittura consiste in un insieme di regole linguistiche, di cui una descrive l'oggetto principale come una sequenza di componenti. Ogni componente si può raffinare da elementi via via sempre più dettagliati, fino ad ottenere una sequenza di componenti elementari.
 
-  Una grammatica non è altro che un meccanismo linguistico, composto dall'oggetto principale, detto anche simbolo iniziale, da un insieme di componenti, a loro volta da sostituire durante il processo di derivazione, detti anche simboli non terminaliun insieme di elementi di base, detti anche simboli elementari, e da un insieme di regole di raffinamento o sostituzioni, chiamate produzioni.
+  Una grammatica non è altro che un meccanismo linguistico, composto dall'oggetto principale, detto anche simbolo iniziale, da un insieme di componenti, a loro volta da sostituire durante il processo di derivazione, detti anche simboli non terminali, un insieme di elementi di base, detti anche simboli elementari, e da un insieme di regole di raffinamento o sostituzioni, chiamate produzioni.
 
   \begin{definition} \label{definizione grammatica}
     Una grammatica G è una tupla di 4 elementi \(G = <V_T, V_N, P, S>\), dove:
@@ -26,7 +25,9 @@
   \end{definition}
 
   Data la definizione di derivazione immediata, si può anche definire la chiusura riflessiva e transitiva, indicata con il simbolo \(\Rightarrow^*\), che opera su una serie di stringhe (di simboli elementari o non elementari), anzichè che su una sola stringa.
-
+  
+  \break
+  
   Date le precedenti definizioni, si può ora definire il linguaggio generato da una grammatica, tramite la seguente definizione:
   \begin{definition}
     Data una grammatica G, il linguaggio L(G) generato da G è definito come:
@@ -41,8 +42,8 @@
   \begin{itemize}
     \item Grammatiche di tipo 0 (non ristrette): sono grammatiche definite come nella \ref{definizione grammatica}, ovvero grammatiche che non possiedono nessuna restrizione nel tipo di produzione;
     \item Grammatiche di tipo 1 (sensibili al contesto): sono grammatiche a cui si introduce il vincolo per cui le produzioni possono essere solo nella forma \(\alpha A\beta\to\alpha\gamma\beta\), dove \(\alpha, \beta, \gamma\in V\) e \(A\in V_N\), con \(\gamma\neq\varepsilon\); inoltre, la derivazione \(S\to\varepsilon\) è consentita solo se \(S\) non appare a destra in nessuna regola di derivazione;
-    \item Grammatiche di tipo 2 (non contestuali): sono grammatiche a cui si introduce il vincolo per cui ad ogni produzione \(\alpha\to\beta \in P\) si verifica che \(\;|\;\alpha\;|\; =1\) (quindi \(\alpha \in V_N\)) e \(\beta\in V^*\);
-    \item Grammatiche di tipo 3 (regolari): sono grammatiche a cui si introduce il vincolo per cui ad ogni produzione \(\alpha\to\beta \in P\) si verifica che \(\;|\;\alpha\;|\; = 1\) (quindi \(\alpha \in V_N\)) e che \(\beta\) sia in una sola delle seguenti forme: \(aB\), \(Ba\), \(a\) oppure \(\varepsilon\), con \(a\in V_T\) e \(B\in V_N\); inoltre, la derivazione \(S\to\varepsilon\) è consentita solo se \(S\) non appare a destra in nessuna regola di derivazione;
+    \item Grammatiche di tipo 2 (non contestuali): sono grammatiche a cui si introduce il vincolo per cui ad ogni produzione \(\alpha\to\beta \in P\) si verifica che \(|\alpha| =1\) (quindi \(\alpha \in V_N\)) e \(\beta\in V^*\);
+    \item Grammatiche di tipo 3 (regolari): sono grammatiche a cui si introduce il vincolo per cui ad ogni produzione \(\alpha\to\beta \in P\) si verifica che \(|\alpha| = 1\) (quindi \(\alpha \in V_N\)) e che \(\beta\) sia in una sola delle seguenti forme: \(aB\), \(Ba\), \(a\) oppure \(\varepsilon\), con \(a\in V_T\) e \(B\in V_N\); inoltre, la derivazione \(S\to\varepsilon\) è consentita solo se \(S\) non appare a destra in nessuna regola di derivazione;
   \end{itemize} 
 
   \begin{figure}[!h]
@@ -58,6 +59,8 @@
     \caption{Gerarchia di Chomsky}    
   \end{figure}
 
+  \break
+
   \section{Grammatiche e Automi}
   Studiando le grammatiche e i linguaggi da esse generate, si può osservare una certa corrispondenza con gli automi analizzati nei capitoli precedenti. Si introducono qui alcuni teoremi che mettono in luce la correlazione esistente fra automi e grammatiche.
 
@@ -69,7 +72,7 @@
     \item \(V_N=Q\);
     \item \(V_T=I\);
     \item \(S=q_0\);
-    \item \(\forall B\to bC\iff C\in\delta(B,b)\);
+    \item \(\forall B\to bC\Leftrightarrow C\in\delta(B,b)\);
     \item \(\forall B\to\varepsilon, B\in F\)
   \end{itemize}
   Data una grammatica \(G=<V_N, V_T, P, S>\) regolare, si può costruire un FSA \(A=<I, \delta, q_0, F>\), tale che:
@@ -89,11 +92,11 @@
   \end{theorem}
 
   \begin{theorem}
-    Data una TM M utilizzata come accettatore di linguaggi è possibile costruire una grammatica generale G (di tipo 0) ad essa equivalente, ossia in grado di riconoscere lo stesso linguaggio riconosciuto da M, e viceversa.Dunque, le grammatiche non ristrette e le macchine di Turing sono modelli differenti per descrivere la stessa classe di linguaggi.
+    Data una TM M utilizzata come accettatore di linguaggi è possibile costruire una grammatica generale G (di tipo 0) ad essa equivalente, ossia in grado di riconoscere lo stesso linguaggio riconosciuto da M, e viceversa. Dunque, le grammatiche non ristrette e le macchine di Turing sono modelli differenti per descrivere la stessa classe di linguaggi.
   \end{theorem}
 
   \section{Espressioni Regolari}
-  Un'espressione regolare è un'espressione utilizzabile per denotare un linguaggio attraverso la struttura delle stringhe che lo compongono.
+  Un'espressione regolare è una sequenza di simboli utilizzabile per denotare un linguaggio attraverso la struttura delle stringhe che lo compongono.
 
   \begin{definition}
     Dato un alfabeto di simboli terminali denotato con \(V_T\), si definiscono su di esso le espressioni regolari e i corrispondenti linguaggi denotati:
@@ -129,9 +132,9 @@
   \noindent
   Il linguaggio generato dal sistema di pattern consiste in tutte le stringhe su \(A\) ottenute da \(p\) sostituendo ogni variabile in \(p\) con una stringa su \(A\). 
 
-  Ad esempio, il pattern \(<{0,1}, {v_1, v_2}, v_1v_10v_2>\) rappresenta il linguaggio composto dalle stringhe che iniziano con 0 (nel caso in cui \(v_1 = \varepsilon\)) oppure che iniziano con una qualunque stringa sull'alfabeto \(A\) (in questo caso binario) ripetuta due volte, seguita da uno 0 e terminano con una qualunque altra stringa dell'alfabeto \(A\) (inclusa \(\varepsilon\)).
+  ESEMPIO. Il pattern \(<{0,1}, {v_1, v_2}, v_1v_10v_2>\) rappresenta il linguaggio composto dalle stringhe che iniziano con 0 (nel caso in cui \(v_1 = \varepsilon\)) oppure che iniziano con una qualunque stringa sull'alfabeto \(A\) (in questo caso binario) ripetuta due volte, seguita da uno 0 e terminano con una qualunque altra stringa dell'alfabeto \(A\) (inclusa \(\varepsilon\)).
 
-  Le espressioni regolari seguono la stessa idea dei sistemi di pattern, ma hanno un potere espressivo differente: nello specifico è possibile esprimere certi linguaggi con i pattern, ma non con le espressioni regolare, e viceversa, è possibile esprimere alcuni linguaggi con le espressioni regolari, ma non con i pattern. Per tale motivo, i due modelli si dicono essere non confrontabili
+  Le espressioni regolari seguono la stessa idea dei sistemi di pattern, ma hanno un potere espressivo differente: nello specifico è possibile esprimere certi linguaggi con i pattern, ma non con le espressioni regolari, e viceversa, è possibile esprimere alcuni linguaggi con le espressioni regolari, ma non con i pattern. Per tale motivo, i due modelli si dicono essere non confrontabili
 
   \section{Riepilogo}
 
@@ -139,7 +142,7 @@
     \caption{Relazione fra grammatiche, linguaggi e automi}
     \centering
     \vspace{10px}
-    \begin{tabular}{l l l l}
+    \begin{tabular}{l | l l l}
       Gerarchia & Grammatiche & Linguaggi & Automa minimo \\ 
       \hline
       tipo 0 & Generali & Ricorsivamente enumerabili & TM\\

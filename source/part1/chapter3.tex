@@ -1,10 +1,10 @@
 \chapter{Automi non Deterministici}
-  Tutti modelli analizzati fino ad ora sono deterministici, nel senso che una volta fissato lo stato iniziale e l'ingresso, il comportamento di tale automa è univocamente determinato. In altri termini, per ogni stato e per ogni ingresso è sempre possibile determinare a priori lo stato in cui l'automa termina la propria esecuzione.
+  Tutti i modelli analizzati fino ad ora sono deterministici, nel senso che una volta fissato lo stato iniziale e l'ingresso, il comportamento di tale automa è univocamente determinato. In altri termini, per ogni stato e per ogni ingresso è sempre possibile determinare a priori lo stato in cui l'automa termina la propria esecuzione.
   
   Ci sono però casi in cui questo non è possibile, in quanto non si ha una conoscenza sufficientemente accurata del comportamento dell'automa per poter prevedere l'esatta evoluzione del modello. In tal caso si dice che l'automa è non deterministico. 
 
-  \section{Automi a Stati Finiti non deterministici}
-  Gli NFSA (Nondeterministic Finite State Automaton) sono automi a stati finiti che presentano un numero finito di stati. Tali automi sono definiti come i corrispettivi automi deterministici, con l'unica differenza che presentano una funzione di transizione definita nel seguente modo:
+  \section{Automi a Stati Finiti non Deterministici}
+  Gli NFSA (Nondeterministic Finite State Automaton) sono automi che presentano un numero finito di stati. Tali automi sono definiti come i corrispettivi automi deterministici, con l'unica differenza che presentano una funzione di transizione definita nel seguente modo:
   
   \(\delta:Q\times I\to \wp(Q)\) \footnote{\(\wp (Q)\) rappresenta l'insieme delle parti di Q, i cui elementi sono insiemi di stati.}
 
@@ -15,7 +15,7 @@
 
   Nel caso di accettatori, \(x\in I^*\) è accettata da un NFSA \(<Q,I,\delta, q_0, F>\) se e solo se \(\delta^*(q_0,x)\cap F = \emptyset\).
 
-  In altre parole, un NFSA può presentare diverse sequenze di transizioni per ogni dato stato e per ogni data sequenza di ingresso, quindi la chiusura riflessive e transitiva della funzione \(\delta\) non rappresenta più un singolo cammino coerente con la stringa di ingresso, ma un insieme di cammini possibili. Questo porta anche alla necessità di dover modificare la condizione di accettazione di una determinata stringa in ingresso: intuitivamente, infatti, tale nastro è accettato dall'automa se e solo se almeno una delle possibili sequenze di transizioni conduce a uno stato finale. 
+  In altre parole, un NFSA può presentare diverse sequenze di transizioni per ogni dato stato e per ogni data sequenza di ingresso, quindi la chiusura riflessiva e transitiva della funzione \(\delta\) non rappresenta più un singolo cammino coerente con la stringa di ingresso, ma un insieme di cammini possibili. Questo porta anche alla necessità di dover modificare la condizione di accettazione di una determinata stringa in ingresso: intuitivamente, infatti, tale nastro è accettato dall'automa se e solo se almeno una delle possibili sequenze di transizioni conduce a uno stato finale. 
 
   Gli automi non deterministici a stati finiti hanno la stessa potenza di calcolo dei corrispettivi automi deterministici, ma sono spesso più convenienti da utilizzare. Da qui il seguente teorema:
 
@@ -44,7 +44,7 @@
   Si noti che i PDA sono automi intrinsecamente non deterministici: infatti, nella prima definizione di automa a pila si era dovuto aggiungere il vincolo che, se per una determinata condizione era definita una \(\varepsilon\)-mossa, allora non era definita nessun'altra transizione che partisse da quello stato. Nella definizione appena data, invece, questo vincolo viene rimosso.
 
   \section{Macchine di Turing non deterministiche}
-  Una NTM (Nondeterministic Turing Machine) è un automa che presenta un numero finito di stati e che opera su un insieme di nastri infiniti a destra. Tali automi sono defiuniti come i corrispettivi automi deterministici, con l'unica differenza che presentano una funzione di transizione e di accettazione definita nel seguente modo:
+  Una NTM (Nondeterministic Turing Machine) è un automa che presenta un numero finito di stati e che opera su un insieme di nastri infiniti a destra. Tali automi sono definiti come i corrispettivi automi deterministici, con l'unica differenza che presentano una funzione di transizione e di accettazione definita nel seguente modo:
 
   \(<\delta, \eta>:(Q-F)\times I\times \Gamma^k\to\wp(Q\times\Gamma^k\times\{R,L,S\}^{k+1}\times\{R,S\})\)
   

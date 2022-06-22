@@ -1,9 +1,7 @@
 \chapter{Complessità del Calcolo}
-  Nei capitoli precedenti si è dimostrato come esistano alcuni problemi che, pur essendo ben definiti, non sono risolvibili algoritmicamente, per cui non esiste una TM in grado di risolvere quel determinato problema. Un'altra difficoltà da tenere in considerazione quando si manipolano i problemi,risiede nel tempo di esecuzione, ovvero il tempo impiegato dal programma per fornire una soluzione: se non è possibile ottenere una soluzione in un tempo ragionevole, ovviamente, il problema diventa intrattabile, nonostante sia teoricamente risolvibile.
+  Nei capitoli precedenti si è dimostrato come esistano alcuni problemi che, pur essendo ben definiti, non sono risolvibili algoritmicamente, per cui non esiste una TM in grado di risolvere quel determinato problema. Un'altra difficoltà da tenere in considerazione quando si manipolano i problemi, risiede nel tempo di esecuzione, ovvero il tempo impiegato dal programma per fornire una soluzione: se non è possibile ottenere una soluzione in un tempo ragionevole, ovviamente, il problema diventa intrattabile, nonostante sia teoricamente risolvibile.
 
   Il concetto di intrattabilità è strettamente correlato al concetto di complessità del calcolo: più il problema è complesso e meno questo diventa trattabile. Informalmente, la complessità indica una misura del prezzo da pagare per risolvere il problema. Le risorse che si utilizzano per la risoluzione di un problema sono principalmente due: lo spazio, ovvero la memoria necessaria all'algoritmo, e il tempo richiesto per produrre la soluzione. Si parlerà quindi di complessità spaziale e di complessità temporale.
-
-  Inoltre, la soluzione proposta per un dato problema occupa le risorse in due modi: esiste infatti una componente costante, che non dipende quindi dai dati di ingresso, e una componente che invece è funzione della dimensione dei dati di ingresso (di più complessa analisi, ma anche più attinente alla realtà). 
 
   Si osservi inoltre che le due risorse, quella temporale e quella spaziale, seppur sembrino indipendenti l'una dall'altra, sono in realtà correlate: alla riduzione di utilizzo di una risorsa aumenta l'altra e viceversa. 
 
@@ -14,8 +12,7 @@
 
   Inoltre, a differenza di quanto analizzato per la risolvibilità dei problemi, la complessità non è collegata solo al problema che si vuole affrontare, ma dipende anche dell'algoritmo che si utilizza per risolverlo. 
 
-  \vspace*{10px}
-
+  \paragraph{}
   Nel capitolo sugli automi, è stato più volte affermato che le Macchine di Turing sono il formalismo più potente che si ha a disposizione per la risoluzione di prblemi, dunque, risulta ragionevole definire la complessità temporale e spaziale impiegando un tale modello.
 
   \begin{definition} \label{complessita temporale} 
@@ -54,12 +51,10 @@
 
   Una volta analizzata la complessità temporale tramite il formalismo delle macchine di Turing, si sposta l'attenzione sugli altri formalismi analizzati nel capitolo riguardante gli automi, in particolare sugli automi a stati finiti, sugli automi a pila e sulle macchine di turine a singolo nastro.
 
-  \vspace*{10px}
+  \paragraph{}
+  Dato un automa a stati finiti \(A\), si definisce la complessità temporale \({T}_A\) come l'intero \(i\) tale che \(\delta^i(q_0,x)=q\) per qualche \(q\), se esiste, ovvero il numero di transizioni effettuate per processare la stringa in ingresso \(x\) a partire dallo stato iniziale. Se \(\delta^*(q_0,x)\) è indefinita, si pone \({T}_A= |x|\), ovvero pari alla lunghezza della stringa in ingresso. \({T}_A\), evidentemente, indica il numero di mosse compiute da \(A\) durante il riconoscimento della stringa \(x\). Dunque, per ogni automa a stati finiti la complessità temporale \({T}_A\) cresce in maniera lineare con il crescere della lunghezza della stringa. Al contrario, la sua complessità spaziale \({S}_A\) non varia mai, in quanto gli FSA sono composti da un numero finito di stati definiti a priori, indipendentemente dalla lunghezza della stringa letta. 
 
-  Dato un automa a stati finiti \(A\), si definisce la complessità temporale \({T}_A\) come l'intero \(i\) tale che \(\delta^i(q_0,x)=q\) per qualche \(q\), se esiste, ovvero il numero di transizioni effettuate per per processare la stringa in ingresso \(x\) a partire dallo stato iniziale. Se \(\delta^*(q_0,x)\) è indefinita, si pone \({T}_A= |x|\), ovvero pari alla lunghezza della stringa in ingresso. \({T}_A\), evidentemente, indica il numero di mosse compiute da \(A\) durante il riconoscimento della stringa \(x\). Dunque, per ogni automa a stati finiti la complessità temporale \({T}_A\) cresce in maniera lineare con il crescere della lunghezza della stringa. Al contrario, la sua complessità spaziale \({S}_A\) non varia mai, in quanto gli FSA sono composti da un numero finito di stati definiti a priori, indipendentemente dalla lunghezza della stringa letta. 
-
-  \vspace*{10px}
-
+  \paragraph{}
   Dato un automa a pila \(A\), si può analizzare sia la complessità temporale in funzione della stringa in ingresso (\({T}_A(x)\)), sia in funzione della lunghezza della stringa (\({T}_A(n)\)). Come per gli automi a stati finiti, quando si calcola la complessità temporale in funzione della stringa in ingresso, si contano il numero di passi che portano da una configurazione iniziale ad una configurazione finale. Quando invece si vuole utilizzare come parametro la lunghezza della stringa, la complessità temporale è calcolata come il massimo di tutte le complessità temporali in funzione delle stringhe in ingresso della lunghezza considerata. La complessità spaziale \({S}_A\), invece, viene associata al numero di celle di memoria della pila che vengono occupate dall'automa per portare a termine la computazione.
 
   \vspace*{10px}
@@ -107,9 +102,9 @@
   \begin{itemize}
     \item Transitività:
     \begin{itemize}
-      \item se \(f(n)\in\Theta(g(n))\) e \(g(n)\in\Theta(h(n)\), allora \(f(n)\in\Theta(h(n))\);
-      \item se \(f(n)\in O(g(n))\) e \(g(n)\in O(h(n)\), allora \(f(n)\in O(h(n))\);
-      \item se \(f(n)\in\Omega(g(n))\) e \(g(n)\in\Omega(h(n)\), allora \(f(n)\in\Omega(h(n))\);
+      \item se \(f(n)\in\Theta(g(n))\) e \(g(n)\in\Theta(h(n))\), allora \(f(n)\in\Theta(h(n))\);
+      \item se \(f(n)\in O(g(n))\) e \(g(n)\in O(h(n))\), allora \(f(n)\in O(h(n))\);
+      \item se \(f(n)\in\Omega(g(n))\) e \(g(n)\in\Omega(h(n))\), allora \(f(n)\in\Omega(h(n))\);
     \end{itemize}
     \item Riflessività:
     \begin{itemize}
@@ -117,8 +112,8 @@
       \item \(f(n)\in O(f(n))\);
       \item \(f(n)\in\Omega(f(n))\);
     \end{itemize}
-    \item Simmetria: \(f(n)\in\Theta(g(n))\iff g(n)\in\Theta(f(n))\);
-    \item Simmetria trasposta: \(f(n)\in O(g(n))\iff g(n)\in\Omega(f(n))\).
+    \item Simmetria: \(f(n)\in\Theta(g(n))\Leftrightarrow g(n)\in\Theta(f(n))\);
+    \item Simmetria trasposta: \(f(n)\in O(g(n))\Leftrightarrow g(n)\in\Omega(f(n))\).
   \end{itemize}
 
   Inoltre, la relazione \(\Theta\) è una relazione di equivalenza.
@@ -147,20 +142,20 @@
   I teoremi qui introdotti valgono anche per le moderne macchine di Von Neumann, in quanto possiamo avere speedup lineari arbitrariamente grandi (ovviamente, entro i limiti fisici della termodinamica), aumentando il parallelismo, ma miglioramenti più che lineari si possono ottenere solamente modificando l'algoritmo impiegato. 
 
   \section{Macchina RAM}
-  La macchina RAM (o Random Access Memory) è un modello classico ispirata allàarchitettura di Von Neumann. Tale macchina è costituita da un nastro in ingresso, un nastro in uscita, un programma rappresentato da un numero finito di istruzioni, un contatore che indica l'istruzione corrente da eseguire e una memoria ad accesso diretto.
+  La macchina RAM (o Random Access Memory) è un modello classico ispirata all'architettura di Von Neumann. Tale macchina è costituita da un nastro in ingresso, un nastro in uscita, un programma rappresentato da un numero finito di istruzioni, un contatore che indica l'istruzione corrente da eseguire e una memoria ad accesso diretto.
 
   \begin{figure}[h]
     \includegraphics[width=\textwidth]{RAM.png}
   \end{figure}
 
-  Sia i nastri che la memoria sono composti da un numero illimitato di celle, ma al contrario dei nastri di ingresso e uscita che si possono accedere in maniera sequenziale, la memoria è indirizzata e si può accedere a una sua cella attraverso un numero intero \(i>0\) che indica l'indirizzo di tale cella di memoria. La cella 0 della memoria è un registro speciale, detto accumulatore, che si utilizza per contenere il valore di uno dei due operandi delle operazioni aritmetiche binarie che la macchina può effettuare. Un generico porgramma eseguibile dalla macchina RAM è composto da istruzioni riportate nella tabella di seguito:
+  Sia i nastri che la memoria sono composti da un numero illimitato di celle, ma al contrario dei nastri di ingresso e uscita che si possono accedere in maniera sequenziale, la memoria è indirizzata e si può accedere a una sua cella attraverso un numero intero \(i>0\) che indica l'indirizzo di tale cella di memoria. La cella 0 della memoria è un registro speciale, detto accumulatore, che si utilizza per contenere il valore di uno dei due operandi delle operazioni aritmetiche binarie che la macchina può effettuare. Un generico porgramma eseguibile dalla macchina RAM è composto da istruzioni riportate nella tabella \ref{tabella istruzioni RAM}.
 
-  \begin{table}[!htb] \label{tabella istruzioni RAM}
+  \begin{table}[!h] 
     \caption{istruzioni macchina RAM}
     \vspace*{10pt}
     
     \centering
-    \begin{tabular}{l l | l}
+    \begin{tabular}{l l | l} \label{tabella istruzioni RAM}
       ISTRUZIONE & & SEMANTICA\\
       \hline
       LOAD= & \(x\) & M[0] \(\leftarrow x\)\\

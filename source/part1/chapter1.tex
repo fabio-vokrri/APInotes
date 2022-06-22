@@ -1,7 +1,7 @@
 \chapter{Linguaggi Formali}
 
   \section{Alfabeti e Stringhe}
-  Di seguito sono riportate alcune definizioni importanti riguardanti i linguaggi formali:
+  Di seguito sono riportate alcune definizioni importanti riguardanti i linguaggi formali, necessarie per affrontare la quasi totalità degli argomenti presentati in questo documento:
   \begin{definition}[Alfabeto]
     Un alfabeto (o vocabolario) V è un insieme finito di oggetti elementari detti simboli (o caratteri)
   \end{definition} 
@@ -12,11 +12,7 @@
 
   Data una stringa \(x\), la notazione \(|\,x\,|\) indica la lunghezza di tale stringa, ovvero il numero di caratteri di cui è composta (la cardinalità del suo dominio \(V\)). Per convenzione la stringa vuota, che non contiene nessun carattere, è indicata con la lettera \(\varepsilon\). La stringa vuota \(\varepsilon\) ha lunghezza zero. 
 
-  Per poter confrontare due stringhe è necessario verificare che:
-  \begin{itemize}
-    \item \(|x| = |y|\)
-    \item \(x_i = y_i\; \forall i=0,1,2,...,|x|\)
-  \end{itemize}
+  Per poter confrontare due stringhe è necessario prima di tutto verificare che le due stringhe abbiano uguale lunghezza (\(|x| = |y|\)) e poi che \(x_i = y_i\; \forall i=0,1,2,...,|x|\).
 
   La concatenazione (o prodotto) \(x.y\) di due stringhe \(x\) e \(y\) è una stringa composta da tutti i caratteri di \(x\) seguiti da tutti i caratteri di \(y\). Inoltre, la concatenazione \(x.\varepsilon\) produce come risultato la stringa \(x\).
 
@@ -27,7 +23,11 @@
     \item se \(z=y=\varepsilon\), \(x=s\)
   \end{itemize}
 
-  Data una stringa \(x\), l'espressione \(x^i\) indica la concatenazione della stringa \(x\) con sè stessa per \(i-1\) volte, ovvero \(x^0 = \varepsilon\) e \(x^{i+1} = x.x^{i}\).
+  Data una stringa \(x\), l'espressione \(x^i\) indica la concatenazione della stringa \(x\) con sè stessa per \(i-1\) volte. In maniera induttiva:
+  \begin{itemize}
+    \item \(x^0 = \varepsilon\);
+    \item \(x^{i+1} = x.x^{i}\).
+  \end{itemize}
 
   \section{Operatori di Kleene}
   Per poter proseguire con il trattato, è prima necessario introdurre alcuni concetti matematici fondamentali. Si danno quindi le seguenti definizioni:
