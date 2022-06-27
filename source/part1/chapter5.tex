@@ -18,7 +18,7 @@ Il calcolo proposizionale, detto anche logica proposizionale, è un modello dich
 \paragraph*{Sintassi}
 In modo formale:
 \begin{definition}
-  La logica proprosizionale è composta da un linguaggio \(\mathcal L\), il cui alfabeto è costituito dai seguenti elementi:
+  La logica proposizionale è composta da un linguaggio \(\mathcal L\), il cui alfabeto è costituito dai seguenti elementi:
   \begin{enumerate}
     \item Un insieme numerabile (finito o non) di proposizioni (simboli di relazione nullaria), che possono essere simboli, stringhe o frasi;
     \item Un insieme di connettivi logici: \(\lnot\) (NOT), \(\wedge\) (AND), \(\vee\) (OR), \(\Rightarrow\) (Implicazione) e \(\Leftrightarrow \)(Coimplicazione);
@@ -103,7 +103,7 @@ Esistono innumerevoli equivalenze notevoli:
     F \Rightarrow G &\equiv \lnot F \vee G \\
     F \Rightarrow G &\equiv \lnot G \Rightarrow  \lnot F
   \end{flalign*}  
-In logica prposizionale è anche possibile sostituire una sottoformula \(G\), di una formula ben formata \(F\), con una formula \(H\): la formula risultate viene indicata con la scrittura \(F[G \backslash H]\). Tale sostituzione, però, può avvenire solamente se \(G \equiv H\). 
+In logica proposizionale è anche possibile sostituire una sottoformula \(G\), di una formula ben formata \(F\), con una formula \(H\): la formula risultate viene indicata con la scrittura \(F[G \backslash H]\). Tale sostituzione, però, può avvenire solamente se \(G \equiv H\). 
 
 In base a questi concetti si può notare che non tutti i connettivi logici sono strettamente necessari, in quanto possono essere sostituiti con altri. A questo proposito, un insieme di connettivi è detto funzionalmente completo se e solo se qualunque formula proposizionale può essere trasformata in una formula semanticamente equivalente che contiene solamente i connettivi dell'insieme dato. Sfruttando tali insiemi, detti minimali, e le equivalenze semantiche, è possibile definire delle forme normali, che introducono degli schemi sintattici di completa generalità semantica per scrivere formule, permettendo così di formalizzare il significato di qualsiasi formula che si possa scrivere con la completa generalità della logica proposizionale. In altre parole, per ogni formula ben formata esistono una o più formule logicamente equivalenti ad essa scritte in una forma normale. Esistono tre principali forme normali per la logica proposizionale, chiamate forma negativa, forma congiuntiva e forma disgiuntiva. Una formula è in forma normale negativa se e solo se è composta solamente da letterali, congiunzioni e disgiunzioni; una formula è in forma normale congiuntiva (detta anche CNF) se e solo se ha la forma \(C_1 \wedge C_2 \wedge ... \wedge C_n\), dove \(C_i\) è una disgiunzione di letterali; una formula è in forma normale disgiuntiva (detta anche DFN) se e solo se ha la forma \(D_1 \vee D_2 \vee ... \vee D_n\), dove \(D_i\) è una congiunzione di letterali. 
 
@@ -139,10 +139,10 @@ Gli oggetti appena denotati attraverso i termini, si possono utilizzare all'inte
   \item Se \(F\) e \(G\) sono formule e \(X\) è una variabile, allora \(\lnot F, F\vee G, F\wedge G, F \Rightarrow G, F \Leftrightarrow G, \exists XF, \forall XF\) sono formule.
 \end{itemize}
 
-Nella scrittura di formule appartenenti alla logica del primo ordine, c'è un'osservazione da fare: quando si utilizza il quantificatore \(\forall\) il connettivo principale utilizzato è \(\Rightarrow\), mentre nel caso si utilizzi il quantificatore \(\exists\) allora il connettivo principale è \(\wedge\). Inoltre, se \(QX(F)\) rappresenta una formula in cui \(Q\) è un quantificatre, allora \(F\) si dice ambito di \(Q\) e che \(Q\) è applicato ad \(F\). Un'occorrenza di una variabile in una formula è legata se e solo se la sua occorrenza è entro l'ambito di un quantificatore che impiega quella variabile, altrimenti è libera. Una formula è chiusa se e solo se non contiene occorrenze libere di variabili. Le formule chiuse sono quelle per le quali, data un'interpretazione \(I\), si può calcolare la veridicità.
+Nella scrittura di formule appartenenti alla logica del primo ordine, c'è un'osservazione da fare: quando si utilizza il quantificatore \(\forall\) il connettivo principale utilizzato è \(\Rightarrow\), mentre nel caso si utilizzi il quantificatore \(\exists\) allora il connettivo principale è \(\wedge\). Inoltre, se \(QX(F)\) rappresenta una formula in cui \(Q\) è un quantificatore, allora \(F\) si dice ambito di \(Q\) e che \(Q\) è applicato ad \(F\). Un'occorrenza di una variabile in una formula è legata se e solo se la sua occorrenza è entro l'ambito di un quantificatore che impiega quella variabile, altrimenti è libera. Una formula è chiusa se e solo se non contiene occorrenze libere di variabili. Le formule chiuse sono quelle per le quali, data un'interpretazione \(I\), si può calcolare la veridicità.
 
 \paragraph*{Semantica}
-Come per il caso della logica proposizionale, anche la logica del primo ordine ha una semantica basata sul concetto di interpretazione: un'interpretazione \(I\) di un alfabeto \(A\) è un dominio non vuoto \(D\) (indicato anche con \(|I|\)) e una funzione che che associa ogni costante \(c\in A\) a un oggetto \(c_I \in D\), ogni simbolo \(n\)-ario di funzione \(f\in A\) a una funzione \(f_I:D^n\to D\) e ogni simbolo \(n\)-ario di predicato \(p\in A\) a una relazione \(p_I\subseteq D\times D\times ... \times D\), \(n\) volte. Prima di poter assegnare un significato alle fromule, va definito il significato di ogni termine, indicato con \(\phi_I(t)\) con \(t\) il termine a cui dare singificato nell'interpretazione \(I\). 
+Come per il caso della logica proposizionale, anche la logica del primo ordine ha una semantica basata sul concetto di interpretazione: un'interpretazione \(I\) di un alfabeto \(A\) è un dominio non vuoto \(D\) (indicato anche con \(|I|\)) e una funzione che che associa ogni costante \(c\in A\) a un oggetto \(c_I \in D\), ogni simbolo \(n\)-ario di funzione \(f\in A\) a una funzione \(f_I:D^n\to D\) e ogni simbolo \(n\)-ario di predicato \(p\in A\) a una relazione \(p_I\subseteq D\times D\times ... \times D\), \(n\) volte. Prima di poter assegnare un significato alle formule, va definito il significato di ogni termine, indicato con \(\phi_I(t)\) con \(t\) il termine a cui dare significato nell'interpretazione \(I\). 
 
 \break
 
@@ -190,14 +190,14 @@ In questa sezione si analizza un frammento della logica monadica del primo ordin
  Una generica formula \(F\) appartenente alla logica monadica del primo ordine ha una sintassi molto semplice, articolata nei seguenti casi:
 \begin{itemize}
   \item \(a(x)\) con \(a\in I\), ovvero un predicato unario per ogni simbolo dell'alfabeto \(I\);
-  \item \(x < y\), che costituisce l'unica eccezzione della logica monadica in quanto non è un operatore unario, ma binario;
+  \item \(x < y\), che costituisce l'unica eccezione della logica monadica in quanto non è un operatore unario, ma binario;
   \item \(\lnot F\), operatore NOT;
   \item \(F \wedge F\), operatore AND;
   \item \(\forall x(F)\), quantifcatore di una formula  rispetto ad una variabile;
 \end{itemize}
 Il dominio delle variabili è \(\mathbb N\).
 
-Si può osservare come, rispetto alla logica proposizionale e del primo ordine, la logica monadica non fa uso della maggior parte degli operatori logici, del quantificatore esistenziale, della maggior parte degli operatori matematici, di oggetti o funzioni. Tutti i costrutti non utilizzati da tale logica possono essere drivati dagli operatori che sono stati presentati.
+Si può osservare come, rispetto alla logica proposizionale e del primo ordine, la logica monadica non fa uso della maggior parte degli operatori logici, del quantificatore esistenziale, della maggior parte degli operatori matematici, di oggetti o funzioni. Tutti i costrutti non utilizzati da tale logica possono essere derivati dagli operatori che sono stati presentati.
 
 Le formule scritte in questa logica possono confrontare dei numeri rappresentati dalle variabili, che a loro volta rappresentano posizioni all'interno delle stringhe scritte sull'alfabeto di riferimento. Quindi con l'alfabeto \(I\) di riferimento posso scrivere delle stringhe mediante i predicati unari e, con la logica monadica è possibile calcolare la posizione, di determinati caratteri all'interno di tali stringhe per poterli confrontare con altre posizioni.
 
@@ -210,7 +210,7 @@ Con gli operatori logici, matematici e i quantificatori utilizzati nella logica 
   x\le y &\equiv \lnot(y<x)
 \end{flalign*}
 
-In realtà si possono anche introdurre alcune abbraviazioni di comodo. Le più utilizzate sono:
+In realtà si possono anche introdurre alcune abbreviazioni di comodo. Le più utilizzate sono:
 \begin{flalign*}
   x = 0 &\equiv \forall y(\lnot(y<x))\\
   successor(x,y) &\equiv x < y \wedge \exists z(x<z \wedge z<y)\\
@@ -235,7 +235,7 @@ Dato un alfabeto \(I\), una stringa \(w\in I^+\) ed un simbolo \(a\in I\), \(a(x
   \item \(w, v_1 \vDash \forall x(F)\) se e solo se \(w, v_1' \vDash F\,\, \forall v_1'\) con \(v_1'(y) = v_1(y),\, y\neq x\).
 \end{itemize}
 
-\paragraph*{Proprietà} La logica monadica del primo ordine ha delle importanti proprietà che consentono di identificare quali linguaggi è possibile rappresentare con tale logica. Nello specifico, tutti i linguaggi esprimibili mediante questa logica sono chiusti rispetto all'unione, all'intersezione e al complemento, Inoltre, si può dimostrare che non è possibile esprimere il linguaggio \(L_p\) composto da tutte e sole le stringhe di lunghezza pari con \(I = \{a\}\): quindi, si può osservare come la logica monadica del primo ordine è strettamente meno espressiva rispetto agli automi a stati finiti, il che significa che data una formula di tale logica, si può sempre costruire un FSA equivalente, ma non il contrario. Infine, i linguaggi definiti da questa logica non sono chiusi rispetto alla stella di Kleene, ed è per questo motivo che tali linguaggi sono anche detti star-free, definibili tramite l'unione, l'intersezione, il complemento e la concatenazione di linguaggi finiti. 
+\paragraph*{Proprietà} La logica monadica del primo ordine ha delle importanti proprietà che consentono di identificare quali linguaggi è possibile rappresentare con tale logica. Nello specifico, tutti i linguaggi esprimibili mediante questa logica sono chiusi rispetto all'unione, all'intersezione e al complemento, Inoltre, si può dimostrare che non è possibile esprimere il linguaggio \(L_p\) composto da tutte e sole le stringhe di lunghezza pari con \(I = \{a\}\): quindi, si può osservare come la logica monadica del primo ordine è strettamente meno espressiva rispetto agli automi a stati finiti, il che significa che data una formula di tale logica, si può sempre costruire un FSA equivalente, ma non il contrario. Infine, i linguaggi definiti da questa logica non sono chiusi rispetto alla stella di Kleene, ed è per questo motivo che tali linguaggi sono anche detti star-free, definibili tramite l'unione, l'intersezione, il complemento e la concatenazione di linguaggi finiti. 
 
 \section{Logica Monadica del Secondo Ordine}
 Per riuscire ad ottenere lo stesso potere espressivo degli FSA è necessario permettere alla logica del primo ordine di quantificare sui predicati monadici, ovvero di poter quantificare anche su insiemi di posizioni. Si ammettono quindi formule del tipo \(\exists X(F)\) oppure \(\exists X(x)\), in cui \(X\) è detta essere una variabile del secondo ordine, il cui dominio non è più l'insieme dei numeri naturali \(\mathbb N\), ma l'insieme dei predicati monadici. Per convenzione si utilizzano le lettere maiuscole per indicare le variabili del secondo ordine e lettere minuscole per le variabili del primo ordine.
@@ -261,7 +261,7 @@ Si può dimostrare che, data una qualsiasi formula \(F\) appartenente alla logic
 \break
 
 \section{Logica per la descrizione di Proprietà}
-Quando si programma una funzione è importante definire con precisione quale sia il suo funzionamento, senza necessariamente descrivere come funzioni. A tal proposito si è soliti scrivere le cosiddette prcondizioni e postcondizioni:
+Quando si programma una funzione è importante definire con precisione quale sia il suo funzionamento, senza necessariamente descrivere come funzioni. A tal proposito si è soliti scrivere le cosiddette precondizioni e postcondizioni:
 \begin{itemize}
   \item Precondizione: indica le condizioni che devono valere prima che la funzione venga invocata;
   \item Postcondizione: indica le condizioni che devono valere al termine dell'esecuzione del programma.  

@@ -13,7 +13,7 @@
   Inoltre, a differenza di quanto analizzato per la risolvibilità dei problemi, la complessità non è collegata solo al problema che si vuole affrontare, ma dipende anche dell'algoritmo che si utilizza per risolverlo. 
 
   \paragraph{}
-  Nel capitolo sugli automi, è stato più volte affermato che le Macchine di Turing sono il formalismo più potente che si ha a disposizione per la risoluzione di prblemi, dunque, risulta ragionevole definire la complessità temporale e spaziale impiegando un tale modello.
+  Nel capitolo sugli automi, è stato più volte affermato che le Macchine di Turing sono il formalismo più potente che si ha a disposizione per la risoluzione di problemi, dunque, risulta ragionevole definire la complessità temporale e spaziale impiegando un tale modello.
 
   \begin{definition} \label{complessita temporale} 
     Sia \(M\) una TM deterministica a \(k\) nastri e sia \(x\in I^*\). Sia \(c_0\vdash c_1\vdash....\vdash c_r\) una computazione, ovvero una sequenza di transizioni di \(M\) tale che \(c_0=<q_0,\;\!\uparrow\! x,\; \!\uparrow\! Z_0,\; ...,\; \!\uparrow\! Z_0>\) e \\ \(c_i=<q_i,\;x_i\!\uparrow\! y_i,\; \alpha_{i1}\!\uparrow\! \beta_{i1},\; ...,\; \alpha_{ik}\!\uparrow\! \beta_{ik}>\), in cui \(c_r\) è una configurazione di arresto, se esiste. Allora, la funzione che rappresenta la complessità temporale \({T}_M\) di \(M\) è definita nel seguente modo:
@@ -49,7 +49,7 @@
     \end{itemize}
   \end{definition}
 
-  Una volta analizzata la complessità temporale tramite il formalismo delle macchine di Turing, si sposta l'attenzione sugli altri formalismi analizzati nel capitolo riguardante gli automi, in particolare sugli automi a stati finiti, sugli automi a pila e sulle macchine di turine a singolo nastro.
+  Una volta analizzata la complessità temporale tramite il formalismo delle macchine di Turing, si sposta l'attenzione sugli altri formalismi analizzati nel capitolo riguardante gli automi, in particolare sugli automi a stati finiti, sugli automi a pila e sulle macchine di Turing a singolo nastro.
 
   \paragraph{}
   Dato un automa a stati finiti \(A\), si definisce la complessità temporale \({T}_A\) come l'intero \(i\) tale che \(\delta^i(q_0,x)=q\) per qualche \(q\), se esiste, ovvero il numero di transizioni effettuate per processare la stringa in ingresso \(x\) a partire dallo stato iniziale. Se \(\delta^*(q_0,x)\) è indefinita, si pone \({T}_A= |x|\), ovvero pari alla lunghezza della stringa in ingresso. \({T}_A\), evidentemente, indica il numero di mosse compiute da \(A\) durante il riconoscimento della stringa \(x\). Dunque, per ogni automa a stati finiti la complessità temporale \({T}_A\) cresce in maniera lineare con il crescere della lunghezza della stringa. Al contrario, la sua complessità spaziale \({S}_A\) non varia mai, in quanto gli FSA sono composti da un numero finito di stati definiti a priori, indipendentemente dalla lunghezza della stringa letta. 
@@ -65,7 +65,7 @@
 
 
   \section{Comportamento asintotico}
-  Nella maggior parte dei casi si analizza la complessità spaziale o temporale di un determinato algoritmo per valori molto grandi dell'ingresso \(x\), ovvero per \(x\) che tende ad infinito. In questi casi si analizza il comportamento asintotico dell'algoritmo, che fornisce un'approssimazione abbastanza precisa sul dispendio di risorse. La notazione dell'ordine di grandezza di una funzione, nota sotto il nome di notazione theta-grande (\(\Theta \)), sottolinea i fattori dominanti che influeanzano la creascita della sua complessità in funzione della dimensione dell'ingresso. Oltre alla notazione theta-grande, esistono anche le notazioni o-grande (O) e omega-grande (\(\Omega \)), le cui definizioni sono riportate di seguito:
+  Nella maggior parte dei casi si analizza la complessità spaziale o temporale di un determinato algoritmo per valori molto grandi dell'ingresso \(x\), ovvero per \(x\) che tende ad infinito. In questi casi si analizza il comportamento asintotico dell'algoritmo, che fornisce un'approssimazione abbastanza precisa sul dispendio di risorse. La notazione dell'ordine di grandezza di una funzione, nota sotto il nome di notazione theta-grande (\(\Theta \)), sottolinea i fattori dominanti che influenzano la crescita della sua complessità in funzione della dimensione dell'ingresso. Oltre alla notazione theta-grande, esistono anche le notazioni o-grande (O) e omega-grande (\(\Omega \)), le cui definizioni sono riportate di seguito:
 
   \begin{definition}[Notazione O]
     Siano \(g:\mathbb{N}\to\mathbb{R}^+\) ed \(f:\mathbb{N}\to\mathbb{R}^+\) due funzioni. La funzione g è in O(f) se e solo se esistono due numeri positivi c ed \(n_0\) tali che per ogni \(n\ge n_0,\; g(n)\le cf(n)\). Ciò significa che \(O(f)=\{g(n):\mathbb{N}\to\mathbb{R}^+ \;|\; \exists c,n_0>0 \land \forall n\ge n_0, g(n)\le cf(n)\}\)
@@ -148,7 +148,7 @@
     \includegraphics[width=\textwidth]{RAM.png}
   \end{figure}
 
-  Sia i nastri che la memoria sono composti da un numero illimitato di celle, ma al contrario dei nastri di ingresso e uscita che si possono accedere in maniera sequenziale, la memoria è indirizzata e si può accedere a una sua cella attraverso un numero intero \(i>0\) che indica l'indirizzo di tale cella di memoria. La cella 0 della memoria è un registro speciale, detto accumulatore, che si utilizza per contenere il valore di uno dei due operandi delle operazioni aritmetiche binarie che la macchina può effettuare. Un generico porgramma eseguibile dalla macchina RAM è composto da istruzioni riportate nella tabella \ref{tabella istruzioni RAM}.
+  Sia i nastri che la memoria sono composti da un numero illimitato di celle, ma al contrario dei nastri di ingresso e uscita che si possono accedere in maniera sequenziale, la memoria è indirizzata e si può accedere a una sua cella attraverso un numero intero \(i>0\) che indica l'indirizzo di tale cella di memoria. La cella 0 della memoria è un registro speciale, detto accumulatore, che si utilizza per contenere il valore di uno dei due operandi delle operazioni aritmetiche binarie che la macchina può effettuare. Un generico programma eseguibile dalla macchina RAM è composto da istruzioni riportate nella tabella \ref{tabella istruzioni RAM}.
 
   \begin{table}[!h] 
     \caption{istruzioni macchina RAM}
@@ -192,7 +192,7 @@
   
   Si è appena affermato però che nella macchina RAM le istruzioni hanno diversa natura e manipolano dati di diversa dimensione: risulta, dunque, evidente che tale criterio è poco affine alla realtà. Per tener conto della differente velocità di esecuzione e della differente quantità di memoria allocata da ciascuna istruzione, si introduce il secondo criterio (del costo logaritmico), basato sulla supposizione che il tempo richiesto per eseguire un'istruzione sia proporzionale alla lunghezza degli operandi dell'istruzione considerata. Poichè gli operandi sono rappresentati in memoria in codice binario, un generico operando di valore \(v\) è rappresentato da \(\lfloor log_2(|v|+1)\rfloor\). 
   
-  Dunque, è possibile definire la funzione \(l(i) = if\;i\neq 0\;then\;\lfloor log_2(|v|+1)\rfloor\;else\;1\) tramite cui calcolare la complessità temporale logaritmica di ciascuna istruzione precedentemente analizzata nella tabella \ref{tabella istruzioni RAM}. Alla stessa maniera, è possibile calcolare i costi relativi allo spazio, introducendo la variabile \(m\) definita come l'indirizzo più alto della cella di memoria a cui si fa accesso durante l'esecuzione del programma, e la variabile \(M_i\) che rappresenta il valore assoluto più grande immagazzianto in M[i] durante l'esecuzione. La complessità spaziale logaritmica si definisce quindi con la seguente formula:
+  Dunque, è possibile definire la funzione \(l(i) = if\;i\neq 0\;then\;\lfloor log_2(|v|+1)\rfloor\;else\;1\) tramite cui calcolare la complessità temporale logaritmica di ciascuna istruzione precedentemente analizzata nella tabella \ref{tabella istruzioni RAM}. Alla stessa maniera, è possibile calcolare i costi relativi allo spazio, introducendo la variabile \(m\) definita come l'indirizzo più alto della cella di memoria a cui si fa accesso durante l'esecuzione del programma, e la variabile \(M_i\) che rappresenta il valore assoluto più grande immagazzinato in M[i] durante l'esecuzione. La complessità spaziale logaritmica si definisce quindi con la seguente formula:
 
   \(\displaystyle \sum_{i=0}^m{l(M_i)}\)\\
   Di seguito sono riportati i costi logaritmici delle istruzioni RAM:

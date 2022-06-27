@@ -14,7 +14,7 @@
   \section{Tesi di Church}
   Le macchine di Turing, come visto in precedenza, sono il formalismo più potente che si ha a disposizione per il calcolo computazionale: ogni programma eseguibile da un calcolatore moderno può essere eseguito anche da una macchina di Turing. Dunque, le macchine di Turing hanno la stessa espressività dei linguaggi di programmazione ad alto livello, detti anche Turing completi. 
 
-  Più formalmente, data una TM M, è possibile costruire un programma, scritto in un determinato linguaggio di programmazione (come C, Java ecc...), che simuli il ocmportamento di M, purchè il calcolatore disponga di una quantità di memoria sufficiente durante l'esecuzione. Inoltre, dato un programma scritto in un determinato linguaggio di programmazione, è possibile coistruire una TM M che calcoli la stessa funzione calcolata dal programma.
+  Più formalmente, data una TM M, è possibile costruire un programma, scritto in un determinato linguaggio di programmazione (come C, Java ecc...), che simuli il comportamento di M, purchè il calcolatore disponga di una quantità di memoria sufficiente durante l'esecuzione. Inoltre, dato un programma scritto in un determinato linguaggio di programmazione, è possibile costruire una TM M che calcoli la stessa funzione calcolata dal programma.
 
   \begin{thesis}[Tesi di Church - Prima Parte]
     Non esiste alcun formalismo, per modellare una determinata computazione meccanica, che sia più potente delle TM e dei formalismi ad essi equivalenti.
@@ -24,22 +24,22 @@
 
   In base a questo risultato si può affermare che, se si riesce a dimostrare che un determinato problema è risolvibile da una TM, allora è sicuramente possibile risolverlo mediante un modello matematico di calcolo, che abbia la stessa potenza delle macchine di Turing. Viceversa, se si dimostra che un problema non può essere risolto da una TM, allora è verificato che tale problema è irrisolvibile da qualunque modello matematico.
 
-  \paragraph{Alogoritmi}
+  \paragraph{Algoritmi}
   Si introduce ora il concetto di algoritmo, centrale nell'informatica. Per algoritmo si intende la procedura di risoluzione di un problema mediante un dispositivo automatico di calcolo. Gli algoritmi si possono anche intendere come un metodo astratto di descrizione dei programmi eseguibili, ovvero una sequenza di comandi che, una volta eseguiti, portano alla risoluzione del problema.
   
-  Ogni algoritmo ha le seguneti proprietà:
+  Ogni algoritmo ha le seguenti proprietà:
   \begin{enumerate}
     \item Un algoritmo deve contenere una sequenza finita di istruzioni;
     \item Ogni istruzione deve essere immediatamente eseguibile da qualche procedimento meccanico di calcolo, ossia deve esistere un processore che sia in grado di comprendere univocamente le istruzioni e di eseguirle producendo risultati precisi ed inequivocabili;
     \item Il processore è dotato di celle di memoria in cui possono essere immagazzinati i riultati intermedi;
     \item La computazione è discreta, ossia l'informazione è codificata in forma digitale e la computazione procede attraverso passi discreti;
-    \item Gli algorimi vengono eseguiti deterministicamente;
+    \item Gli algoritmi vengono eseguiti deterministicamente;
     \item Non esiste un limite finito sui dati di ingresso e di uscita: ogni calcolatore può ricevere in ingresso o emettere in uscita stringhe di lunghezza arbitraria;
     \item Non esiste un limite alla quantità di memoria richiesta per effettuare i calcoli;
     \item Non esiste un limite al numero di passi discreti richiesti per effettuare un calcolo ed è dunque possibile avere computazioni infinite.
   \end{enumerate}
 
-  La tesi di Church non si ferma solo nell'affermazione che nessun formalismo sia più espresivo delle TM, ma afferma anche che nessun algoritmo è in grado di risolvere un problema che non è risolvibile da una TM. Formalmente:
+  La tesi di Church non si ferma solo nell'affermazione che nessun formalismo sia più espressivo delle TM, ma afferma anche che nessun algoritmo è in grado di risolvere un problema che non è risolvibile da una TM. Formalmente:
 
   \begin{thesis}[Tesi di Church - Seconda Parte]
     Ogni algoritmo per la soluzione automatica di un problema può essere codificato in termini di una TM (o di un formalismo a potenza equivalente).
@@ -54,13 +54,13 @@
   \section{Enumerazione delle TM}
   Le macchine di Turing possono essere viste come dei calcolatori astratti, specializzati nella risoluzione di un solo problema e non programmabili. Ci si pone quindi la domanda: 'le TM sono in grado di simulare i calcolatori programmabili e di risolvere i problemi da \(\mathbb{N}\) a \(\mathbb{N}\)?'
 
-  Per poter risondere a tale domanda, si noti innanzitutto che dato un qualsiasi insieme S, questo può essere enumerato algoritmicamente se è possibile stabilire una biiezione fra l'insieme \(S\) e l'insieme dei numeri naturali \(\mathbb{N}\), calcolabile attraverso un algoritmo o da una TM.
+  Per poter rispondere a tale domanda, si noti innanzitutto che dato un qualsiasi insieme S, questo può essere enumerato algoritmicamente se è possibile stabilire una biiezione fra l'insieme \(S\) e l'insieme dei numeri naturali \(\mathbb{N}\), calcolabile attraverso un algoritmo o da una TM.
   Alla stessa maniera è possibile enumerare algoritmicamente l'insieme delle TM tramite una biiezione \(E:\{TM\}\leftrightarrow\mathbb{N}\). Tale biiezione è implementabile da un algoritmo che riceve in ingresso un numero \(n\) e ritorna la \(n\)-esima macchina di Turing. Un'enumerazione calcolabile da una TM viene chiamata Gödelizzazione, mentre il numero naturale biiettivamente associato da tale enumerazione ad una TM è detto numero di Gödel della TM. 
 
   Inoltre, è noto che una TM M può risolvere una funzione \(f_M:D\to R\), con \(D\) ed \(R\) opportunamente codificati nell'alfabeto di \(M\), dunque si indicherà con \(f_y\) la funzione calcolata dalla \(y\)-esima macchina di Turing, indicata con \(M_y=E(y)\).
 
   \section{Macchine di Turing Universali}
-  Le UTM (Universal Turing Machines) sono TM in grado di modellare dispositivi generali di risoluzione dei problemi, in cui il problema da risolvere non viene codificato nella struttura del dispositivo (come avviene per le TM), ma gli viene fornito come input, assieme ai dati con cui operare (esattamente come gli oderni calcolatori). Le UTM sono quindi MT che calcolano la funzione \(g(y,x)=f_y(x)\), in cui \(y\) rappresenta la funzione \(f_y\), calcolata dalla TM \(M_y\), ed \(x\) rappresenta l'ingresso su cui \(M_y\) opera; calcolano, dunque, il valore della funzione \(f_y\) applicata ad \(x\).
+  Le UTM (Universal Turing Machines) sono TM in grado di modellare dispositivi generali di risoluzione dei problemi, in cui il problema da risolvere non viene codificato nella struttura del dispositivo (come avviene per le TM), ma gli viene fornito come input, assieme ai dati con cui operare (esattamente come gli odierni calcolatori). Le UTM sono quindi MT che calcolano la funzione \(g(y,x)=f_y(x)\), in cui \(y\) rappresenta la funzione \(f_y\), calcolata dalla TM \(M_y\), ed \(x\) rappresenta l'ingresso su cui \(M_y\) opera; calcolano, dunque, il valore della funzione \(f_y\) applicata ad \(x\).
 
   Come si può osservare, la UTM così definita non sembra appartenere all'insieme delle macchine di Turing, in quanto la funzione \(g(y,x)\) è opera da \(\mathbb{N}\times\mathbb{N}\) ad \(\mathbb{N}\), anzichè da \(\mathbb{N}\) ad \(\mathbb{N}\) come tutte le altre TM. È però possibile, come già dimostrato in precedenza, definire una biiezione calcolabile algoritmicamente, tramite la funzione:
   \begin{equation*}
@@ -94,7 +94,7 @@
 
   Ora, quando si vuole definire una funzione si usa un linguaggio che la esprima, ovvero un sottoinsieme del monoide libero su di un determinato alfabeto finito: dunque, il linguaggio è un insieme numerabile. Si ricava quindi che la classe delle funzioni denotabili è a sua volta numerabile.
 
-  Quando si scrive un programma, ci sono diverse proprietà che si vorebbero garantire. Una di queste è la terminazione del programma, ovvero la garanzia che, dato un qualsiasi ingresso conforme al programma stesso, esso termini la propria computazione e non vada, dunque, in un ciclo infinito. Nella realtà, però, non è possibile garantire a priori la terminazione del programma per un generico valore in ingresso, nè decidere attraverso un algoritmo se ciò possa avvenire in corrispondenza di uno specifico valore in ingresso. Più in generale, il problema della terminazione del calcolo automatico è in generale non decidibile, nonostante tale problema sia definibile.
+  Quando si scrive un programma, ci sono diverse proprietà che si vorrebbero garantire. Una di queste è la terminazione del programma, ovvero la garanzia che, dato un qualsiasi ingresso conforme al programma stesso, esso termini la propria computazione e non vada, dunque, in un ciclo infinito. Nella realtà, però, non è possibile garantire a priori la terminazione del programma per un generico valore in ingresso, nè decidere attraverso un algoritmo se ciò possa avvenire in corrispondenza di uno specifico valore in ingresso. Più in generale, il problema della terminazione del calcolo automatico è in generale non decidibile, nonostante tale problema sia definibile.
   Si è quindi constatato che esistono problemi definibili, ma che non possono essere risolti algoritmicamente: dunque, l'insieme dei problemi definibili contiene strettamente l'insieme dei problemi risolvibili, nonostante entrambi siano numerabili e con la stessa cardinalità.
 
   \begin{figure}[!h]
@@ -155,7 +155,7 @@
     Un insieme S è ricorsivo (o decidibile) se e solo se la sua funzione caratteristica è computabile.
   \end{definition}
 
-  Si noti, inoltre, che per ogni insieme \(S\), la sua funzione caratteristica \(c_S\) è totale: infatti, dato un qualsiasi elemento \(x\in\mathbb{N}\), questo necessariamente apparteniene o non appartiene all'insieme.
+  Si noti, inoltre, che per ogni insieme \(S\), la sua funzione caratteristica \(c_S\) è totale: infatti, dato un qualsiasi elemento \(x\in\mathbb{N}\), questo necessariamente appartiene o non appartiene all'insieme.
   
   \begin{definition}
     Un insieme S è ricorsivamente enumerabile (o semidecidibile) se e solo se è l'insieme vuoto oppure è l'immagine di una funzione totale e computabile \(g_s\), ovvero:
@@ -187,7 +187,7 @@
     Per ogni insieme S, se \(i \in S\) implica che \(f_i\) sia totale e se per ogni funzione \(f\) totale e computabile, esiste \(i\in S\;|\;f=f_i\), allora S non è ricorsivamente enumerabile. 
   \end{theorem}
 
-  Informalmente, questo teorema stabilisce che tutte le funzioni totali computabili non sono ricorsivamente enumerabili (mentre le funzioni parziali computabili lo sono). Dunque, tale teorema afferma implicitamente che non esiste nessun formalismo ricorsivamente enumerabile in grado di definire tutte e sole le funzioni totali e computabili: infatti, gli FSA sono in grado di definire le funzioni totali, ma non tutte, le TM definiscono tutte le funzioni computabili, ma anche quelle non totali, e un linguaggio di programmazione (come il C) è in grado di definire tutti gli algoritmi, ma anche anche quelli che non terminano mai. 
+  Informalmente, questo teorema stabilisce che tutte le funzioni totali computabili non sono ricorsivamente enumerabili (mentre le funzioni parziali computabili lo sono). Dunque, tale teorema afferma implicitamente che non esiste nessun formalismo ricorsivamente enumerabile in grado di definire tutte e sole le funzioni totali e computabili: infatti, gli FSA sono in grado di definire le funzioni totali, ma non tutte, le TM definiscono tutte le funzioni computabili, ma anche quelle non totali, e un linguaggio di programmazione (come il C) è in grado di definire tutti gli algoritmi, ma anche quelli che non terminano mai. 
   
   Si cerca quindi di comprendere se sia possibile eliminare le funzioni non totali: per far ciò, si prenda in considerazione una generica funzione parziale, ad esempio, arricchendo \(\mathbb{N}\) con il valore \(\{\bot\}\) o con qualsiasi altro simbolo che indichi che la funzione non è definita per certi valori. Tale trasformazione da funzione parziale a totale, però, non può essere applicata perchè nel passaggio è possibile perdere la computabilità della funzione. Questo risultato è enunciato nel seguente teorema:
   
@@ -235,4 +235,4 @@
     Sia F un insieme generico di funzioni computabili. L'insieme \(S=\{x\;|\;f_x\in F\}\) degli indici delle TM che calcolano le funzioni di F, è ricorsivo se e solo se \(F=\emptyset\) oppure F è l'insieme di tutte le funzioni computabili.
   \end{theorem}
 
-  Il teorema di Rice ha un forte impatto pratico negativo, in quanto afferma che, in tutti i casi non banali, \(S\) non è decidibile. Non è quindi possibile stabilire algoritmicamente se un dato algoritmo sia in grado di risolvere un determinato problema, nè se due programmi siano equivalenti (ossia se calcolino la stessa funzione). Il grande impatto pratico del teorema di Rice deriva dal fatto che il concetto di sottoinsieme \(F\) di funzioni computabili è un'espressione formale del concetto generale di proprietà di problemi risolvibili: una proprietà degli elementi di un insieme è un sottoinsieme dell'insieme dato e una funzione computabile è una formalizzazione del concetto di problema risolvibile; quindi, il teorema di Rice efferma che non è possibile stabilire se un determinato algoritmo risolve un problema pur risolvibile che godi di una qualsiasi proprietà non banale.
+  Il teorema di Rice ha un forte impatto pratico negativo, in quanto afferma che, in tutti i casi non banali, \(S\) non è decidibile. Non è quindi possibile stabilire algoritmicamente se un dato algoritmo sia in grado di risolvere un determinato problema, nè se due programmi siano equivalenti (ossia se calcolino la stessa funzione). Il grande impatto pratico del teorema di Rice deriva dal fatto che il concetto di sottoinsieme \(F\) di funzioni computabili è un'espressione formale del concetto generale di proprietà di problemi risolvibili: una proprietà degli elementi di un insieme è un sottoinsieme dell'insieme dato e una funzione computabile è una formalizzazione del concetto di problema risolvibile; quindi, il teorema di Rice afferma che non è possibile stabilire se un determinato algoritmo risolve un problema pur risolvibile che godi di una qualsiasi proprietà non banale.
